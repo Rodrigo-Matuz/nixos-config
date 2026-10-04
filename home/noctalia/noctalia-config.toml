@@ -1,0 +1,336 @@
+[accessibility]
+ui_scale = 0.95000000670552254
+
+[bar]
+order = [ "default" ]
+
+    [bar.default]
+    background_opacity = 0.59999998658895493
+    border = "primary"
+    capsule_fill = "surface"
+    capsule_radius = 0
+    capsule_thickness = 0.99999998137354851
+    center = [ "custom_button_2", "clock", "weather", "screenshot" ]
+    color = "on_primary"
+    end = [ "tray", "bar", "obs-integrate", "widget", "notifications", "clipboard", "volume", "session" ]
+    margin_ends = 0
+    padding = 10
+    panel_overlap = 0
+    position = "left"
+    radius = 0
+    scale = 1.0500000081956387
+    shadow = false
+    start = [ "launcher", "workspaces", "sysmon", "spacer_2", "media", "audio_visualizer" ]
+    thickness = 35
+    widget_spacing = 14
+
+        [bar.default.monitor.DP-1]
+        match = "DP-1"
+        position = "left"
+
+        [bar.default.monitor.DP-2]
+        match = "DP-2"
+        position = "right"
+
+        [bar.default.monitor.HDMI-A-1]
+        enabled = false
+        match = "HDMI-A-1"
+
+[control_center]
+hidden_tabs = [ "monitor", "power", "bluetooth" ]
+sidebar = "full"
+width = 1000
+
+    [control_center.calendar]
+    show_events_card = false
+
+    [[control_center.shortcuts]]
+    type = "notification"
+
+    [[control_center.shortcuts]]
+    type = "audio"
+
+    [[control_center.shortcuts]]
+    type = "mic_mute"
+
+    [[control_center.shortcuts]]
+    type = "media"
+
+    [[control_center.shortcuts]]
+    type = "clipboard"
+
+    [[control_center.shortcuts]]
+    type = "session"
+
+[desktop_widgets]
+schema_version = 2
+widget_order = [ "desktop-widget-0000000000000001" ]
+
+    [desktop_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [desktop_widgets.widget.desktop-widget-0000000000000001]
+    box_height = 48.0
+    box_width = 112.0
+    cx = 960.0
+    cy = 20.0
+    output = "DP-1"
+    rotation = 0.0
+    type = "clock"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000001.settings]
+        background = true
+        clock_style = "digital"
+        color = "on_primary"
+
+[dock]
+active_monitor_only = true
+active_scale = 1.1000000163912773
+auto_hide = true
+background_opacity = 0.59999998658895493
+concave_edge_corners = false
+cross_axis_padding = 0
+enabled = true
+icon_size = 35
+inactive_opacity = 0.4999999888241291
+item_spacing = 0
+launcher_icon = "device-desktop-heart"
+launcher_position = "start"
+layer = "overlay"
+main_axis_padding = 26
+monitors = [ "DP-1", "DP-2" ]
+radius_bottom_left = 0
+radius_bottom_right = 0
+reserve_space = false
+
+[hot_corners]
+delay_ms = 200
+enabled = true
+
+    [hot_corners.bottom_left]
+    action = "window_switcher"
+
+    [hot_corners.top_left]
+    action = "launcher"
+
+[location]
+auto_locate = true
+
+[lockscreen_widgets]
+enabled = false
+schema_version = 2
+widget_order = [ "lockscreen-login-box@DP-2", "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@DP-1" ]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@DP-1"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 960.0
+    cy = 898.0
+    output = "DP-1"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@DP-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@DP-2"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 960.0
+    cy = 898.0
+    output = "DP-2"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@DP-2".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 540.0
+    cy = 1738.0
+    output = "HDMI-A-1"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+[notification]
+background_opacity = 0.59999998658895493
+layer = "overlay"
+position = "bottom_right"
+
+[osd]
+background_opacity = 0.59999998658895493
+monitors = [ "DP-1" ]
+position = "bottom_right"
+position_vertical = "bottom_right"
+
+[plugins]
+enabled = [ "yuuto/calculator", "oldirtty/color_picker", "neyfua/obs-integration" ]
+
+[shell]
+app_icon_color = "primary"
+avatar_path = "/home/matuz/Pictures/pfp/1000041945.png"
+button_borders = false
+input_borders = false
+lang = "en"
+password_style = "random"
+polkit_agent = true
+screen_time_enabled = true
+settings_window_translucent = true
+
+    [shell.animation]
+    speed = 1.1000000163912773
+
+    [shell.panel]
+    clipboard_placement = "attached"
+    launcher_placement = "attached"
+    launcher_position = "top_center"
+    open_near_click_clipboard = true
+    open_near_click_control_center = true
+    open_near_click_launcher = true
+    polkit_placement = "attached"
+    transparency_mode = "soft"
+
+    [shell.screen_corners]
+    size = 1
+
+    [shell.shadow]
+    alpha = 0.0
+
+[theme]
+builtin = "Tokyo-Night"
+community_palette = "Mine"
+custom_palette = "Matuz"
+mode = "dark"
+source = "custom"
+wallpaper_scheme = "m3-fruit-salad"
+
+    [theme.templates]
+    builtin_ids = [ "btop", "cava", "gtk3", "gtk4", "qt" ]
+    community_ids = [
+        "ytm-player",
+        "pywalfox",
+        "zen-browser",
+        "discord",
+        "steam",
+        "rofi",
+        "vicinae",
+        "fastfetch",
+        "obs",
+        "zathura",
+        "zellij",
+        "hyprtoolkit",
+        "papirus-icons",
+        "snappy-switcher",
+        "yazi"
+    ]
+
+[wallpaper]
+enabled = true
+
+    [wallpaper.default]
+    path = "/nix/store/pqp11qzmnqi2zbhj0h3nw4wr0yqsl260-noctalia-5.0.0/share/noctalia/assets/noctalia-wallpaper.png"
+
+    [wallpaper.last]
+    path = "/nix/store/pqp11qzmnqi2zbhj0h3nw4wr0yqsl260-noctalia-5.0.0/share/noctalia/assets/noctalia-wallpaper.png"
+
+[widget.audio_visualizer]
+bands = 128
+color_2 = "tertiary"
+interactive = false
+width = 150
+
+[widget.bar]
+color = "primary"
+enable_scroll = false
+icon_color = "primary"
+show_bar_value = false
+type = "yuuto/calculator:bar"
+
+[widget.clock]
+enabled = false
+scale = 1.1000000000000001
+
+[widget.custom_button_2]
+glyph = "image"
+tooltip = "Wallpaper Picker"
+type = "custom_button"
+
+    [widget.custom_button_2.actions]
+    right = "exec wallpaper-picker-ui"
+
+[widget.launcher]
+color = "primary"
+
+[widget.media]
+art_size = 25
+
+[widget.obs-integrate]
+type = "neyfua/obs-integration:obs-integrate"
+
+[widget.session]
+color = "tertiary"
+
+[widget.spacer_2]
+type = "spacer"
+
+[widget.sysmon]
+color = "primary"
+icon_color = "primary"
+
+[widget.widget]
+type = "oldirtty/color_picker:widget"
+
+[widget.workspaces]
+show_all_outputs = true
+style = "minimal"

@@ -1,0 +1,22 @@
+# Nix build results and local development state
+result
+result-*
+.direnv/
+
+# Local secrets and generated application state
+.env
+.env.*
+*.secret
+*.secret.*
+*.age
+*.key
+home/hermes/hermes-profile.gz
+
+# Editor and OS metadata
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local build output
+home/wallpaper/bin/

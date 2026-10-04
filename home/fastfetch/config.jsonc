@@ -1,0 +1,136 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+
+    "logo": {
+        "color": {
+            "1": "#1E65FF",
+            "2": "#702EF3",
+            "3": "#FC1A70",
+            "4": "#FF4D00",
+            "5": "#FFFF87",
+            "6": "#A4E400"
+        }
+    },
+
+    "display": {
+        "separator": " -> "
+    },
+
+    "modules": [
+        "title",
+        "separator",
+
+        // ─────────────────────────────────────────────
+        // System
+        // ─────────────────────────────────────────────
+
+        {
+            "type": "os",
+            "key": " OS",
+            "keyColor": "#702EF3",
+            "format": "{2}"
+        },
+        {
+            "type": "os",
+            "key": "├{icon}",
+            "keyColor": "#702EF3"
+        },
+        {
+            "type": "kernel",
+            "key": "├",
+            "keyColor": "#702EF3"
+        },
+        {
+            "type": "packages",
+            "key": "├󰏖",
+            "keyColor": "#702EF3"
+        },
+        {
+            "type": "shell",
+            "key": "└",
+            "keyColor": "#702EF3"
+        },
+
+        "break",
+
+        // ─────────────────────────────────────────────
+        // Desktop
+        // ─────────────────────────────────────────────
+
+        {
+            "type": "wm",
+            "key": " DE/WM",
+            "keyColor": "#FC1A70"
+        },
+        {
+            "type": "lm",
+            "key": "├󰧨",
+            "keyColor": "#FC1A70"
+        },
+        {
+            "type": "wmtheme",
+            "key": "├󰉼",
+            "keyColor": "#FC1A70"
+        },
+        {
+            "type": "icons",
+            "key": "├󰀻",
+            "keyColor": "#FC1A70"
+        },
+        {
+            "type": "terminal",
+            "key": "├",
+            "keyColor": "#FC1A70"
+        },
+        {
+            "type": "wallpaper",
+            "key": "└󰸉",
+            "keyColor": "#FC1A70"
+        },
+
+        "break",
+
+        // ─────────────────────────────────────────────
+        // Hardware
+        // ─────────────────────────────────────────────
+
+        {
+            "type": "host",
+            "key": "󰌢 PC",
+            "keyColor": "#1E65FF"
+        },
+        {
+            "type": "cpu",
+            "key": "├󰻠",
+            "keyColor": "#1E65FF"
+        },
+        {
+            "type": "gpu",
+            "key": "├󰍛",
+            "keyColor": "#1E65FF"
+        },
+        {
+            "type": "disk",
+            "key": "├",
+            "keyColor": "#1E65FF"
+        },
+        {
+            "type": "memory",
+            "key": "├󰑭",
+            "keyColor": "#1E65FF"
+        },
+        {
+            "type": "display",
+            "key": "├󰍹",
+            "keyColor": "#1E65FF"
+        },
+        {
+            "type": "uptime",
+            "key": "└󰅐",
+            "keyColor": "#1E65FF"
+        },
+
+        "break",
+        "colors"
+    ]
+}
