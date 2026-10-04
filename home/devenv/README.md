@@ -1,15 +1,15 @@
 # devenv
 
-Installs the `devenv` development-environment tool.
+Installs the `devenv` development-environment tool as a Home Manager package.
+Project-specific environments are still defined by each project's own
+`devenv.nix` or `devenv.yaml`.
+
+## Upstream and original Nix source
+
+- [devenv.sh](https://devenv.sh/) · [source](https://github.com/cachix/devenv) — tool documentation and implementation.
+- [nixpkgs devenv package](https://github.com/NixOS/nixpkgs/tree/nixos-unstable/pkgs/by-name/de/devenv) — package used by this module.
 
 ## Module
 
-This module is available to be imported by [`../matuz.nix`](../matuz.nix). The implementation lives in [`default.nix`](default.nix).
-
-## Dependencies
-
-`pkgs.devenv`
-
-## Customization
-
-Edit `default.nix` and keep this README current when the module's behavior or external inputs change.
+Imported by [`../matuz.nix`](../matuz.nix); implementation is in
+[`default.nix`](default.nix).

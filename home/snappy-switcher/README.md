@@ -1,15 +1,16 @@
 # Snappy Switcher
 
-Installs the default Snappy Switcher package from its flake input.
+Opt-in package module for the default Snappy Switcher output from
+`inputs.snappy-switcher`. The current root flake does not declare that input;
+add and lock the input before enabling this directory.
+
+## Upstream and original Nix source
+
+The upstream repository URL is not declared in the current flake, so this
+README intentionally does not guess it. Once the input is added, document its
+canonical repository URL in [`../../flake.nix`](../../flake.nix) and here.
 
 ## Module
 
-This module is available to be imported by [`../matuz.nix`](../matuz.nix). The implementation lives in [`default.nix`](default.nix).
-
-## Dependencies
-
-`inputs.snappy-switcher`
-
-## Customization
-
-Edit `default.nix` and keep this README current when the module's behavior or external inputs change.
+Imported by [`../matuz.nix`](../matuz.nix) when enabled; implementation is in
+[`default.nix`](default.nix) and expects `inputs.snappy-switcher`.

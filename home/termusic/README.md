@@ -1,15 +1,13 @@
 # termusic
 
-Installs the terminal music player termusic.
+Installs the terminal music player termusic from nixpkgs.
+
+## Upstream and original Nix sources
+
+- [termusic](https://github.com/tramhao/termusic) — application documentation and source.
+- [nixpkgs termusic package](https://github.com/NixOS/nixpkgs/tree/nixos-unstable/pkgs/by-name/te/termusic) — package used here.
 
 ## Module
 
-This module is available to be imported by [`../matuz.nix`](../matuz.nix). The implementation lives in [`default.nix`](default.nix).
-
-## Dependencies
-
-`pkgs.termusic`
-
-## Customization
-
-Edit `default.nix` and keep this README current when the module's behavior or external inputs change.
+Imported by [`../matuz.nix`](../matuz.nix); implementation is in
+[`default.nix`](default.nix).

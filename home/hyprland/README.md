@@ -1,15 +1,22 @@
 # Hyprland
 
-Enables the Home Manager Hyprland module and loads the window manager configuration from Lua files.
+Enables Home Manager's Hyprland integration and loads the window-manager
+configuration from Lua files.
+
+## Files
+
+`programs.lua` covers applications; `envs.lua` the session environment;
+`general.lua` general settings; `monitors.lua` monitor layout;
+`workspaces.lua` workspace placement; `keybinds.lua` shortcuts;
+`windowrules.lua`/`layerrules.lua` placement; and `misc.lua` remaining settings.
+Monitor names and geometry are machine-specific.
+
+## Upstream and original Nix source
+
+- [Hyprland](https://github.com/hyprwm/Hyprland) · [wiki](https://wiki.hypr.land/)
+- [Home Manager modules](https://github.com/nix-community/home-manager/tree/master/modules/programs/wayland) — original Hyprland integration.
 
 ## Module
 
-This module is available to be imported by [`../matuz.nix`](../matuz.nix). The implementation lives in [`default.nix`](default.nix).
-
-## Dependencies
-
-`programs.lua`, `envs.lua`, `general.lua`, `monitors.lua`, `workspaces.lua`, `keybinds.lua`, `windowrules.lua`, `layerrules.lua`, and `misc.lua`
-
-## Customization
-
-Edit `default.nix` and keep this README current when the module's behavior or external inputs change.
+Implementation is in [`default.nix`](default.nix) and is imported by
+[`../matuz.nix`](../matuz.nix).

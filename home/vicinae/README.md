@@ -1,15 +1,14 @@
 # Vicinae launcher
 
-Enables Vicinae as a systemd user service and starts it automatically in the graphical session.
+Enables Vicinae as a systemd user service, starts it automatically in the
+graphical session, and sets `USE_LAYER_SHELL=1` for layer-shell integration.
+
+## Upstream and original Nix sources
+
+- [Vicinae](https://github.com/vicinaehq/vicinae) — launcher, extensions, and configuration reference.
+- [Vicinae Nix/Home Manager module](https://github.com/vicinaehq/vicinae/tree/main/nix) — upstream packaging and module source.
 
 ## Module
 
-This module is available to be imported by [`../matuz.nix`](../matuz.nix). The implementation lives in [`default.nix`](default.nix).
-
-## Dependencies
-
-`inputs.vicinae`
-
-## Customization
-
-Edit `default.nix` and keep this README current when the module's behavior or external inputs change.
+Imported by [`../matuz.nix`](../matuz.nix); implementation is in
+[`default.nix`](default.nix). It requires `inputs.vicinae`.
