@@ -317,6 +317,10 @@ art_size = 25
 
 [widget.obs-integrate]
 type = "neyfua/obs-integration:obs-integrate"
+# Keep the recording control legible: white capsule, Matuz-red icon/text.
+capsule_fill = "#FFFFFF"
+color = "#FC1A70"
+icon_color = "#FC1A70"
 
 [widget.session]
 color = "tertiary"

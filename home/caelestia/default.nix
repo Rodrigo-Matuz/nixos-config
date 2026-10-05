@@ -7,7 +7,9 @@
   programs.caelestia = {
     enable = true;
     # Use the shell without its bundled CLI; the single CLI below is our fork.
-    package = inputs.caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    package = inputs.caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
+      patches = (old.patches or []) ++ [ ./lock-notifications.patch ];
+    });
 
     # -------------------------------------------------------------------------
     # Systemd
