@@ -1,23 +1,23 @@
 --- a/modules/lock/NotifGroup.qml
 +++ b/modules/lock/NotifGroup.qml
-@@ -218,10 +218,10 @@
-                 }
-             }
-
+@@ -164,0 +165,2 @@
++                    // Lock-screen privacy: do not expose notification timing.
++                    visible: false
+@@ -177,2 +179,3 @@
+-                    opacity: root.notifs.length > Config.notifs.groupPreviewNum ? 1 : 0
+-                    Layout.preferredWidth: root.notifs.length > Config.notifs.groupPreviewNum ? implicitWidth : 0
++                    // Do not expose notification counts or expansion controls.
++                    opacity: 0
++                    Layout.preferredWidth: 0
+@@ -220,0 +224,2 @@
 +            // Lock-screen privacy: keep the app name above, but do not render
 +            // notification summaries or bodies while the session is locked.
-             Repeater {
+@@ -222,3 +227 @@
 -                model: ScriptModel {
 -                    values: root.notifs.slice(0, root.Config.notifs.groupPreviewNum) as Array
 -                }
 +                model: []
-
-                 NotifLine {
-                     id: notif
-@@ -278,9 +278,10 @@
-                 asynchronous: true
-                 Layout.fillWidth: true
-
+@@ -281,3 +284,4 @@
 -                opacity: root.expanded ? 1 : 0
 -                Layout.preferredHeight: root.expanded ? implicitHeight : 0
 -                active: opacity > 0
@@ -25,6 +25,3 @@
 +                opacity: 0
 +                Layout.preferredHeight: 0
 +                active: false
-
-                 sourceComponent: ColumnLayout {
-                     Repeater {
