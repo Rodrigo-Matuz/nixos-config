@@ -25,3 +25,11 @@
 +                opacity: 0
 +                Layout.preferredHeight: 0
 +                active: false
+--- a/modules/utilities/cards/Record.qml
++++ b/modules/utilities/cards/Record.qml
+@@ -265,0 +266,5 @@
++                    // Recording pause control: white background with the fixed red accent.
++                    activeColour: Colours.accents.whiteForeground
++                    inactiveColour: Colours.accents.whiteForeground
++                    activeOnColour: Colours.accents.red
++                    inactiveOnColour: Colours.accents.red
