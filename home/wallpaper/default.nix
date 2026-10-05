@@ -12,7 +12,7 @@
     wallpapersPath = "${config.home.homeDirectory}/Wallpapers";
 
     # App behaviour preferences.
-    debugMode = false;
+    debugMode = true;
     newWallpapers = true;
     darkMode = true;
 
