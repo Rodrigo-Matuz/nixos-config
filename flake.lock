@@ -59,11 +59,11 @@
         "quickshell": "quickshell_2"
       },
       "locked": {
-        "lastModified": 1791237332,
-        "narHash": "sha256-LbimndtnjpvJ+D5nxUP1TOETBSOrrWNEBIDio7mGuvs=",
+        "lastModified": 1791239152,
+        "narHash": "sha256-m4H44aRBBp0V83TqjMJnkRIzcMSblcHK5WF+YjuZJns=",
         "owner": "Rodrigo-Matuz",
         "repo": "shell",
-        "rev": "01aca746f9b89e0692e1a4833e24069fc254eea9",
+        "rev": "5299af33cf46b1c329e9db10b20e0c47afd60b3a",
         "type": "github"
       },
       "original": {
