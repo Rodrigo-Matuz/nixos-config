@@ -55,4 +55,21 @@
       "rw"
     ];
   };
+
+  # The NTFS metadata for this directory can preserve a read-only mode (555)
+  # even though the volume itself is mounted read-write. Keep OBS's recording
+  # destination writable after every boot/remount.
+  systemd.services.storage-hd-obs-permissions = {
+    description = "Make the OBS recording directory writable";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "mnt-storage_hd.mount" ];
+    requires = [ "mnt-storage_hd.mount" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      ${pkgs.coreutils}/bin/chmod 0755 "/mnt/storage_hd/OBS Videos"
+    '';
+  };
 }

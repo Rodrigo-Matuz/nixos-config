@@ -1,21 +1,87 @@
-# Matuz NixOS configuration
+# Dotfiles
 
-Personal NixOS and Home Manager configuration for the `matuz` workstation. This
-flake targets one `x86_64-linux` machine and contains machine-specific UUIDs,
-monitor names, mount points, user paths, and service settings.
+Personal configurations and dotfiles for the programs I use, including NixOS
+and Home Manager. **NixOS installation is optional.** You can browse and reuse
+individual program settings without running an installer. This repository is
+planned for `Rodrigo-Matuz/dotfiles`, but it is **not public yet**; the website
+bootstrap URL is also not live.
 
-## Start here
+The existing `#nixos` flake profile is for my `matuz` workstation only. It has
+machine-specific UUIDs, monitors, paths, and service settings. **Do not apply
+`#nixos` on another computer.** The separate `#install` profile behind
+[`install.sh`](install.sh) accepts a username and optional modules.
+
+## Choose a path
+
+### Fresh NixOS installation (opt-in)
+
+On an **x86_64 UEFI NixOS installer**, partition and format disks yourself,
+mount the target root at `/mnt` and EFI system partition at `/mnt/boot`, then
+review the bootstrap script and run it as root:
+
+```bash
+# After this repository is public, fetch the script from the raw GitHub URL:
+curl -fsSLo install.sh https://raw.githubusercontent.com/Rodrigo-Matuz/dotfiles/main/install.sh
+less install.sh
+sudo bash install.sh --mode iso
+```
+
+**The download will fail until the repository is published.** The planned
+`https://www.matuz.dev/nixos-installscript` route currently returns 404 and
+must be configured separately before using it instead. The script clones the
+full Git repository itself; no manual clone is needed. For a local test of a
+published checkout, pass `--repo /path/to/dotfiles` (its files must be committed).
+It will ask for a username, hostname, time zone, state version, and optional
+modules, then dry-build and require `YES` before installing. Set root and user
+passwords at its prompts. **It does not partition, format, or mount disks.**
+See [fresh-install prerequisites and limitations](install/README.md#fresh-nixos-installation).
+
+### Existing NixOS installation: try it without switching
+
+Run **without sudo** to build a separate NixOS VM. This is the default mode;
+it does not activate the configuration on your host:
+
+```bash
+# Once published, fetch the raw script as above, inspect it, then:
+bash install.sh --mode preview
+# Run the VM launcher from the path printed by the script.
+```
+
+Before publication, use a **local committed Git checkout** instead:
+
+```bash
+bash /path/to/dotfiles/install.sh --mode preview --repo /path/to/dotfiles
+```
+
+You need NixOS on x86_64, Git (or network access to fetch it), a working Nix
+store, and enough space to build/run the VM. VM preview writes a checkout under
+`~/.local/share/dotfiles-preview/portable-config` (or `$XDG_DATA_HOME`) and
+builds in the Nix store; it does **not** copy host disk UUIDs, mount partitions,
+change `/etc/nixos`, or switch generations. The VM console logs in as the
+chosen user. Select only modules compatible with a virtual machine; graphical
+and hardware-specific modules may need edits before they work there. Existing
+non-NixOS hosts are not supported by this installer. See the
+[preview walkthrough and caveats](install/README.md#existing-nixos-try-the-configuration-in-a-vm).
+
+`--mode installed` is a **separate, destructive-to-host-configuration choice**:
+it runs `nixos-rebuild switch` and can remove services or change accounts.
+It is **not** the way to try the config. Read the
+[advanced apply/rollback guidance](install/README.md#existing-nixos-apply-to-the-host-advanced)
+first.
+
+## Repository map
 
 | File | Purpose |
 | --- | --- |
-| [`flake.nix`](flake.nix) | Inputs and the `nixosConfigurations.nixos` output |
+| [`flake.nix`](flake.nix) | Inputs and separate `#nixos` (personal) / `#install` (portable) outputs |
 | [`flake.lock`](flake.lock) | Locked revisions and hashes for inputs |
-| [`configuration.nix`](configuration.nix) | NixOS system entrypoint |
-| [`hardware-configuration.nix`](hardware-configuration.nix) | Generated hardware/filesystem configuration |
+| [`configuration.nix`](configuration.nix) | Workstation-only NixOS entrypoint |
+| [`hardware-configuration.nix`](hardware-configuration.nix) | Workstation hardware; **not reused by the installer** |
 | [`partitions.nix`](partitions.nix) | Additional workstation mounts |
-| [`home/matuz.nix`](home/matuz.nix) | Home Manager entrypoint and imports |
-| [`home/`](home/) | Focused user-level modules |
-| [`steam/`](steam/) | System-level Steam module |
+| [`home/matuz.nix`](home/matuz.nix) | Workstation Home Manager imports |
+| [`home/`](home/) | Focused user-level modules and application dotfiles |
+| [`steam/`](steam/) | Optional system-level Steam module |
+| [`install/`](install/) | Portable profile, selection and installer details |
 
 ## Home Manager modules
 
@@ -66,14 +132,11 @@ component-specific links.
 - [Firefox add-on packages](https://gitlab.com/rycee/nur-expressions/-/tree/master/pkgs/firefox-addons)
 - [VSCodium extensions overlay](https://github.com/nix-community/nix-vscode-extensions)
 
-## Requirements and apply
+## Maintainer: apply the workstation profile
 
-- NixOS on `x86_64-linux`, flakes enabled, and Git.
-- A machine-specific hardware configuration.
-- The external flake inputs declared in `flake.nix`.
-- A Hyprland session for desktop-oriented modules.
-
-From the repository root:
+The following commands are **only for the original `matuz` workstation**.
+That profile needs its matching hardware configuration, external flake inputs,
+and a Hyprland session for desktop-oriented modules. From the repository root:
 
 ```bash
 sudo nixos-rebuild switch --flake .#nixos

@@ -1,0 +1,81 @@
+{ inputs, lib, pkgs, ... }:
+let
+  selection = import ./selection.nix;
+  enabled = name: builtins.elem name selection.homeModules;
+  homePath = name: ../home + "/${name}";
+  systemPath = name: ../system + "/${name}";
+  homeImports = map homePath selection.homeModules
+    ++ lib.optionals (enabled "caelestia") [ inputs.caelestia-shell.homeManagerModules.default ]
+    ++ lib.optionals (enabled "zen-browser") [ inputs.zen-browser.homeModules.default ]
+    ++ lib.optionals (enabled "hermes") [ inputs.hermes-agent.homeManagerModules.default ]
+    ++ lib.optionals (enabled "wallpaper") [ inputs.wallpaper-picker-ui.homeManagerModules.default ];
+  withHomeManager = selection.homeModules != [ ];
+in
+{
+  # Never import configuration.nix, partitions.nix, or home/matuz.nix here:
+  # those contain workstation-specific devices, identity and activation hooks.
+  imports = [ ../hardware-configuration.nix ]
+    ++ lib.optionals (builtins.elem "steam" selection.systemModules) [ ../steam ]
+    ++ map systemPath (builtins.filter (name: name != "steam") selection.systemModules)
+    ++ lib.optionals withHomeManager [ inputs.home-manager.nixosModules.home-manager ];
+
+  assertions =
+    map (name: {
+      assertion = builtins.pathExists (homePath name + "/default.nix");
+      message = "Unknown Home Manager module: ${name}";
+    }) selection.homeModules
+    ++ map (name: {
+      assertion = name == "steam" || builtins.pathExists (systemPath name + "/default.nix");
+      message = "Unknown system module: ${name}";
+    }) selection.systemModules
+    ++ [
+      { assertion = !(enabled "nvim" && enabled "nvchad"); message = "Choose either nvim or nvchad"; }
+      { assertion = !(enabled "caelestia" && enabled "wallpaper"); message = "Choose either caelestia or wallpaper"; }
+      { assertion = !(enabled "noctalia" || enabled "snappy-switcher"); message = "These modules need flake inputs not declared by this repository"; }
+    ];
+
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  networking.hostName = selection.hostname;
+  networking.networkmanager.enable = true;
+  time.timeZone = selection.timeZone;
+  i18n.defaultLocale = "en_US.UTF-8";
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = lib.optionals (enabled "vscodium") [ inputs.nix-vscode-extensions.overlays.default ];
+
+  users.users.${selection.username} = {
+    isNormalUser = true;
+    home = "/home/${selection.username}";
+    extraGroups = [ "wheel" "networkmanager" ];
+  } // lib.optionalAttrs (enabled "zsh") { shell = pkgs.zsh; };
+  programs.zsh.enable = enabled "zsh";
+  programs.hyprland.enable = enabled "hyprland";
+
+  # Only the build-vm variant logs in automatically; the installed host does not.
+  virtualisation.vmVariant = {
+    services.getty.autologinUser = selection.username;
+    virtualisation.memorySize = 2048;
+    virtualisation.cores = 2;
+  };
+
+  system.stateVersion = selection.stateVersion;
+}
+// lib.optionalAttrs withHomeManager {
+  home-manager.useGlobalPkgs = true;
+  home-manager.useUserPackages = true;
+  home-manager.extraSpecialArgs = { inherit inputs; };
+  home-manager.users.${selection.username} = {
+    imports = homeImports;
+    home.username = selection.username;
+    home.homeDirectory = "/home/${selection.username}";
+    home.stateVersion = selection.stateVersion;
+    programs.home-manager.enable = true;
+  } // lib.optionalAttrs (enabled "zsh" && !(enabled "hyprland")) {
+    # The workstation's zsh module otherwise launches Hyprland on tty1.
+    programs.zsh.initContent = lib.mkForce ''
+      source ${pkgs.zsh-powerlevel10k}/share/zsh/themes/powerlevel10k/powerlevel10k.zsh-theme
+      [[ -r ~/.p10k.zsh ]] && source ~/.p10k.zsh
+    '';
+  };
+}
