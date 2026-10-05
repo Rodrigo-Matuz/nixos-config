@@ -7,9 +7,16 @@
   programs.caelestia = {
     enable = true;
     # Use the shell without its bundled CLI; the single CLI below is our fork.
-    package = inputs.caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
-      patches = (old.patches or []) ++ [ ./lock-notifications.patch ];
-    });
+    # This patch protects the old pinned revision. The newer shell contains
+    # sender-only lock notifications and the recorder icon styling upstream.
+    package =
+      let
+        shell = inputs.caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      in
+      if (inputs.caelestia-shell.rev or "") == "54d9a899da77cf35f423541049b7f9c613dd978d" then
+        shell.overrideAttrs (old: { patches = (old.patches or []) ++ [ ./lock-notifications.patch ]; })
+      else
+        shell;
 
     # -------------------------------------------------------------------------
     # Systemd
@@ -62,7 +69,6 @@
         enabled = true;
         wallpaperEnabled = true;
         visualiser.enabled = true;
-        desktopClock = false;
       };
 
       paths.wallpaperDir = "~/Pictures/Wallpapers";

@@ -1,11 +1,12 @@
 { config, pkgs, inputs, ... }:
+
 {
   programs.wallpaper-picker-ui = {
     enable = true;
 
     # The command the app runs when you apply a wallpaper.
     # $VP is replaced with the selected file path.
-    command = "${pkgs.mpvpaper}/bin/mpvpaper -o \"loop no-audio\" \"*\" \"$VP\"";
+    command = "caelestia set wallpaper \"$VP\"";
 
     # Folder to scan for wallpapers.
     wallpapersPath = "${config.home.homeDirectory}/Wallpapers";

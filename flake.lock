@@ -8,11 +8,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791204141,
-        "narHash": "sha256-v7jpYOrolRzfZJ2z2+e1MSaC1Udk/S+KTwllTSuY2o8=",
+        "lastModified": 1791237366,
+        "narHash": "sha256-79d2hzxuxvtFQGw3jS1FJWjak6XzrgwDPpbiwpXOjCo=",
         "owner": "Rodrigo-Matuz",
         "repo": "cli",
-        "rev": "b419d46561a476081b52ff15aab71652cf210dee",
+        "rev": "16e7325f6fc0de04b370486411c73930029b4938",
         "type": "github"
       },
       "original": {
@@ -59,11 +59,11 @@
         "quickshell": "quickshell_2"
       },
       "locked": {
-        "lastModified": 1791207877,
-        "narHash": "sha256-WWKfXfM+L+SiuJ5uI1ExJp7Q8gZ43ANHrkJUomk9aTM=",
+        "lastModified": 1791237332,
+        "narHash": "sha256-LbimndtnjpvJ+D5nxUP1TOETBSOrrWNEBIDio7mGuvs=",
         "owner": "Rodrigo-Matuz",
         "repo": "shell",
-        "rev": "54d9a899da77cf35f423541049b7f9c613dd978d",
+        "rev": "01aca746f9b89e0692e1a4833e24069fc254eea9",
         "type": "github"
       },
       "original": {
@@ -659,11 +659,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1790945475,
-        "narHash": "sha256-TsvvC66gMh0s6gojvEKZDFI3Y15NOpZX3ssIIaB46UY=",
+        "lastModified": 1791226468,
+        "narHash": "sha256-K1kBwLyZTQz8Tx3icJXZQx7eHwfK2+AjA6fXPp8xSyE=",
         "owner": "Rodrigo-Matuz",
         "repo": "wallpaper-picker-ui",
-        "rev": "5ab242a622976c9f3b4f8102c45ff73ca7ffbc23",
+        "rev": "b8a0e14ce75355c3ac4664d0663e19177f726e2d",
         "type": "github"
       },
       "original": {
