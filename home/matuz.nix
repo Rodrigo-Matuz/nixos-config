@@ -25,6 +25,7 @@
     ./mpv
     ./vscodium
     ./hermes
+    # ./kanatype # Opt in to Kanatype by uncommenting this import.
   ];
 
   # ---------------------------------------------------------------------------
@@ -89,6 +90,5 @@
   # ---------------------------------------------------------------------------
   # Home Manager
   # ---------------------------------------------------------------------------
-  programs.kanatype.enable = true;
   programs.home-manager.enable = true;
 }

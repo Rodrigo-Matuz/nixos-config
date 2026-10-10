@@ -101,7 +101,7 @@ modules are documented opt-in building blocks.
 | `git` | active | Git identity and program settings |
 | `hermes` | active | Hermes Agent application and local backend |
 | `hyprland` | active | Lua-based window-manager configuration |
-| `kanatype` | active | Japanese kana and kanji practice app (external Home Manager module) |
+| [`kanatype`](home/kanatype/README.md) | opt-in | Japanese kana and kanji practice app; uncomment `./kanatype` in `home/matuz.nix` |
 | `kitty` | active | Terminal, font, shell integration, and palette |
 | `librewolf` | opt-in | LibreWolf profile and uBlock Origin |
 | `noctalia` | opt-in | Noctalia shell and Matuz palette |

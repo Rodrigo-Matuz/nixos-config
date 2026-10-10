@@ -95,7 +95,6 @@
             inputs.zen-browser.homeModules.default
             inputs.hermes-agent.homeManagerModules.default
             inputs.wallpaper-picker-ui.homeManagerModules.default
-            inputs.kanatype.homeManagerModules.default
           ];
         }
       ];
