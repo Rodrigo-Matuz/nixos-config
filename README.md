@@ -101,6 +101,7 @@ modules are documented opt-in building blocks.
 | `git` | active | Git identity and program settings |
 | `hermes` | active | Hermes Agent application and local backend |
 | `hyprland` | active | Lua-based window-manager configuration |
+| `kanatype` | active | Japanese kana and kanji practice app (external Home Manager module) |
 | `kitty` | active | Terminal, font, shell integration, and palette |
 | `librewolf` | opt-in | LibreWolf profile and uBlock Origin |
 | `noctalia` | opt-in | Noctalia shell and Matuz palette |
@@ -128,6 +129,7 @@ component-specific links.
 - [Home Manager](https://github.com/nix-community/home-manager) · [module sources](https://github.com/nix-community/home-manager/tree/master/modules)
 - [Caelestia fork: shell](https://github.com/Rodrigo-Matuz/shell) · [CLI](https://github.com/Rodrigo-Matuz/cli)
 - [Wallpaper Picker UI](https://github.com/Rodrigo-Matuz/wallpaper-picker-ui)
+- [Kanatype](https://github.com/Rodrigo-Matuz/kanatype)
 - [Hermes Agent](https://github.com/NousResearch/hermes-agent)
 - [Vicinae](https://github.com/vicinaehq/vicinae)
 - [Zen Browser flake](https://github.com/0xc000022070/zen-browser-flake)

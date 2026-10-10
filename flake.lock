@@ -219,6 +219,26 @@
         "type": "github"
       }
     },
+    "kanatype": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791653271,
+        "narHash": "sha256-Oqn1T4jZ2PPSZ36VtV15CtHIXaT+FlPOetr5QyeoDek=",
+        "owner": "Rodrigo-Matuz",
+        "repo": "kanatype",
+        "rev": "6de9d581aa96329b4f71736a470e5da6a3c94fe5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Rodrigo-Matuz",
+        "repo": "kanatype",
+        "type": "github"
+      }
+    },
     "m3shapes": {
       "inputs": {
         "nixpkgs": [
@@ -545,6 +565,7 @@
         "firefox-addons": "firefox-addons",
         "hermes-agent": "hermes-agent",
         "home-manager": "home-manager_2",
+        "kanatype": "kanatype",
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nix4nvchad": "nix4nvchad",
         "nixpkgs": "nixpkgs_2",
