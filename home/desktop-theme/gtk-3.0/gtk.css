@@ -14,7 +14,23 @@
 @define-color borders #263c61;
 
 window, dialog, .background, popover, menu { background-color: @theme_bg_color; color: @theme_fg_color; }
-headerbar, .titlebar, toolbar, button, notebook > header { background-color: #001029; color: @theme_fg_color; }
+/* GTK 3 portal file pickers use a headerbar plus treeview column buttons.
+   Use the KDE header blue, not Adwaita's near-black/gray titlebar. */
+headerbar, headerbar.titlebar, .titlebar {
+  background-color: #073887;
+  background-image: linear-gradient(to bottom, #073887, #001330);
+  color: @theme_fg_color;
+  border-color: #1e65ff;
+}
+headerbar:backdrop, headerbar.titlebar:backdrop, .titlebar:backdrop {
+  background-color: #001330;
+  background-image: none;
+  color: @theme_fg_color;
+}
+headerbar button, .titlebar button { background-color: rgba(1, 10, 23, 0.65); color: @theme_fg_color; }
+headerbar button:hover, .titlebar button:hover { background-color: #1e65ff; color: #ffffff; }
+filechooser treeview.view header button { background-color: #073887; color: @theme_fg_color; }
+toolbar, notebook > header, button { background-color: #001029; color: @theme_fg_color; }
 entry, textview text, treeview.view, iconview.view, list, viewport { background-color: @theme_base_color; color: @theme_text_color; }
 selection, *:selected { background-color: @theme_selected_bg_color; color: @theme_selected_fg_color; }
 *:backdrop:selected { background-color: @theme_unfocused_selected_bg_color; color: @theme_unfocused_selected_fg_color; }
