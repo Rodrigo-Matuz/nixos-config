@@ -1,24 +1,17 @@
 { pkgs, inputs }:
 
 let
-  addons = inputs.firefox-addons.packages.${pkgs.stdenv.hostPlatform.system};
-
-  # Enhancer for YouTube is distributed under a non-free custom license. The
-  # package is intentionally requested here; override only its Nix metadata so
-  # the flake can evaluate it without changing the system-wide unfree policy.
-  enhancerForYoutube = addons.enhancer-for-youtube.overrideAttrs (old: {
-    meta = old.meta // {
-      license = old.meta.license // { free = true; };
-    };
-  });
+  # Evaluate the pinned add-on overlay with Home Manager's nixpkgs instance,
+  # so its allowUnfree setting applies to proprietary extensions as well.
+  addons = (inputs.firefox-addons.overlays.default pkgs pkgs).firefox-addons;
 in
 {
   packages = with addons; [
     ublock-origin
     darkreader
     dearrow
-    enhancerForYoutube
-    sidebery
+    enhancer-for-youtube
+    imagus
     # youtube-shorts-block
   ];
 

@@ -14,25 +14,23 @@ NixOS search shortcuts, declarative extensions, and custom browser chrome from
 - Firefox telemetry, Pocket, sponsored content, and sponsored top sites are disabled.
 - Cookies remain enabled so website sessions persist.
 - Compact density and CSS customization are enabled.
-- uBlock Origin, Dark Reader, DeArrow, Enhancer for YouTube, and Sidebery are forced into the profile.
+- uBlock Origin, Dark Reader, DeArrow, Enhancer for YouTube, and Imagus are installed in the profile. `extensions.autoDisableScopes = 0` enables packaged add-ons without a first-run approval prompt.
 
 The complete preference set is in [`settings.nix`](settings.nix), bookmarks are
 in [`bookmarks.nix`](bookmarks.nix), and extensions are in
 [`extensions.nix`](extensions.nix). The profile path is
 `~/.config/mozilla/firefox/ia642mh7.nixos`.
 
-## Sidebery and mutable profile state
+## Add-ons and mutable profile state
 
-[Sidebery](https://github.com/mbnuqw/sidebery) owns **Ctrl+B** and toggles the
-left tab sidebar. The activation step creates Firefox's
-`extension-settings.json` only when it does not exist, preserving an existing
-shortcut file and later user changes. Firefox's horizontal tab strip remains
-available when Sidebery is closed.
+[Imagus](https://addons.mozilla.org/firefox/addon/imagus/) previews linked images
+on hover. Firefox owns session data and user-managed add-on state. Close Firefox
+before activating Home Manager changes if it is writing profile data. The
+activation step removes only the obsolete Sidebery Ctrl+B shortcut entry from
+existing Firefox profiles; it preserves all other shortcut and add-on settings.
 
-Home Manager owns the declarative files and forced extensions; Firefox owns
-session data and user-managed extension state. Close Firefox before rebuilding
-if it is writing profile data. Sidebery's panel layout and width are deliberately
-left user-configurable.
+When the address-bar search suggestions open, their background is opaque; the
+rest of the FoxOne theme remains unchanged.
 
 ## Upstream and original Nix sources
 
@@ -40,7 +38,7 @@ left user-configurable.
 - [Home Manager Firefox options](https://nix-community.github.io/home-manager/options.xhtml#opt-programs.firefox.profiles) — generated option reference.
 - [Firefox](https://www.mozilla.org/firefox/) · [Mozilla source](https://github.com/mozilla-firefox/firefox)
 - [Firefox add-on packages](https://gitlab.com/rycee/nur-expressions/-/tree/master/pkgs/firefox-addons) — source for `inputs.firefox-addons`.
-- [Sidebery](https://github.com/mbnuqw/sidebery) — sidebar extension.
+- [Imagus](https://addons.mozilla.org/firefox/addon/imagus/) — image hover previews.
 - [Firefox CSS hacks](https://github.com/MrOtherGuy/firefox-csshacks) — browser-chrome CSS reference.
 
 ## Module files

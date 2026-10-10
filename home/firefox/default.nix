@@ -1,23 +1,5 @@
-{ config, lib, pkgs, inputs, ... }:
+{ lib, pkgs, inputs, ... }:
 
-let
-  firefoxExtensionSettings = builtins.toFile "firefox-extension-settings.json" (builtins.toJSON {
-    version = 3;
-    commands = {
-      "_execute_sidebar_action" = {
-        initialValue = {};
-        precedenceList = [
-          {
-            id = "{3c078156-979c-498b-8990-85f7987dd929}";
-            installDate = 0;
-            value = { shortcut = "Ctrl+B"; };
-            enabled = true;
-          }
-        ];
-      };
-    };
-  });
-in
 {
   # https://mynixos.com/home-manager/options/programs.firefox.profiles.%3Cname%3E
   home.file.".config/mozilla/firefox/ia642mh7.nixos/chrome".source = ./chrome;
@@ -65,8 +47,25 @@ in
     };
   };
 
-  # Sidebery owns Ctrl+B and toggles its left tab sidebar.
-  home.activation.firefoxExtensionShortcuts =
-    lib.hm.dag.entryAfter [ "writeBoundary" ]
-      "test -e $HOME/.config/mozilla/firefox/ia642mh7.nixos/extension-settings.json || install -Dm644 ${firefoxExtensionSettings} $HOME/.config/mozilla/firefox/ia642mh7.nixos/extension-settings.json";
+  # Remove only Sidebery’s retired Ctrl+B command from an existing profile.
+  # Firefox owns the rest of extension-settings.json, so preserve all other keys.
+  home.activation.firefoxRemoveSideberyShortcut = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    shortcutFile="$HOME/.config/mozilla/firefox/ia642mh7.nixos/extension-settings.json"
+    sideberyId='{3c078156-979c-498b-8990-85f7987dd929}'
+    if [ -f "$shortcutFile" ] && ${pkgs.jq}/bin/jq -e --arg id "$sideberyId" \
+      'any(.commands._execute_sidebar_action.precedenceList[]?; .id == $id)' "$shortcutFile" >/dev/null; then
+      tmpFile="$(${pkgs.coreutils}/bin/mktemp "$shortcutFile.XXXXXX")"
+      ${pkgs.coreutils}/bin/chmod 600 "$tmpFile"
+      if ${pkgs.jq}/bin/jq --arg id "$sideberyId" '
+        .commands._execute_sidebar_action.precedenceList |= map(select(.id != $id))
+        | if .commands._execute_sidebar_action.precedenceList == []
+          then del(.commands._execute_sidebar_action) else . end
+      ' "$shortcutFile" > "$tmpFile"; then
+        ${pkgs.coreutils}/bin/mv -f "$tmpFile" "$shortcutFile"
+      else
+        ${pkgs.coreutils}/bin/rm -f "$tmpFile"
+        exit 1
+      fi
+    fi
+  '';
 }

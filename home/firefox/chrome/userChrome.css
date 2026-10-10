@@ -1162,6 +1162,15 @@ sidebar-main,
   border: 1px solid var(--uc-color-surface) !important;
 }
 
+/* Keep search suggestions on a fully opaque surface, even when the toolbar
+   theme supplies a translucent field colour. Limit this to the open dropdown. */
+#urlbar[open] > #urlbar-background,
+#urlbar[open] > .urlbar-background,
+#urlbar[open] .urlbarView {
+  background: var(--uc-color-base) !important;
+  opacity: 1 !important;
+}
+
 /* Nova extends the breakout by growing .urlbar-background past the toolbar
    row on every side (--urlbar-background-inset-breakout resolves to -8px:
    --urlbar-min-height / 2 - --border-radius-xxlarge, 16 - 24), so in the
@@ -2917,25 +2926,4 @@ html[id^="taskbartab"] #unified-extensions-button {
     animation: none !important;
     transform: scaleX(1) !important;
   }
-}
-
-/* ============================================================================
-   SIDEBERY — left-hand tab sidebar
-
-   Sidebery is toggled by Ctrl+B through the managed extension shortcut above.
-   Keep Firefox's native horizontal strip available as a fallback when the
-   sidebar is closed; when the extension sidebar is active, the tab strip is
-   removed so tabs exist only on the left.
-   ============================================================================ */
-:root:has(#sidebar-box[sidebarcommand="_3c078156-979c-498b-8990-85f7987dd929_-sidebar-action"]) #TabsToolbar {
-  display: none !important;
-}
-
-:root:has(#sidebar-box[sidebarcommand="_3c078156-979c-498b-8990-85f7987dd929_-sidebar-action"]) #sidebar-box {
-  min-width: 220px !important;
-  width: 280px !important;
-}
-
-:root:has(#sidebar-box[sidebarcommand="_3c078156-979c-498b-8990-85f7987dd929_-sidebar-action"]) #sidebar {
-  width: 100% !important;
 }
