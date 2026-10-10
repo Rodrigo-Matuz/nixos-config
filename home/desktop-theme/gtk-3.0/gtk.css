@@ -1,0 +1,22 @@
+/* Keep Adwaita's widget behavior; match the KDE MatuzDark palette. */
+@import url("resource:///org/gtk/libgtk/theme/Adwaita/gtk-contained-dark.css");
+
+@define-color theme_bg_color #010a17;
+@define-color theme_fg_color #f5f5f5;
+@define-color theme_base_color #030a14;
+@define-color theme_text_color #f5f5f5;
+@define-color theme_selected_bg_color #1e65ff;
+@define-color theme_selected_fg_color #ffffff;
+@define-color theme_unfocused_selected_bg_color #073887;
+@define-color theme_unfocused_selected_fg_color #f5f5f5;
+@define-color theme_insensitive_bg_color #001029;
+@define-color theme_insensitive_fg_color #a1a1aa;
+@define-color borders #263c61;
+
+window, dialog, .background, popover, menu { background-color: @theme_bg_color; color: @theme_fg_color; }
+headerbar, .titlebar, toolbar, button, notebook > header { background-color: #001029; color: @theme_fg_color; }
+entry, textview text, treeview.view, iconview.view, list, viewport { background-color: @theme_base_color; color: @theme_text_color; }
+selection, *:selected { background-color: @theme_selected_bg_color; color: @theme_selected_fg_color; }
+*:backdrop:selected { background-color: @theme_unfocused_selected_bg_color; color: @theme_unfocused_selected_fg_color; }
+entry:focus, button:focus, switch:checked, check:checked, radio:checked, progressbar progress { border-color: @theme_selected_bg_color; }
+button:hover { background-color: #073887; }

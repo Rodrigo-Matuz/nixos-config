@@ -13,21 +13,11 @@ hl.window_rule({
   match = {
     class = "^kitty$",
   },
-  size = { "45%", "51%" },
-  xray = false,
-})
-
--- --------------------------------------------------------------
--- Thunar
--- --------------------------------------------------------------
-
-hl.window_rule({
-  name = "thunar",
-  match = {
-    class = "^thunar$",
-  },
-  size = { "50%", "50%" },
+  size = { 1000, 600 },
   float = true,
+  fullscreen_state = "0 0",
+  suppress_event = "fullscreen maximize",
+  xray = false,
 })
 
 -- --------------------------------------------------------------
@@ -66,8 +56,9 @@ hl.window_rule({
 hl.window_rule({
   name = "Wallpaper Picker",
   match = {
-    title = "^wallpaper-picker-ui$",
+    class = "^(dev[.]matuz[.]wallpaper-picker-ui|wallpaper-picker-ui)$",
   },
+  size = { 950, 600 },
   float = true,
 })
 

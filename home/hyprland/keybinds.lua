@@ -10,7 +10,7 @@ local SP = "SUPER"
 
 hl.bind(SP .. " + A", hl.dsp.exec_cmd("kitty"))
 hl.bind(SP .. " + C", hl.dsp.window.close())
-hl.bind(SP .. " + E", hl.dsp.exec_cmd("nautilus"))
+hl.bind(SP .. " + E", hl.dsp.exec_cmd("dolphin"))
 
 hl.bind(SP .. " + F", hl.dsp.window.float())
 

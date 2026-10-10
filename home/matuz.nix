@@ -20,6 +20,9 @@
     ./firefox
     ./git
     ./devenv
+    ./dolphin
+    ./desktop-theme
+    ./mpv
     ./vscodium
     ./hermes
   ];
@@ -51,11 +54,11 @@
     enable = true;
 
     defaultApplications = {
-      "inode/directory" = [ "org.gnome.Nautilus.desktop" ];
+      "inode/directory" = [ "org.kde.dolphin.desktop" ];
     };
 
     associations.added = {
-      "inode/directory" = [ "org.gnome.Nautilus.desktop" ];
+      "inode/directory" = [ "org.kde.dolphin.desktop" ];
     };
   };
 
@@ -74,7 +77,6 @@
     zathura
 
     # System
-    thunar
   ];
 
   # ---------------------------------------------------------------------------

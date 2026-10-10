@@ -73,7 +73,7 @@
             "terminal": ["foot"],
             "audio": ["pwvucontrol"],
             "playback": ["mpv"],
-            "explorer": ["thunar"]
+            "explorer": ["dolphin"]
         },
         "idle": {
             "lockBeforeSleep": true,

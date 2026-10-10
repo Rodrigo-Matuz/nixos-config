@@ -37,7 +37,7 @@
         terminal = [ "kitty" ];
         audio = [ "pwvucontrol" ];
         playback = [ "mpv" ];
-        explorer = [ "thunar" ];
+        explorer = [ "dolphin" ];
       };
 
       general.idle = {

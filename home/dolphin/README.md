@@ -1,8 +1,9 @@
 # Dolphin file manager
 
-Installs KDE Dolphin as a user package. Desktop integration and mounted-volume
-behavior are provided by the surrounding KDE/Wayland session rather than this
-module.
+Installs KDE Dolphin as a user package together with Ark for archive handling,
+FFmpeg and KDE graphics thumbnail providers, and Qt image format plugins.
+Desktop integration and mounted-volume behavior are provided by the surrounding
+KDE/Wayland session rather than this module.
 
 ## Upstream and original Nix source
 
@@ -11,5 +12,10 @@ module.
 
 ## Module
 
-Opt-in module imported from [`../matuz.nix`](../matuz.nix) when enabled;
+Active module imported from [`../matuz.nix`](../matuz.nix);
 implementation is in [`default.nix`](default.nix).
+
+## Theme
+
+The module installs and selects [`MatuzDark.colors`](MatuzDark.colors), based
+on the Matuz design tokens from `matuz.dev`.

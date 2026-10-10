@@ -181,7 +181,6 @@
 
   environment.systemPackages = with pkgs; [
     wget
-    nautilus
   ];
 
   # ============================================================================
@@ -203,18 +202,6 @@
   # Optional Programs / Services
   # ============================================================================
 
-  # programs.thunar = {
-  #   enable = true;
-  #
-  #   plugins = [
-  #     pkgs.thunar-archive-plugin
-  #     pkgs.thunar-volman
-  #     pkgs.thunar-vcs-plugin
-  #   ];
-  # };
-  #
-  # programs.xfconf.enable = true;
-  #
   services.gvfs.enable = true;
   services.tumbler.enable = true;
   #

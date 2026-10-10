@@ -91,9 +91,11 @@ modules are documented opt-in building blocks.
 | Module | Status | Purpose |
 | --- | --- | --- |
 | `caelestia` | active | Desktop shell, bar, dashboard, lock screen, and wallpaper |
-| `cursor` | active | Bundled NieR cursor theme |
+| `cursor` | active | Rem (Re:ZERO) animated XCursor and Hyprcursor theme |
 | `devenv` | active | Development-environment tool |
-| `dolphin` | opt-in | KDE file manager |
+| `dolphin` | active | KDE file manager |
+| `desktop-theme` | active | Shared Fantasy icon theme and dark GTK/Qt appearance |
+| `mpv` | active | mpv with the ModernZ on-screen controller |
 | `fastfetch` | active | Fastfetch and JSONC configuration |
 | `firefox` | active | Profile, preferences, bookmarks, extensions, and CSS |
 | `git` | active | Git identity and program settings |

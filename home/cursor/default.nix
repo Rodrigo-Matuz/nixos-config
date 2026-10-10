@@ -1,24 +1,28 @@
 { pkgs, ... }:
 
 let
-  nier-cursors = pkgs.stdenvNoCC.mkDerivation {
-    pname = "nier-cursors";
-    version = "2020-08-25";
+  rem-cursors = pkgs.stdenvNoCC.mkDerivation {
+    pname = "rem-by-blz-cursors";
+    version = "2025-07";
 
-    src = ./NieR_Cursors_2020-08-25.tar.xz;
+    # Generated with ani2xcursor, then converted to hyprcursor with
+    # hyprcursor-util. The combined theme contains both XCursor and
+    # hyprcursor data so GTK/XWayland and native Wayland clients use the
+    # same animated cursor theme.
+    src = ./rem_by_blz;
 
     installPhase = ''
-      mkdir -p $out/share/icons/nier_cursors
-      cp -r ./* $out/share/icons/nier_cursors/
+      mkdir -p $out/share/icons/rem_by_blz
+      cp -R ./* $out/share/icons/rem_by_blz/
     '';
   };
 in
 {
   home.pointerCursor = {
     enable = true;
-    package = nier-cursors;
-    name = "nier_cursors";
-    size = 24;
+    package = rem-cursors;
+    name = "rem_by_blz";
+    size = 12;
 
     gtk.enable = true;
     x11.enable = true;
