@@ -38,3 +38,29 @@ treeview.view header button {
   border-color: #073887;
 }
 treeview.view header button:hover { background-color: #073887; }
+
+/* Adwaita supplies literal #353535/#303030 for inactive windows and views.
+   Keep the same navy surfaces when the dialog loses focus, but mute the text. */
+dialog.background:backdrop {
+  background-color: #010a17;
+  color: #a1a1aa;
+}
+filechooser .view:backdrop, filechooser treeview.view:backdrop,
+filechooser iconview.view:backdrop, filechooser textview text:backdrop {
+  background-color: #030a14;
+  color: #a1a1aa;
+}
+/* User CSS must restore the selection explicitly: its provider outranks the
+   theme's :selected:backdrop rule as well as the gray view rule. */
+filechooser treeview.view:selected:backdrop,
+filechooser .view:selected:backdrop {
+  background-color: #073887;
+  color: #f5f5f5;
+}
+filechooser .dialog-action-box:backdrop { border-color: #001330; }
+treeview.view header button:backdrop {
+  background-color: #001029;
+  background-image: none;
+  color: #a1a1aa;
+  border-color: #001330;
+}
