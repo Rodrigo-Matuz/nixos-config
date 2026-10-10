@@ -35,6 +35,9 @@ in
   gtk = {
     enable = true;
     colorScheme = "dark";
+    # Adwaita's high-specificity header rules survive the theme CSS.
+    # User CSS has a higher GTK style-provider priority than theme CSS.
+    gtk3.extraCss = builtins.readFile ./gtk-3.0/file-chooser.css;
 
     theme = {
       package = matuzGtkTheme;

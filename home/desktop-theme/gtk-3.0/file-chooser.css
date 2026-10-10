@@ -1,0 +1,40 @@
+/* GTK 3 user CSS has higher priority than the imported Adwaita theme.
+   The portal file picker uses headerbar, #pathbarbox and treeview headers. */
+headerbar, headerbar.titlebar, .titlebar:not(headerbar) {
+  background-color: #001330;
+  background-image: none;
+  color: #f5f5f5;
+  border-color: #073887;
+}
+headerbar:backdrop, headerbar.titlebar:backdrop, .titlebar:backdrop:not(headerbar) {
+  background-color: #001029;
+  background-image: none;
+  color: #f5f5f5;
+  border-color: #001330;
+}
+headerbar button:not(.suggested-action), .titlebar button:not(.suggested-action) {
+  background-color: #001029;
+  background-image: none;
+  color: #f5f5f5;
+  border-color: #073887;
+}
+headerbar button:not(.suggested-action):hover, .titlebar button:not(.suggested-action):hover {
+  background-color: #073887;
+}
+filechooser #pathbarbox, filechooser .location-bar {
+  background-color: #001029;
+  background-image: none;
+  border-color: #073887;
+}
+filechooser #pathbarbox button {
+  background-color: #001330;
+  background-image: none;
+  color: #f5f5f5;
+}
+treeview.view header button {
+  background-color: #001330;
+  background-image: none;
+  color: #f5f5f5;
+  border-color: #073887;
+}
+treeview.view header button:hover { background-color: #073887; }

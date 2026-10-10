@@ -10,8 +10,10 @@ Configures the desktop-wide dark appearance for GTK and Qt applications:
 The GTK palette lives in [`gtk-3.0/gtk.css`](gtk-3.0/gtk.css) and
 [`gtk-4.0/gtk.css`](gtk-4.0/gtk.css); Dolphin remains a Qt application
 and reads the KDE color scheme, not the GTK theme.
-The GTK 3 portal file chooser and GTK 4 file dialogs now get blue headerbars
-and matching file-list column headers. Qt file dialogs still use KDE colors.
+The GTK 3 portal file chooser gets navy title, breadcrumb and column headers
+from [`gtk-3.0/file-chooser.css`](gtk-3.0/file-chooser.css). Home Manager
+installs this as user CSS at higher priority than Adwaita's imported theme CSS;
+the GTK 4 theme receives matching navy headers. Qt file dialogs still use KDE colors.
 
 The Fantasy theme is pinned to upstream commit
 `993280f3117bbe1eebcfc5dfa07f33a36845edc7`.
