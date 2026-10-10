@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, ... }:
+{ lib, inputs, ... }:
 
 {
   imports = [
@@ -21,16 +21,21 @@
     ./git
     ./devenv
     ./dolphin
+    ./cli-tools
+    ./obsidian
+    # ./zathura # Optional PDF reader; uncomment to install.
     ./desktop-theme
     ./mpv
     ./vscodium
     ./hermes
-    # ./kanatype # Opt in to Kanatype by uncommenting this import.
+    ./kanatype
   ];
 
   # ---------------------------------------------------------------------------
   # Package overlays
   # ---------------------------------------------------------------------------
+  # Home Manager evaluates its own nixpkgs instance (useGlobalPkgs is false).
+  nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [
     inputs.nix-vscode-extensions.overlays.default
     # inputs.ytm-player.overlays.default
@@ -43,49 +48,23 @@
   home.homeDirectory = "/home/matuz";
   home.stateVersion = "26.05";
 
-  # Storage HD directories
+  # Storage HD directories. Never create nested links inside a real user
+  # directory or replace a file if a mount/home layout changes.
   home.activation.storageHdLinks = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    ln -sfn "/mnt/storage_hd/OBS Videos" "$HOME/Videos"
-    ln -sfn "/mnt/storage_hd/Pictures" "$HOME/Pictures"
-    ln -sfn "/mnt/storage_hd/Wallpapers" "$HOME/Wallpapers"
-    ln -sfn "/mnt/workspace_linux/Repos" "$HOME/Repos"
+    link_storage() {
+      source="$1"
+      target="$2"
+      if [ -e "$target" ] && [ ! -L "$target" ]; then
+        printf 'Skipping storage link: %s exists and is not a symlink\n' "$target" >&2
+        return
+      fi
+      run ln -sfnT "$source" "$target"
+    }
+    link_storage "/mnt/storage_hd/OBS Videos" "$HOME/Videos"
+    link_storage "/mnt/storage_hd/Pictures" "$HOME/Pictures"
+    link_storage "/mnt/storage_hd/Wallpapers" "$HOME/Wallpapers"
+    link_storage "/mnt/workspace_linux/Repos" "$HOME/Repos"
   '';
-
-  xdg.mimeApps = {
-    enable = true;
-
-    defaultApplications = {
-      "inode/directory" = [ "org.kde.dolphin.desktop" ];
-    };
-
-    associations.added = {
-      "inode/directory" = [ "org.kde.dolphin.desktop" ];
-    };
-  };
-
-  xdg.configFile."mimeapps.list".force = true;
-  # ---------------------------------------------------------------------------
-  # User Packages
-  # ---------------------------------------------------------------------------
-  home.packages = with pkgs; [
-    # CLI / Development
-    ripgrep
-    fd
-    bat
-    btop
-
-    # Applications
-    zathura
-
-    # System
-  ];
-
-  # ---------------------------------------------------------------------------
-  # Git
-  # ---------------------------------------------------------------------------
-  programs.git = {
-    enable = true;
-  };
 
   # ---------------------------------------------------------------------------
   # Home Manager

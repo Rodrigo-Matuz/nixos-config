@@ -10,6 +10,13 @@
     pkgs.kdePackages.qtimageformats
   ];
 
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications."inode/directory" = [ "org.kde.dolphin.desktop" ];
+    associations.added."inode/directory" = [ "org.kde.dolphin.desktop" ];
+  };
+  xdg.configFile."mimeapps.list".force = true;
+
   xdg.configFile."kdeglobals".text = ''
     [General]
     AccentColor=30,101,255

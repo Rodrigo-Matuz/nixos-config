@@ -93,6 +93,7 @@ modules are documented opt-in building blocks.
 | `caelestia` | active | Desktop shell, bar, dashboard, lock screen, and wallpaper |
 | `cursor` | active | Rem (Re:ZERO) animated XCursor and Hyprcursor theme |
 | `devenv` | active | Development-environment tool |
+| `cli-tools` | active | Shared command-line utilities |
 | `dolphin` | active | KDE file manager |
 | `desktop-theme` | active | Shared Fantasy icon theme and dark GTK/Qt appearance |
 | `mpv` | active | mpv with the ModernZ on-screen controller |
@@ -101,7 +102,7 @@ modules are documented opt-in building blocks.
 | `git` | active | Git identity and program settings |
 | `hermes` | active | Hermes Agent application and local backend |
 | `hyprland` | active | Lua-based window-manager configuration |
-| [`kanatype`](home/kanatype/README.md) | opt-in | Japanese kana and kanji practice app; uncomment `./kanatype` in `home/matuz.nix` |
+| [`kanatype`](home/kanatype/README.md) | active | Japanese kana and kanji practice app |
 | `kitty` | active | Terminal, font, shell integration, and palette |
 | `librewolf` | opt-in | LibreWolf profile and uBlock Origin |
 | `noctalia` | opt-in | Noctalia shell and Matuz palette |
@@ -109,13 +110,15 @@ modules are documented opt-in building blocks.
 | `nvchad` | opt-in | NvChad Home Manager module |
 | `nvtop` | active | AMD GPU monitoring |
 | `obs` | active | OBS Studio and capture plugins |
+| `obsidian` | active | Obsidian notes; vault data stays unmanaged |
 | `rtorrent` | active | rtorrent Home Manager program |
 | `screenshot` | active | Wayland screenshot/annotation tools |
 | `termusic` | active | Terminal music player |
 | `vesktop` | active | Vesktop/Vencord preferences |
 | `vicinae` | active | Vicinae launcher service |
 | `vscodium` | active | VSCodium settings, theme, icons, and extensions |
-| `wallpaper` | opt-in | Wallpaper Picker UI and mpvpaper integration |
+| `wallpaper` | active | Wallpaper Picker UI and mpvpaper integration |
+| `zathura` | opt-in | PDF/document viewer; uncomment `./zathura` in `home/matuz.nix` |
 | `zsh` | active | Zsh tools, aliases, plugins, and integrations |
 | `zen-browser` | opt-in | Zen Browser module |
 
