@@ -14,12 +14,32 @@ NixOS search shortcuts, declarative extensions, and custom browser chrome from
 - Firefox telemetry, Pocket, sponsored content, and sponsored top sites are disabled.
 - Cookies remain enabled so website sessions persist.
 - Compact density and CSS customization are enabled.
-- uBlock Origin, Dark Reader, DeArrow, Enhancer for YouTube, and Imagus are installed in the profile. `extensions.autoDisableScopes = 0` enables packaged add-ons without a first-run approval prompt.
+- On the workstation, uBlock Origin, Dark Reader, DeArrow, Enhancer for YouTube, and Imagus are installed in the profile. `extensions.autoDisableScopes = 0` enables packaged add-ons without a first-run approval prompt.
 
-The complete preference set is in [`settings.nix`](settings.nix), bookmarks are
-in [`bookmarks.nix`](bookmarks.nix), and extensions are in
-[`extensions.nix`](extensions.nix). The profile path is
+The complete preference set is in [`settings.nix`](settings.nix). The workstation
+uses [`bookmarks.nix`](bookmarks.nix) and [`extensions.nix`](extensions.nix).
+**The portable installer instead uses** [`favorites.nix`](favorites.nix) and
+[`extensions-portable.nix`](extensions-portable.nix), without copying this
+workstation's bookmarks or extension list. The profile path is
 `~/.config/mozilla/firefox/ia642mh7.nixos`.
+
+## Customize a portable install
+
+Edit `home/firefox/favorites.nix` in the installed clone to add your own
+`{ name = "…"; url = "https://…"; }` entries. For toolbar links, place
+entries in a folder with `toolbar = true` and `bookmarks = [ ... ];`.
+By default the list is empty, so Firefox manages bookmarks normally.
+**Adding entries enables Home Manager's forced bookmarks**: export any existing
+browser bookmarks first, because later rebuilds can replace them. Do not paste
+Firefox's exported HTML here; Home Manager expects a Nix list.
+
+In `home/firefox/extensions-portable.nix`, comment/uncomment a package name in
+the list to remove/add it. Find more names in the pinned
+[`firefox-addons`](https://gitlab.com/rycee/nur-expressions/-/tree/master/pkgs/firefox-addons)
+input; use the package attribute name, not an add-ons.mozilla.org URL. The
+portable default is only uBlock Origin. Close Firefox before rebuilding and
+activating the cloned `#install` profile. These files do not change the existing
+workstation Firefox profile, which retains its current bookmarks and add-ons.
 
 ## Add-ons and mutable profile state
 
@@ -45,5 +65,7 @@ rest of the FoxOne theme remains unchanged.
 
 [`default.nix`](default.nix) owns profile/search/extension setup and shortcut
 activation; [`settings.nix`](settings.nix) owns preferences;
-[`bookmarks.nix`](bookmarks.nix) owns bookmarks; [`extensions.nix`](extensions.nix)
-owns add-ons; and [`chrome/`](chrome/) owns CSS.
+[`bookmarks.nix`](bookmarks.nix) and [`extensions.nix`](extensions.nix)
+retain workstation bookmarks/add-ons; [`favorites.nix`](favorites.nix) and
+[`extensions-portable.nix`](extensions-portable.nix) are portable overrides;
+and [`chrome/`](chrome/) owns CSS.

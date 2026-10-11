@@ -178,9 +178,12 @@ still usable. To rebuild an edited portable selection later, run
   inputs are wired and locked. `nvim` and `nvchad` conflict, as do `caelestia`
   and `wallpaper`. Caelestia auto-selects Hyprland.
 - The workstation's `#nixos` still uses the fixed `matuz` identity. Selecting
-  a username in `#install` does not replace personal Git identity, bookmarks,
-  branding, or hardware assumptions **inside individual optional modules**.
-  Inspect modules before selecting them.
+  a username in `#install` does not replace personal Git identity, branding,
+  or hardware assumptions **inside individual optional modules**. The portable
+  Firefox profile starts without the workstation’s bookmarks and uses only
+  uBlock Origin by default; edit `home/firefox/favorites.nix` and
+  `home/firefox/extensions-portable.nix` in the new clone to customize them.
+  Inspect other modules before selecting them.
 
 ## Hardware and account cautions
 
