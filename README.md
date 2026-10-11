@@ -32,8 +32,11 @@ must be configured separately before using it instead. The script clones the
 full Git repository itself; no manual clone is needed. For a local test of a
 published checkout, pass `--repo /path/to/dotfiles` (its files must be committed).
 It will ask for a username, hostname, time zone, state version, and optional
-modules, then dry-build and require `YES` before installing. Set root and user
-passwords at its prompts. **It does not partition, format, or mount disks.**
+modules. It can also ask about existing formatted data partitions, one at a
+time, and generate UUID-based mounts such as `/mnt/linux_hd` in its cloned
+portable profile. It then dry-builds and requires `YES` before installing.
+Set root and user passwords at its prompts. **It does not repartition, format,
+or mount disks during setup; root and EFI must already be mounted.**
 See [fresh-install prerequisites and limitations](install/README.md#fresh-nixos-installation).
 
 ### Existing NixOS installation: try it without switching

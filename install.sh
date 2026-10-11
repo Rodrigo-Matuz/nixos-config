@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Bootstrap a separate NixOS VM preview, install a portable profile from a
 # mounted live ISO, or apply it to an already-installed NixOS system.
-# Does NOT partition disks or reuse this workstation's UUIDs.
+# Does NOT repartition/format disks or reuse this workstation's UUIDs.
 set -Eeuo pipefail
 
 # Planned public dotfiles repo. It does not exist publicly yet; use --repo to
@@ -24,7 +24,8 @@ usage() {
     'iso:       /mnt and /mnt/boot must already be mounted; runs nixos-install.' \
     'installed: preserves /etc/nixos; requires an existing systemd-boot installation.' \
     'All modes require x86_64, NixOS, and an interactive terminal.' \
-    'No disks are formatted. No existing /etc/nixos files are overwritten.'
+    'Optional data-volume mounting uses existing filesystems; no formatting or repartitioning.' \
+    'No existing /etc/nixos files are overwritten.'
 }
 
 fail() { printf 'Error: %s\n' "$*" >&2; exit 1; }
@@ -165,7 +166,7 @@ clone+=(-- "$repo_url" "$stage/repo")
 printf 'Fetching dotfiles from %s...\n' "$repo_url"
 "${clone[@]}" || fail "Could not clone $repo_url (the dotfiles repo may not be public yet; use --repo URL for a test checkout)"
 repo="$stage/repo"
-[[ -s $repo/flake.nix && -s $repo/flake.lock && -s $repo/install/portable.nix && -s $repo/install/selection.nix ]] || fail 'Repository is missing the installer flake files'
+[[ -s $repo/flake.nix && -s $repo/flake.lock && -s $repo/install/portable.nix && -s $repo/install/selection.nix && -s $repo/install/partitions.nix && -s $repo/install/partitions.sh ]] || fail 'Repository is missing the installer flake files'
 
 if [[ $mode == iso ]]; then
   nixos-generate-config --root "$root" --dir "$repo"
@@ -232,6 +233,9 @@ if has_choice caelestia && ! has_choice hyprland; then
   selected_home+=(hyprland)
   printf 'Added Hyprland: Caelestia needs a graphical session.\n'
 fi
+# Ask about data disks only in real installation modes, never VM preview.
+source "$repo/install/partitions.sh"
+configure_partitions "$mode" "$root" "$repo" "$username"
 printf '\nSelected home modules: %s\n' "${selected_home[*]:-(none)}"
 printf 'Selected system modules: %s\n' "${selected_system[*]:-(none)}"
 printf '%s\n' 'Note: Hyprland, Caelestia, OBS, Steam, Git, and Hermes modules contain personal hardware/settings assumptions; review them before proceeding.'
@@ -242,7 +246,7 @@ printf '%s\n' 'Note: Hyprland, Caelestia, OBS, Steam, Git, and Hermes modules co
   if ((${#selected_home[@]})); then printf '"%s" ' "${selected_home[@]}"; fi
   printf '];\n  systemModules = [ '
   if ((${#selected_system[@]})); then printf '"%s" ' "${selected_system[@]}"; fi
-  printf '];\n}\n'
+  printf '];\n  partitionOwnerUid = %s;\n}\n' "$partition_owner_uid"
 } > "$repo/install/selection.nix"
 
 if [[ $mode == preview ]]; then

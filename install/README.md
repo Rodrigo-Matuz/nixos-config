@@ -5,8 +5,10 @@ its separate `#install` profile. The `#nixos` output is the original `matuz`
 workstation profile; **never install that profile on another machine**. This
 installer supports x86_64 NixOS only. It offers a non-root VM preview, a fresh
 UEFI installation, and an explicitly opt-in switch of an installed NixOS host.
-It does **not** partition, format, or mount disks. It leaves an existing
-`/etc/nixos` tree in place and refuses to overwrite `portable-config`.
+It never repartitions, formats, or mounts disks during setup. In ISO and
+installed modes it can optionally configure **existing formatted data volumes**
+to mount on the installed system. It leaves an existing `/etc/nixos` tree in
+place and refuses to overwrite `portable-config`.
 
 ## Publication status and bootstrap
 
@@ -51,10 +53,14 @@ expose a writable host exchange directory and guest networking.
 3. Type a **required** normal username (not `root`), hostname, time zone, and
    state version. Press Enter at the optional Home Manager/system module
    prompts to choose none; otherwise enter their displayed numbers separated
-   by spaces or commas. The chosen username controls the new NixOS account,
-   `/home/NAME`, and Home Manager identity. The script generates hardware
-   settings **from your mounted target**, dry-builds the selected profile,
-   and requires the literal `YES` before running `nixos-install`.
+   by spaces or commas. You can then opt in to additional data partitions: the
+   script displays each supported partition's device (for example `/dev/sdc1`),
+   size, filesystem, label, UUID and existing mountpoint; answer yes/no for
+   each, then enter a mount name such as `linux_hd` for `/mnt/linux_hd`. The
+   chosen username controls the new NixOS account, `/home/NAME`, and Home
+   Manager identity. The script generates hardware settings **from your mounted
+   target**, dry-builds the selected profile, and requires the literal `YES`
+   before running `nixos-install`.
 4. Complete both password prompts (root and the chosen user). The script
    explicitly invokes `passwd` in the target even if the bootstrap was
    piped into Bash. Reboot only after both passwords are set. The persistent
@@ -65,6 +71,24 @@ mounted EFI system partition. Nothing is installed if prerequisites or the
 pre-install confirmation fail, but the script may leave generated files in
 the mounted target only after confirmation. A dry-build cannot prove the
 machine will boot or that optional graphical modules work on its hardware.
+
+**Data-mount behavior:** This opt-in does not prepare a new disk: root and EFI
+must already be mounted, and unformatted, encrypted/locked, swap, or unknown
+filesystems are not offered. A partition already mounted outside the data
+area (for example `/home`) is skipped, as is a filesystem UUID shared by
+multiple devices. Existing `/mnt/NAME` targets must be empty or already mount
+the same filesystem; symlinked mount parents are rejected. Supported data
+filesystems are ext4, btrfs, xfs, NTFS (mounted with `ntfs3`), FAT (`vfat`)
+and exFAT. The generated
+`install/partitions.nix` uses filesystem UUIDs and `nofail` with a device
+timeout so an absent data disk does not prevent boot. FAT, exFAT and NTFS use
+UID/GID mount options and `umask=022`; for ext4/btrfs/xfs, a systemd oneshot
+gives the chosen user ownership and write permission on the **mount root only**
+after mounting. Existing files and subdirectories keep their original owners
+and modes; this is not a recursive ownership takeover. NTFS volumes must be
+cleanly shut down in Windows (Fast Startup/hibernation disabled) for reliable
+read-write access. Review `/boot` free space and back up important data before
+changing boot/system configuration. VM preview never imports host data mounts.
 
 ## Existing NixOS: try the configuration in a VM
 
@@ -114,8 +138,12 @@ sudo bash install.sh --mode installed
 ```
 
 The script copies this host's `/etc/nixos/hardware-configuration.nix` to a
-new `/etc/nixos/portable-config` checkout, dry-builds, asks for `YES`, then
-runs `nixos-rebuild switch` and asks for the selected user's password. It
+new `/etc/nixos/portable-config` checkout. It can optionally generate UUID-based
+data mounts through the same per-partition questions as ISO mode. It then
+dry-builds, asks for `YES`, runs `nixos-rebuild switch`, and asks for the
+selected user's password. This is still a **full profile switch**, not a way
+to add mounts to your current workstation configuration. This mode requires
+systemd-boot and is not supported on the GRUB workstation in this repository. It
 does not overwrite the previous `/etc/nixos` files, but **switching can stop
 services or disrupt access**; it has no automatic rollback. Some selected
 Home Manager modules use `force = true` and may replace existing application
@@ -132,7 +160,12 @@ still usable. To rebuild an edited portable selection later, run
   version with that host, not as shared defaults for other users.
 - `portable.nix` imports either target-generated hardware, the host's
   hardware in installed mode, or empty hardware in VM mode (where `build-vm`
-  supplies virtual devices). It includes a minimal NixOS base; every
+  supplies virtual devices), plus `install/partitions.nix`. The latter is an
+  empty module by default; the installer generates it **in the new clone**
+  when data mounts are selected. It does not import or overwrite the
+  workstation's root `partitions.nix`. A fresh account gets explicit UID 1000
+  only when a data partition is selected; installed mode preserves the selected
+  account's existing numeric UID. It includes a minimal NixOS base; every
   non-essential Home Manager and system module is opt-in.
 - To add a normal Home Manager module, add `home/NAME/default.nix` and a
   README; the script discovers it automatically. A system module goes at

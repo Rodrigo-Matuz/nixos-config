@@ -6,4 +6,5 @@
   stateVersion = "26.05";
   homeModules = [ ];
   systemModules = [ ];
+  partitionOwnerUid = null; # set only for explicit data-mount selections
 }
