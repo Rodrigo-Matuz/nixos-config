@@ -226,11 +226,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791653271,
-        "narHash": "sha256-Oqn1T4jZ2PPSZ36VtV15CtHIXaT+FlPOetr5QyeoDek=",
+        "lastModified": 1791735275,
+        "narHash": "sha256-+bfvQPk4tuxapBxVUi6mxXCkTcJ5x87JSj9y0OnPAbY=",
         "owner": "Rodrigo-Matuz",
         "repo": "kanatype",
-        "rev": "6de9d581aa96329b4f71736a470e5da6a3c94fe5",
+        "rev": "2c87c24a53454acd28f49305f4ce237d918c0ca7",
         "type": "github"
       },
       "original": {
