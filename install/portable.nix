@@ -73,6 +73,8 @@ in
     home.homeDirectory = "/home/${selection.username}";
     home.stateVersion = selection.stateVersion;
     programs.home-manager.enable = true;
+  } // lib.optionalAttrs (enabled "hyprland") {
+    matuz.hyprland.includeMonitorLayout = false;
   } // lib.optionalAttrs (enabled "zsh" && !(enabled "hyprland")) {
     # The workstation's zsh module otherwise launches Hyprland on tty1.
     programs.zsh.initContent = lib.mkForce ''

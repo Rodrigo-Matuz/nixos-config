@@ -184,8 +184,12 @@ still usable. To rebuild an edited portable selection later, run
 
 ## Hardware and account cautions
 
-- Hyprland Lua settings reference specific monitors and AMD graphics. No
-  display manager or tty autologin is configured on the installed host;
+- The portable Hyprland profile does not import the workstation’s monitor
+  layout or workspace-to-monitor rules. Hyprland chooses its default modes and
+  placement; configure your own layout after login. Some other optional modules
+  still contain monitor-specific settings (for example OBS and Caelestia), so
+  review those before selecting them. No display manager or tty autologin is
+  configured on the installed host;
   launch the graphical session manually after login. The VM-only variant
   enables console autologin for preview.
 - `home/git` sets a personal Git identity. `home/nvtop` uses the AMD variant.
