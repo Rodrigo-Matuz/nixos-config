@@ -5,12 +5,12 @@
 
 partition_yes_no() {
   local response
-  ask "$1 (yes/no)" "$2"
+  ask "$1 (yes/no/skip)" "$2"
   response=${REPLY,,}
   case $response in
     yes|y) return 0 ;;
-    no|n) return 1 ;;
-    *) fail 'Answer yes or no' ;;
+    no|n|skip|s) return 1 ;;
+    *) fail 'Answer yes, no, or skip' ;;
   esac
 }
 
@@ -46,6 +46,7 @@ configure_partitions() {
   choices=$(lsblk -rnp -o PATH,TYPE --exclude 7,11) || fail 'Could not enumerate block devices'
   uuid_devices=$(lsblk -rnp -o PATH,UUID) || fail 'Could not check filesystem UUID uniqueness'
   printf '\nOnly existing, formatted data partitions are offered; root and EFI are excluded.\n'
+  printf 'Unsure which disk this is or what it contains? Press Enter (default no) or type skip; leave it untouched until you can identify it.\n'
   while read -r device kind; do
     [[ $kind == part ]] || continue
     major_minor=$(lsblk -dnro MAJ:MIN -- "$device") || fail "Cannot inspect $device"

@@ -56,7 +56,9 @@ expose a writable host exchange directory and guest networking.
    by spaces or commas. You can then opt in to additional data partitions: the
    script displays each supported partition's device (for example `/dev/sdc1`),
    size, filesystem, label, UUID and existing mountpoint; answer yes/no for
-   each, then enter a mount name such as `linux_hd` for `/mnt/linux_hd`. The
+   each, then enter a mount name such as `linux_hd` for `/mnt/linux_hd`.
+   **If you cannot identify a partition or do not know what it contains, press
+   Enter (default `no`) or type `skip`; the script does not inspect its files.** The
    chosen username controls the new NixOS account, `/home/NAME`, and Home
    Manager identity. The script generates hardware settings **from your mounted
    target**, dry-builds the selected profile, and requires the literal `YES`
