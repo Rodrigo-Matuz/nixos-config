@@ -46,12 +46,12 @@
 
   home.packages = with pkgs; [
     libsecret
-    (pkgs.writeTextFile {
-      name = "github-copilot-token";
-      text = "GITHUB_TOKEN=gho_Si...gVAt";
-      destination = "/home/matuz/.github-copilot-token";
-      executable = false;
-    })
+    (pkgs.writeShellScriptBin "copilot-login" ''
+      #!/run/current-system/sw/bin/bash
+      # Set GITHUB_TOKEN from gh CLI credentials
+      export GITHUB_TOKEN="$(gh auth token)"
+      exec "$@"
+    '')
   ];
 
   # Storage HD directories
@@ -74,10 +74,13 @@
   # Home Manager
   programs.home-manager.enable = true;
 
-  # Add GitHub Copilot token to zsh environment
+  # Add GITHUB_TOKEN to shell environment from gh CLI credentials
   home.file = {
     ".zshenv".text = ''
-      export GITHUB_TOKEN="gho_Si...gVAt"
+      # Use GitHub CLI's secure credential store for Copilot tokens
+      if command -v gh &>/dev/null; then
+        export GITHUB_TOKEN="$(gh auth token 2>/dev/null)"
+      fi
     '';
   };
 }
