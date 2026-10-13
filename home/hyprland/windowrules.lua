@@ -43,9 +43,7 @@ hl.window_rule({
   match = {
     class = "^com%.obsproject%.Studio$",
   },
-  size = { 1125, 900 },
   monitor = "DP-1",
-  workspace = "special:minimized silent",
   float = true,
 })
 
