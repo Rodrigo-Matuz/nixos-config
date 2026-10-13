@@ -150,9 +150,9 @@ hl.bind(
 -- OBS
 -- --------------------------------------------------------------
 
---hl.bind(SP .. "ALT + Z", hl.dsp.pass({ window = "class:com%.obsproject%.Studio" }))
+hl.bind(SP .. "ALT + Z", hl.dsp.pass({ window = "class:com%.obsproject%.Studio" }))
 
---hl.bind(SP .. "ALT + F10", hl.dsp.pass({ window = "class:com%.obsproject%.Studio" }))
+hl.bind(SP .. "ALT + F10", hl.dsp.pass({ window = "class:com%.obsproject%.Studio" }))
 
 -- --------------------------------------------------------------
 -- Audio
