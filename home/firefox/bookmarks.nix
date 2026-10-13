@@ -97,12 +97,6 @@ in
           (link "Microsoft 365" "https://www.office.com/?auth=1")
           (link "OneDrive" "https://onedrive.live.com/?id=root&cid=1C022A973FAC7E2C")
         ])
-
-        (folder "Vivaldi" [
-          (link "Features" "https://vivaldi.com/features/")
-          (link "Webmail" "https://webmail.vivaldi.net/")
-          (link "Help" "https://help.vivaldi.com/")
-        ])
       ])
 
       (folder "Shopping" [

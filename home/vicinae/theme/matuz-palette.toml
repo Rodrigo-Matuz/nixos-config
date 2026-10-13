@@ -1,0 +1,79 @@
+# Matuz Palette — generated TOML (for reference)
+
+[meta]
+name = "Matuz Palette"
+description = "Dark theme matching the matuz.dev / wallpaper-picker-ui palette"
+variant = "dark"
+inherits = "vicinae-dark"
+
+[colors.core]
+accent = "#1e65ff"
+accent_foreground = "#ffffff"
+background = "#050505"
+foreground = "#fffff0"
+secondary_background = "#151515"
+border = "#3e364f"
+
+[colors.accents]
+red = "#fc1a70"
+purple = "#702ef3"
+blue = "#1e65ff"
+orange = "#ff4d00"
+yellow = "#ffff87"
+green = "#a4e400"
+
+[colors.text]
+default = "#fffff0"
+muted = "#d8d0e8"
+danger = "#ff4d00"
+success = "#fc1a70"
+placeholder = { name = "#d8d0e8", opacity = 0.6 }
+
+[colors.text.selection]
+background = "#1e65ff"
+foreground = "#ffffff"
+
+[colors.text.links]
+default = "#1e65ff"
+visited = "#fc1a70"
+
+[colors.input]
+border = "#62557d"
+border_focus = "#1e65ff"
+border_error = "#ff4d00"
+
+[colors.button.primary]
+background = "#1f1f1f"
+foreground = "#fffff0"
+
+[colors.button.primary.hover]
+background = "#292929"
+
+[colors.button.primary.focus]
+outline = "#1e65ff"
+
+[colors.list.item.hover]
+background = { name = "#00226b", opacity = 0.25 }
+foreground = "#fffff0"
+
+[colors.list.item.selection]
+background = { name = "#00226b", opacity = 0.50 }
+foreground = "#ccdcff"
+secondary_background = "#00226b"
+secondary_foreground = "#ccdcff"
+
+[colors.grid.item]
+background = "#151515"
+
+[colors.grid.item.hover]
+outline = { name = "#702ef3", opacity = 0.8 }
+
+[colors.grid.item.selection]
+outline = "#1e65ff"
+
+[colors.scrollbars]
+background = { name = "#1e65ff", opacity = 0.2 }
+
+[colors.loading]
+bar = "#1e65ff"
+spinner = "#1e65ff"
