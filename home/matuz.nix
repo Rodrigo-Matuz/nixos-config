@@ -49,6 +49,10 @@
   home.homeDirectory = "/home/matuz";
   home.stateVersion = "26.05";
 
+  home.packages = with pkgs; [
+    libsecret
+  ];
+
   # Storage HD directories. Never create nested links inside a real user
   # directory or replace a file if a mount/home layout changes.
   home.activation.storageHdLinks = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
