@@ -1,13 +1,13 @@
 { config, pkgs, ... }:
 
 {
-  programs.copilot = {
+  # GitHub Copilot CLI (command-line interface)
+  programs.github-copilot-cli = {
     enable = true;
-    shellIntegration = true;
   };
 
-  # Optional: make `copilot` binary available in user environment
-  environment.systemPackages = with pkgs; [
-    github-copilot
+  # Binary package in the user environment (home.packages, not system packages)
+  home.packages = with pkgs; [
+    github-copilot-cli
   ];
 }
