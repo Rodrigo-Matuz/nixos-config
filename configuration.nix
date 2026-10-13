@@ -186,17 +186,9 @@
   # ============================================================================
   # Optional Services
   # ============================================================================
-  #
-  # programs.git.config = {
-  #   user = {
-  #     name = "Rodrig-Matuz";
-  #     email = "rodrigosantoslima1311@gmail.com";
-  #   };
-  #
-  #   init = {
-  #     defaultBranch = "main";
-  #   };
-  # };
+
+  services.gnome.gnome-keyring.enable = true;
+  security.polkit.enable = true;
 
   # ============================================================================
   # Optional Programs / Services
