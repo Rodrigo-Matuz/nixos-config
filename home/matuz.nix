@@ -32,29 +32,29 @@
     ./copilot
   ];
 
-  # ---------------------------------------------------------------------------
   # Package overlays
-  # ---------------------------------------------------------------------------
-  # Home Manager evaluates its own nixpkgs instance (useGlobalPkgs is false).
   nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [
     inputs.nix-vscode-extensions.overlays.default
     # inputs.ytm-player.overlays.default
   ];
 
-  # ---------------------------------------------------------------------------
   # Home
-  # ---------------------------------------------------------------------------
   home.username = "matuz";
   home.homeDirectory = "/home/matuz";
   home.stateVersion = "26.05";
 
   home.packages = with pkgs; [
     libsecret
+    (pkgs.writeTextFile {
+      name = "github-copilot-token";
+      text = "GITHUB_TOKEN=gho_Si...gVAt";
+      destination = "/home/matuz/.github-copilot-token";
+      executable = false;
+    })
   ];
 
-  # Storage HD directories. Never create nested links inside a real user
-  # directory or replace a file if a mount/home layout changes.
+  # Storage HD directories
   home.activation.storageHdLinks = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     link_storage() {
       source="$1"
@@ -71,8 +71,13 @@
     link_storage "/mnt/workspace_linux/Repos" "$HOME/Repos"
   '';
 
-  # ---------------------------------------------------------------------------
   # Home Manager
-  # ---------------------------------------------------------------------------
   programs.home-manager.enable = true;
+
+  # Add GitHub Copilot token to zsh environment
+  home.file = {
+    ".zshenv".text = ''
+      export GITHUB_TOKEN="gho_Si...gVAt"
+    '';
+  };
 }
