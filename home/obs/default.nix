@@ -11,8 +11,11 @@
   home.packages = [
     pkgs.obs-cmd
 
-    (pkgs.writeShellScriptBin "obs-control"
-      (builtins.readFile ./obs-control.sh))
+    (pkgs.writeShellApplication {
+      name = "obs-control";
+      runtimeInputs = [ pkgs.obs-cmd ];
+      text = builtins.readFile ./obs-control.sh;
+    })
   ];
 
   programs.obs-studio = {

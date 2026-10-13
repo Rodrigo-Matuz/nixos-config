@@ -153,13 +153,13 @@ hl.bind(
 
 hl.bind(
   "ALT + Z",
-  hl.dsp.exec_cmd("obs-cmd replay save"),
+  hl.dsp.exec_cmd("obs-control replay save"),
   { description = "OBS: Save Replay Buffer" }
 )
 
 hl.bind(
   "ALT + F10",
-  hl.dsp.exec_cmd("obs-cmd recording toggle"),
+  hl.dsp.exec_cmd("obs-control recording toggle"),
   { description = "OBS: Toggle Recording" }
 )
 
