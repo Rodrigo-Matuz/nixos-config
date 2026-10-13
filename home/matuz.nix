@@ -23,12 +23,13 @@
     ./dolphin
     ./cli-tools
     ./obsidian
-    # ./zathura # Optional PDF reader; uncomment to install.
+    ./zathura
     ./desktop-theme
     ./mpv
     ./vscodium
     ./hermes
     ./kanatype
+    ./copilot
   ];
 
   # ---------------------------------------------------------------------------
