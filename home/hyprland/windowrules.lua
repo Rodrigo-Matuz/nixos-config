@@ -56,7 +56,7 @@ hl.window_rule({
   match = {
     class = "^(dev[.]matuz[.]wallpaper-picker-ui|wallpaper-picker-ui)$",
   },
-  size = { 950, 600 },
+  size = { 900, 600 },
   float = true,
 })
 
