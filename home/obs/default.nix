@@ -8,6 +8,13 @@
     };
   };
 
+  home.packages = [
+    pkgs.obs-cmd
+
+    (pkgs.writeShellScriptBin "obs-control"
+      (builtins.readFile ./obs-control.sh))
+  ];
+
   programs.obs-studio = {
     enable = true;
 
@@ -17,5 +24,4 @@
       obs-vkcapture
     ];
   };
-
 }

@@ -146,13 +146,22 @@ hl.bind(
     "grimblast --freeze save area - | satty -f - --copy-command wl-copy"
   )
 )
+
 -- --------------------------------------------------------------
--- OBS
+-- OBS - WebSocket Controls
 -- --------------------------------------------------------------
 
-hl.bind("ALT + Z", hl.dsp.pass({ window = "class:com%.obsproject%.Studio" }))
+hl.bind(
+  "ALT + Z",
+  hl.dsp.exec_cmd("obs-cmd replay save"),
+  { description = "OBS: Save Replay Buffer" }
+)
 
-hl.bind("ALT + F10", hl.dsp.pass({ window = "class:com%.obsproject%.Studio" }))
+hl.bind(
+  "ALT + F10",
+  hl.dsp.exec_cmd("obs-cmd recording toggle"),
+  { description = "OBS: Toggle Recording" }
+)
 
 -- --------------------------------------------------------------
 -- Audio
