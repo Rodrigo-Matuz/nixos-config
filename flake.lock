@@ -680,11 +680,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791944592,
-        "narHash": "sha256-RhYBzBwmss9V5+ZbuRT9yyUQI8n00F8KGfqNj+Gyqo8=",
+        "lastModified": 1791989885,
+        "narHash": "sha256-GGRgXPx4hPdKZd5LlnG54/RP8bUfwFYs58pQqAKV0+c=",
         "owner": "Rodrigo-Matuz",
         "repo": "wallpaper-picker-ui",
-        "rev": "928ce11c4b89a7b04515aa36ba5cf6deb2319bb1",
+        "rev": "c659e11174a82d1c80dd7de002f82132d205ec3e",
         "type": "github"
       },
       "original": {
