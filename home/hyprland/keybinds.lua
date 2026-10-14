@@ -19,7 +19,7 @@ hl.bind(SP .. " + SHIFT + F", hl.dsp.exec_cmd("hyprctl dispatch workspaceopt all
 
 -- Rofi launchers and widgets
 -- hl.bind(SP .. " + R", hl.dsp.exec_cmd("~/.config/rofi/launchers/type-3/launcher.sh"))
-hl.bind(SP .. " + RETURN", hl.dsp.global("caelestia:launcher"))
+-- hl.bind(SP .. " + RETURN", hl.dsp.global("caelestia:launcher"))
 hl.bind(SP .. " + SPACE", hl.dsp.exec_cmd("vicinae open"))
 
 -- MPD
