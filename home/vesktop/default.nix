@@ -11,7 +11,7 @@
   programs.vesktop = {
     enable = true;
 
-    vencord.settings = {
+    vencord.settings.plugins = {
       BadgeAPI = {
         enabled = true;
       };
@@ -94,15 +94,15 @@
         type = 0;
         timestampMode = 2;
         appID = "1337472828395753563";
-        appName = "or Learning";
+        appName = "Hello!";
         imageBig = "pfp";
-        imageSmall = "arch-logo";
-        imageSmallTooltip = "I DON'T use Arch btw. (it's ilegal in brazil)";
+        imageSmall = "nix-logo";
+        imageSmallTooltip = "I should've used NixOS all along";
         imageBigTooltip = "Rem is the best waifu <3";
         details = "Just a random developer.";
         state = "Local Time (UTC-3)";
         buttonOneText = "My Website";
-        buttonOneURL = "https://matuz.me";
+        buttonOneURL = "https://matuz.dev";
         buttonTwoText = "AniList";
         buttonTwoURL = "https://anilist.co/user/Matuz0117/";
       };

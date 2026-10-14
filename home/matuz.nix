@@ -20,6 +20,7 @@
     ./firefox
     ./git
     ./devenv
+    ./rust
     ./dolphin
     ./cli-tools
     ./obsidian

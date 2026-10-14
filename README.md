@@ -96,6 +96,7 @@ modules are documented opt-in building blocks.
 | `caelestia` | active | Desktop shell, bar, dashboard, lock screen, and wallpaper |
 | `cursor` | active | Rem (Re:ZERO) animated XCursor and Hyprcursor theme |
 | `devenv` | active | Development-environment tool |
+| `rust` | active | Rust compiler, Cargo, formatter, linter, and language server |
 | `cli-tools` | active | Shared command-line utilities |
 | `dolphin` | active | KDE file manager |
 | `desktop-theme` | active | Shared Fantasy icon theme and dark GTK/Qt appearance |
