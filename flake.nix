@@ -92,7 +92,7 @@
 
           home-manager.users.matuz.imports = [
             inputs.caelestia-shell.homeManagerModules.default
-            (import "${inputs.caelestia-shell}/integrations/vencord/default.nix")
+            inputs.caelestia-shell.homeManagerModules.vesktop-voice
             inputs.zen-browser.homeModules.default
             inputs.hermes-agent.homeManagerModules.default
             inputs.wallpaper-picker-ui.homeManagerModules.default
