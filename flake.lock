@@ -617,6 +617,26 @@
         "url": "https://git.outfoxxed.me/outfoxxed/quickshell"
       }
     },
+    "resonance": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792041569,
+        "narHash": "sha256-k4YegYK9HJfL9HkY8THL4ozXlTAe8IeH39naplOSUzA=",
+        "owner": "Rodrigo-Matuz",
+        "repo": "Resonance",
+        "rev": "19380cac016c83f1c6e91a353b1fcdf00d278ae6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Rodrigo-Matuz",
+        "repo": "Resonance",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "caelestia-cli": "caelestia-cli",
@@ -630,6 +650,7 @@
         "nix4nvchad": "nix4nvchad",
         "nixpkgs": "nixpkgs_2",
         "nuclear": "nuclear",
+        "resonance": "resonance",
         "snappy-switcher": "snappy-switcher",
         "sops-nix": "sops-nix",
         "vicinae": "vicinae",

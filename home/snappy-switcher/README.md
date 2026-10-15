@@ -29,3 +29,4 @@ used `Alt+Tab` for monitor switching.
 Imported by [`../matuz.nix`](../matuz.nix); implementation is in
 [`default.nix`](default.nix). The package is provided by the
 `inputs.snappy-switcher` flake input.
+- App cards use `#05050566` so the wallpaper remains visible through them.

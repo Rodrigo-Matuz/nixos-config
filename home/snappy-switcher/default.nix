@@ -47,15 +47,16 @@ in
 
   home.file.".config/snappy-switcher/themes/matuz.ini".text = ''
     # Matuz palette shared with the Caelestia shell.
-    # #05050599 is #050505 at 0.60 alpha.
+    # Keep the panel at 60% black, but let the app cards show the wallpaper
+    # through at 40% black instead of turning them into opaque blocks.
     [colors]
     background = #05050599
-    card_bg = #050505cc
+    card_bg = #05050566
     card_selected = #1E65FF66
     border_color = #702EF3ff
     text_color = #ffffffff
     subtext_color = #FFFF87ff
-    bundle_bg = #FF4D0033
+    bundle_bg = #FF4D0026
     badge_bg = #A4E400ff
     badge_text_color = #050505ff
     badge_bg_selected = #FC1A70ff
