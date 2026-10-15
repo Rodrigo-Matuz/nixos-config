@@ -58,31 +58,37 @@
     --accent_orange_light: #FF8A5C;
     --accent_orange_dark: #B52D00;
 
-    /* Deep indigo surfaces inspired by the matuz.dev hero background. */
-    --grey1: #747BA8;
-    --grey2: #454A70;
-    --grey3: #2C3154;
-    --grey4: #202541;
-    --grey5: #171B32;
-    --grey6: #10142A;
-    --grey7: #0A0D1C;
-    --grey8: #03040A;
+    /* matuz.dev surface palette */
+    --surface_background: #030A14;
+    --surface: #010A17;
+    --surface_raised: #001029;
+    --surface_hover: #073887;
 
-    --white1: #F7F7FF;
-    --white2: #D9DCF5;
-    --white3: #B9BEDF;
-    --white4: #9298BC;
-    --white5: #6B7299;
+    /* Keep OBS's semantic grey ramp aligned with the four UI surfaces. */
+    --grey1: #71717A;
+    --grey2: #193354;
+    --grey3: #0C2441;
+    --grey4: var(--surface_raised);
+    --grey5: var(--surface_raised);
+    --grey6: var(--surface_raised);
+    --grey7: var(--surface);
+    --grey8: var(--surface_background);
 
-    --black1: #E7E9FF;
-    --black2: #20233A;
-    --black3: #3A3E60;
-    --black4: #555A80;
-    --black5: #70769B;
+    --white1: #F5F5F5;
+    --white2: #A1A1AA;
+    --white3: #A1A1AA;
+    --white4: #71717A;
+    --white5: #71717A;
 
-    --bg_window: #0A0D1C;
-    --bg_base: #10142A;
-    --bg_preview: #03040A;
+    --black1: #F5F5F5;
+    --black2: #010A17;
+    --black3: #0C2441;
+    --black4: #193354;
+    --black5: #71717A;
+
+    --bg_window: var(--surface_background);
+    --bg_base: var(--surface);
+    --bg_preview: var(--surface_background);
 
     --primary: var(--blue3);
     --primary_light: var(--blue2);
@@ -99,35 +105,35 @@
     --text_inactive: var(--white3);
 
     --border_color: var(--grey3);
-    --input_bg: var(--grey4);
-    --input_bg_hover: var(--grey3);
-    --input_bg_focus: var(--grey5);
+    --input_bg: var(--surface_raised);
+    --input_bg_hover: var(--surface_hover);
+    --input_bg_focus: var(--surface_raised);
     --input_border: var(--grey2);
     --input_border_hover: var(--purple2);
     --input_border_focus: var(--blue3);
 
-    --button_bg: var(--grey4);
-    --button_bg_hover: var(--grey3);
-    --button_bg_down: var(--grey6);
-    --button_bg_disabled: var(--grey6);
+    --button_bg: var(--surface_raised);
+    --button_bg_hover: var(--surface_hover);
+    --button_bg_down: var(--surface);
+    --button_bg_disabled: var(--surface);
     --button_border: var(--grey3);
     --button_border_hover: var(--purple2);
     --button_border_focus: var(--blue3);
 
-    --tab_bg: var(--grey6);
-    --tab_bg_hover: var(--grey4);
+    --tab_bg: var(--surface);
+    --tab_bg_hover: var(--surface_hover);
     --tab_bg_down: var(--purple3);
-    --tab_bg_disabled: var(--grey6);
+    --tab_bg_disabled: var(--surface);
     --tab_border: var(--grey3);
     --tab_border_hover: var(--purple2);
     --tab_border_focus: var(--blue1);
     --tab_border_selected: var(--purple3);
 
     --list_item_bg_selected: var(--blue3);
-    --list_item_bg_hover: var(--purple5);
+    --list_item_bg_hover: var(--surface_hover);
     --scrollbar_handle: var(--grey3);
-    --scrollbar_bg: var(--grey7);
-    --scrollbar_hover: var(--purple4);
+    --scrollbar_bg: var(--surface);
+    --scrollbar_hover: var(--surface_hover);
     --scrollbar_down: var(--purple3);
     --scrollbar_border: var(--purple2);
 }
@@ -156,7 +162,7 @@ QListWidget::item:selected {
 QMenu::item:hover,
 QListView::item:hover,
 QListWidget::item:hover {
-    background-color: var(--purple5);
+    background-color: var(--surface_hover);
     border-color: var(--purple4);
 }
 

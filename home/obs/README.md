@@ -5,8 +5,15 @@ capture, a Hyprland launcher entry, and the declarative [`Matuz.ovt`](Matuz.ovt)
 theme. [`obs.lua`](obs.lua) contains the launcher; [`default.nix`](default.nix)
 selects packages, plugins, and installs the theme into OBS's user theme folder.
 
-The theme uses a near-black indigo background inspired by `matuz.dev` and the
-following saturated accents: red `#FC1A70`, purple `#702EF3`, blue `#1E65FF`,
+The theme uses the exact `matuz.dev` surface palette:
+
+- Background `#030A14`
+- Surface `#010A17`
+- Raised surface `#001029`
+- Hover `#073887`
+- Text `#F5F5F5`, muted text `#A1A1AA`, and secondary text `#71717A`
+
+Its saturated accents are red `#FC1A70`, purple `#702EF3`, blue `#1E65FF`,
 orange `#FF4D00`, yellow `#FFFF87`, and green `#A4E400`. It extends OBS's Yami
 base theme rather than copying the full base stylesheet, so OBS updates remain
 less likely to break it.
