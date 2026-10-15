@@ -19,6 +19,7 @@
     ./termusic
     ./firefox
     ./helium
+    ./snappy-switcher
     ./git
     ./devenv
     ./rust

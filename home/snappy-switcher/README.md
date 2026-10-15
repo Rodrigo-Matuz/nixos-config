@@ -1,16 +1,31 @@
 # Snappy Switcher
 
-Opt-in package module for the default Snappy Switcher output from
-`inputs.snappy-switcher`. The current root flake does not declare that input;
-add and lock the input before enabling this directory.
+Installs [Snappy Switcher](https://github.com/OpalAayan/snappy-switcher) from
+its upstream flake, starts its daemon as a systemd user service, and configures
+the Hyprland `Alt+Tab` binding.
 
-## Upstream and original Nix source
+## Theme
 
-The upstream repository URL is not declared in the current flake, so this
-README intentionally does not guess it. Once the input is added, document its
-canonical repository URL in [`../../flake.nix`](../../flake.nix) and here.
+The managed theme uses the fixed Matuz/Caelestia palette:
+
+- Red `#FC1A70`
+- Purple `#702EF3`
+- Blue `#1E65FF`
+- Orange `#FF4D00`
+- Yellow `#FFFF87`
+- Green `#A4E400`
+- Background `#050505` at 60% opacity (`#05050599`)
+
+The generated files are:
+
+- `~/.config/snappy-switcher/config.ini`
+- `~/.config/snappy-switcher/themes/matuz.ini`
+
+The active binding is `Alt+Tab`; it replaces the previous Hyprland binding that
+used `Alt+Tab` for monitor switching.
 
 ## Module
 
-Imported by [`../matuz.nix`](../matuz.nix) when enabled; implementation is in
-[`default.nix`](default.nix) and expects `inputs.snappy-switcher`.
+Imported by [`../matuz.nix`](../matuz.nix); implementation is in
+[`default.nix`](default.nix). The package is provided by the
+`inputs.snappy-switcher` flake input.

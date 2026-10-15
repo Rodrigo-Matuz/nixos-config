@@ -189,3 +189,5 @@ to the requested command instead of globally exporting it from `.zshenv`.
 The original workstation keeps console auto-login by the owner's choice;
 portable real installs ask explicitly (default no), while VM preview always
 autologs in. Steam network exceptions are disabled unless opted into.
+|| `snappy-switcher` | active | Hyprland Alt+Tab window switcher with Matuz palette |
+|- [Snappy Switcher](https://github.com/OpalAayan/snappy-switcher)

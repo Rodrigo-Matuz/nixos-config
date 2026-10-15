@@ -79,7 +79,13 @@ hl.bind(SP .. " + SHIFT + 0", hl.dsp.window.move({ workspace = "10" }))
 -- Monitor switching
 -- --------------------------------------------------------------
 
-hl.bind("ALT_L + TAB", hl.dsp.focus({ monitor = "+1" }))
+-- Snappy Switcher: standard Alt+Tab MRU window switching.
+-- The previous Alt+Tab monitor binding was replaced to avoid a key conflict.
+hl.bind(
+  "ALT_L + TAB",
+  hl.dsp.exec_cmd("snappy-switcher next --mod alt"),
+  { description = "Snappy Switcher: Alt+Tab" }
+)
 
 -- --------------------------------------------------------------
 -- Special workspace / scratchpad
