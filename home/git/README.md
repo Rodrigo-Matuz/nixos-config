@@ -1,8 +1,10 @@
 # Git
 
-Enables Git and declares the default author identity used by this workstation.
-The identity in [`default.nix`](default.nix) is personal; replace it before
-reusing the module.
+Enables Git. The original workstation sets its author name and email in
+[`../matuz.nix`](../matuz.nix); the reusable [`default.nix`](default.nix)
+**does not inherit them**. For portable installs, the installer optionally asks
+for an author name and email and writes them only to that machine's generated
+selection. Leaving both blank installs Git without an author identity.
 
 ## Upstream and original Nix source
 
@@ -13,5 +15,5 @@ reusing the module.
 ## Module
 
 Imported by [`../matuz.nix`](../matuz.nix); implementation is in
-[`default.nix`](default.nix). Additional commented Git preferences can be
-enabled there as needed.
+[`default.nix`](default.nix). Set `matuz.git.authorName` and
+`matuz.git.authorEmail` together to configure another machine declaratively.

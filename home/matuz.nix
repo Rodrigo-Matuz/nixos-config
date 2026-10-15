@@ -40,6 +40,10 @@
     # inputs.ytm-player.overlays.default
   ];
 
+  # Workstation Git identity; the portable installer collects its own.
+  matuz.git.authorName = "Rodrig-Matuz";
+  matuz.git.authorEmail = "rodrigosantoslima1311@gmail.com";
+
   # Home
   home.username = "matuz";
   home.homeDirectory = "/home/matuz";
@@ -48,9 +52,17 @@
   home.packages = with pkgs; [
     libsecret
     (pkgs.writeShellScriptBin "copilot-login" ''
-      #!/run/current-system/sw/bin/bash
-      # Set GITHUB_TOKEN from gh CLI credentials
-      export GITHUB_TOKEN="$(gh auth token)"
+      if [ "$#" -eq 0 ]; then
+        printf 'Usage: copilot-login COMMAND [ARGS...]\n' >&2
+        exit 2
+      fi
+      # Scope the token to the requested command, not every login shell.
+      token=$(gh auth token) || {
+        printf 'Authenticate with gh auth login first.\n' >&2
+        exit 1
+      }
+      export GITHUB_TOKEN="$token"
+      unset token
       exec "$@"
     '')
   ];
@@ -74,14 +86,4 @@
 
   # Home Manager
   programs.home-manager.enable = true;
-
-  # Add GITHUB_TOKEN to shell environment from gh CLI credentials
-  home.file = {
-    ".zshenv".text = ''
-      # Use GitHub CLI's secure credential store for Copilot tokens
-      if command -v gh &>/dev/null; then
-        export GITHUB_TOKEN="$(gh auth token 2>/dev/null)"
-      fi
-    '';
-  };
 }

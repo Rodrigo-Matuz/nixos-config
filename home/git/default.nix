@@ -1,42 +1,26 @@
-{ config, pkgs, inputs, ... }:
-
+{ config, lib, ... }:
+let
+  identity = config.matuz.git;
+in
 {
-  programs.git = {
+  options.matuz.git = {
+    authorName = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Optional Git author name (never default to the repository owner's identity on portable installs).";
+    };
+    authorEmail = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Optional Git author email.";
+    };
+  };
+
+  config.programs.git = {
     enable = true;
-
-    settings = {
-      user = {
-        name = "Rodrig-Matuz";
-        email = "rodrigosantoslima1311@gmail.com";
-      };
-
-    #   init.defaultBranch = "main";
-    #
-    #   pull.rebase = true;
-    #
-    #   push = {
-    #     autoSetupRemote = true;
-    #     followTags = true;
-    #   };
-    #
-    #   fetch.prune = true;
-    #
-    #   merge.conflictStyle = "zdiff3";
-    #
-    #   rerere.enabled = true;
-    #
-    #   core = {
-    #     editor = "nvim";
-    #     autocrlf = "input";
-    #   };
-    #
-    #   diff = {
-    #     algorithm = "histogram";
-    #     colorMoved = "default";
-    #   };
-    #
-    #   branch.sort = "-committerdate";
-    #   tag.sort = "version:refname";
+    settings = lib.optionalAttrs (identity.authorName != null || identity.authorEmail != null) {
+      user = lib.optionalAttrs (identity.authorName != null) { name = identity.authorName; }
+        // lib.optionalAttrs (identity.authorEmail != null) { email = identity.authorEmail; };
     };
   };
 }
