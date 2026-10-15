@@ -28,3 +28,6 @@ Thumbs.db
 
 # Local build output
 home/wallpaper/bin/
+
+# Local Resonance test artifacts; supplied via RESONANCE_LOCAL_DEB instead
+.resonance/

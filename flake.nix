@@ -90,12 +90,17 @@
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
   let
     system = "x86_64-linux";
-    resonancePackage = inputs.resonance.packages.${system}.default.overrideAttrs (_: {
-      # Temporary local bootstrap: the private GitHub release is downloaded with
-      # gh because the Nix daemon cannot use the user GitHub access-token setting
-      # for release assets. Remove this override after public release hosting.
-      src = ./.resonance/Resonance_0.1.0_amd64.deb;
-    });
+    localResonanceDeb =
+      let path = builtins.getEnv "RESONANCE_LOCAL_DEB";
+      in if path == "" then null else builtins.path { path = path; name = "resonance-local-deb"; };
+    resonancePackage = if localResonanceDeb != null
+      then inputs.resonance.packages.${system}.default.overrideAttrs (_: {
+        # Local testing path. The artifact is supplied through an environment
+        # variable by Resonance/scripts/nixos-local-test.sh and is never added
+        # to this repository or committed to the NixOS configuration.
+        src = localResonanceDeb;
+      })
+      else inputs.resonance.packages.${system}.default;
   in
   {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
