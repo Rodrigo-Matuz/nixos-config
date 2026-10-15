@@ -1,8 +1,15 @@
 # OBS Studio
 
 Enables OBS Studio with PipeWire audio capture, VA-API encoding, Vulkan
-capture, and a Hyprland launcher entry. [`obs.lua`](obs.lua) contains the
-launcher; [`default.nix`](default.nix) selects packages and plugins.
+capture, a Hyprland launcher entry, and the declarative [`Matuz.ovt`](Matuz.ovt)
+theme. [`obs.lua`](obs.lua) contains the launcher; [`default.nix`](default.nix)
+selects packages, plugins, and installs the theme into OBS's user theme folder.
+
+The theme uses a near-black indigo background inspired by `matuz.dev` and the
+following saturated accents: red `#FC1A70`, purple `#702EF3`, blue `#1E65FF`,
+orange `#FF4D00`, yellow `#FFFF87`, and green `#A4E400`. It extends OBS's Yami
+base theme rather than copying the full base stylesheet, so OBS updates remain
+less likely to break it.
 
 ## Upstream and original Nix sources
 

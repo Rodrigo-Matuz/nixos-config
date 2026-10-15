@@ -1,0 +1,265 @@
+@OBSThemeMeta {
+    name: 'Matuz';
+    id: 'com.matuz.obs.Matuz';
+    extends: 'com.obsproject.Yami';
+    author: 'Rodrigo Matuz';
+    dark: 'true';
+}
+
+@OBSThemeVars {
+    /* matuz.dev accent palette */
+    --blue1: #B9CEFF;
+    --blue2: #70A0FF;
+    --blue3: #1E65FF;
+    --blue4: #1648C7;
+    --blue5: #0D2E87;
+    --blue6: #071A52;
+
+    --red1: #FF9DC0;
+    --red2: #FF5F99;
+    --red3: #FC1A70;
+    --red4: #C40D53;
+    --red5: #7E0736;
+    --red6: #46021F;
+
+    /* Purple is used for secondary selection and focus states. */
+    --pink1: #D9C7FF;
+    --pink2: #A989FF;
+    --pink3: #702EF3;
+    --pink4: #4D1DB4;
+    --pink5: #2D0D73;
+    --pink6: #17063F;
+
+    --purple1: #C7B3FF;
+    --purple2: #9A73FF;
+    --purple3: #702EF3;
+    --purple4: #4D1DB4;
+    --purple5: #2D0D73;
+    --purple6: #17063F;
+
+    /* Green and yellow retain the requested saturated values at their
+     * semantic primary positions. */
+    --green1: #E3FFA0;
+    --green2: #C5F044;
+    --green3: #A4E400;
+    --green4: #72A000;
+    --green5: #477000;
+    --green6: #263D00;
+
+    --yellow1: #FFFFD1;
+    --yellow2: #FFFFB0;
+    --yellow3: #FFFF87;
+    --yellow4: #CFCF54;
+    --yellow5: #8F8F35;
+    --yellow6: #55551D;
+
+    /* OBS has no built-in orange semantic ramp. */
+    --accent_orange: #FF4D00;
+    --accent_orange_light: #FF8A5C;
+    --accent_orange_dark: #B52D00;
+
+    /* Deep indigo surfaces inspired by the matuz.dev hero background. */
+    --grey1: #747BA8;
+    --grey2: #454A70;
+    --grey3: #2C3154;
+    --grey4: #202541;
+    --grey5: #171B32;
+    --grey6: #10142A;
+    --grey7: #0A0D1C;
+    --grey8: #03040A;
+
+    --white1: #F7F7FF;
+    --white2: #D9DCF5;
+    --white3: #B9BEDF;
+    --white4: #9298BC;
+    --white5: #6B7299;
+
+    --black1: #E7E9FF;
+    --black2: #20233A;
+    --black3: #3A3E60;
+    --black4: #555A80;
+    --black5: #70769B;
+
+    --bg_window: #0A0D1C;
+    --bg_base: #10142A;
+    --bg_preview: #03040A;
+
+    --primary: var(--blue3);
+    --primary_light: var(--blue2);
+    --primary_lighter: var(--blue1);
+    --primary_dark: var(--blue4);
+    --primary_darker: var(--blue5);
+
+    --warning: var(--yellow3);
+    --danger: var(--red3);
+    --text: var(--white1);
+    --text_light: var(--white2);
+    --text_muted: var(--white4);
+    --text_disabled: var(--white5);
+    --text_inactive: var(--white3);
+
+    --border_color: var(--grey3);
+    --input_bg: var(--grey4);
+    --input_bg_hover: var(--grey3);
+    --input_bg_focus: var(--grey5);
+    --input_border: var(--grey2);
+    --input_border_hover: var(--purple2);
+    --input_border_focus: var(--blue3);
+
+    --button_bg: var(--grey4);
+    --button_bg_hover: var(--grey3);
+    --button_bg_down: var(--grey6);
+    --button_bg_disabled: var(--grey6);
+    --button_border: var(--grey3);
+    --button_border_hover: var(--purple2);
+    --button_border_focus: var(--blue3);
+
+    --tab_bg: var(--grey6);
+    --tab_bg_hover: var(--grey4);
+    --tab_bg_down: var(--purple3);
+    --tab_bg_disabled: var(--grey6);
+    --tab_border: var(--grey3);
+    --tab_border_hover: var(--purple2);
+    --tab_border_focus: var(--blue1);
+    --tab_border_selected: var(--purple3);
+
+    --list_item_bg_selected: var(--blue3);
+    --list_item_bg_hover: var(--purple5);
+    --scrollbar_handle: var(--grey3);
+    --scrollbar_bg: var(--grey7);
+    --scrollbar_hover: var(--purple4);
+    --scrollbar_down: var(--purple3);
+    --scrollbar_border: var(--purple2);
+}
+
+/* Keep the application dark and indigo; reserve saturated colors for
+ * selection, focus, and recording/streaming actions. */
+QMainWindow,
+QDialog,
+QStatusBar,
+QMenuBar,
+QMenu {
+    background-color: var(--bg_window);
+}
+
+QMenuBar::item:selected {
+    background-color: var(--purple3);
+}
+
+QMenu::item:selected,
+QListView::item:selected,
+QListWidget::item:selected {
+    background-color: var(--blue3);
+    border-color: var(--blue1);
+}
+
+QMenu::item:hover,
+QListView::item:hover,
+QListWidget::item:hover {
+    background-color: var(--purple5);
+    border-color: var(--purple4);
+}
+
+QPushButton:hover,
+QPushButton:focus,
+QToolButton:hover,
+QToolButton:focus {
+    border-color: var(--purple2);
+}
+
+QPushButton:checked,
+QToolButton:checked,
+.btn-tool:checked {
+    background-color: var(--purple3);
+    border-color: var(--purple1);
+}
+
+QTabBar::tab:selected {
+    background-color: var(--purple3);
+    border-color: var(--purple1);
+}
+
+QSlider::sub-page:horizontal,
+QSlider::add-page:vertical {
+    background-color: var(--blue3);
+}
+
+QProgressBar::chunk {
+    background-color: var(--blue3);
+    border-top-color: var(--blue2);
+    border-bottom-color: var(--blue4);
+}
+
+/* OBS controls use the full accent palette without turning every button into
+ * a bright color block. */
+#streamButton:!hover:!pressed.state-active {
+    background-color: var(--red3);
+    border-color: var(--red2);
+}
+
+#recordButton:!hover:!pressed.state-active {
+    background-color: var(--accent_orange);
+    border-color: var(--accent_orange_light);
+}
+
+#replayBufferButton:!hover:!pressed.state-active {
+    background-color: var(--purple3);
+    border-color: var(--purple1);
+}
+
+#virtualCamButton:!hover:!pressed.state-active {
+    background-color: var(--blue3);
+    border-color: var(--blue1);
+}
+
+#broadcastButton:!hover:!pressed.state-active {
+    background-color: var(--green3);
+    border-color: var(--green1);
+    color: var(--grey8);
+}
+
+#streamButton:hover:!pressed.state-active {
+    background-color: var(--red2);
+}
+
+#recordButton:hover:!pressed.state-active {
+    background-color: var(--accent_orange_light);
+}
+
+#replayBufferButton:hover:!pressed.state-active {
+    background-color: var(--purple2);
+}
+
+#virtualCamButton:hover:!pressed.state-active {
+    background-color: var(--blue2);
+}
+
+#broadcastButton:hover:!pressed.state-active {
+    background-color: var(--green2);
+    color: var(--grey8);
+}
+
+VolumeMeter {
+    qproperty-backgroundNominalColor: var(--green5);
+    qproperty-backgroundWarningColor: var(--yellow5);
+    qproperty-backgroundErrorColor: var(--red5);
+    qproperty-foregroundNominalColor: var(--green3);
+    qproperty-foregroundWarningColor: var(--yellow3);
+    qproperty-foregroundErrorColor: var(--red3);
+}
+
+QToolTip {
+    background-color: var(--grey5);
+    color: var(--text);
+    border: 1px solid var(--purple4);
+}
+
+QScrollBar::handle:hover {
+    background-color: var(--purple4);
+    border-color: var(--purple2);
+}
+
+QScrollBar::handle:pressed {
+    background-color: var(--purple3);
+    border-color: var(--purple1);
+}

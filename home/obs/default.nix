@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
 
 {
+  # OBS UI theme: a Yami variant using the matuz.dev indigo/near-black
+  # background with the site's saturated accent palette.
+  xdg.configFile."obs-studio/themes/Matuz.ovt".source = ./Matuz.ovt;
+
   wayland.windowManager.hyprland.extraLuaFiles = {
     "apps/obs" = {
       content = ./obs.lua;
