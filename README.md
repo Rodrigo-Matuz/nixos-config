@@ -170,6 +170,18 @@ sudo nixos-rebuild switch --flake .#nixos
 ## Machine-specific files and privacy
 
 `hardware-configuration.nix`, `partitions.nix`, and `home/matuz.nix` contain
-machine-specific UUIDs, paths, and user settings. `home/hermes/hermes-profile.gz`
-and build output are ignored. Do not store secrets here; use environment files,
-a secret manager, or encrypted storage.
+machine-specific UUIDs, paths, and user settings; review the tracked bookmarks
+and Git identity too. `home/hermes/hermes-profile.gz` is ignored but contains
+potentially sensitive state: move it outside the checkout and restrict access
+before sharing this tree or making backups. The portable installer requires no
+secrets (even when selecting Hermes); authentication is a post-install step.
+The workstation alone has an **off-by-default** [sops-nix/age secrets
+option](secrets/README.md). Never add plaintext credentials, live `~/.config`,
+Hermes profiles, or GitHub CLI `hosts.yml` to Git. `.gitignore` is not a security
+boundary: inspect staged files **and repository history**, use a dedicated
+secret scanner before publishing, and rotate any credential previously committed.
+For GitHub CLI, use `gh auth login`; `copilot-login COMMAND` scopes the token
+to the requested command instead of globally exporting it from `.zshenv`.
+The original workstation keeps console auto-login by the owner's choice;
+portable real installs ask explicitly (default no), while VM preview always
+autologs in. Steam network exceptions are disabled unless opted into.

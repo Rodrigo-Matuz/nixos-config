@@ -148,9 +148,8 @@
     shell = pkgs.zsh;
   };
 
-  # Automatically log in as Matuz on the first virtual console.
+  # Keep the owner's workstation console auto-login (explicit preference).
   services.getty.autologinUser = "matuz";
-
 
   # ============================================================================
   # Shell

@@ -21,7 +21,13 @@ printf 'PASS: default source is the planned dotfiles repository\n'
 command -v script >/dev/null || { printf 'SKIP: util-linux script is required\n' >&2; exit 77; }
 tmp=$(mktemp -d "${TMPDIR:-/tmp}/dotfiles-installer-test.XXXXXXXX")
 trap 'rm -rf -- "$tmp"' EXIT
-cp -a "$repo" "$tmp/fixture"
+# Copy only tracked paths. Never bring ignored archives or live credentials into
+# the fixture, even when someone has placed them alongside the checkout.
+mkdir -p "$tmp/fixture"
+git -C "$repo" ls-files -z | tar -C "$repo" --null -T - -cf - | tar -C "$tmp/fixture" -xf -
+# Simulate malicious top-level code in a cloned script: preview must not source it.
+printf '%s\n' 'printf "UNEXPECTED sourced partitions.sh\n" >> "$MOCK_LOG"' >> "$tmp/fixture/install/partitions.sh"
+git -C "$tmp/fixture" init -q
 git -C "$tmp/fixture" add -A
 git -C "$tmp/fixture" -c user.name=Test -c user.email=test@example.invalid commit -m fixture >/dev/null
 mkdir -p "$tmp/bin" "$tmp/home"
@@ -53,7 +59,7 @@ commands=$(<"$tmp/commands.log")
 [[ $commands == *'nixos-rebuild build-vm '* && $commands != *'switch '* && $commands != *'UNEXPECTED '* ]] || {
   printf 'FAIL: preview invoked a host-changing command\n' >&2; exit 1;
 }
-printf 'PASS: unprivileged VM preview keeps host untouched\n'
+printf 'PASS: preview never sources cloned partition code before VM confirmation\n'
 
 vm_hardware=$(<"$tmp/home/.local/share/dotfiles-preview/portable-config/hardware-configuration.nix")
 [[ $vm_hardware == '{ ... }: { }' ]] || {
@@ -83,3 +89,48 @@ vm_store=$(nix --extra-experimental-features 'nix-command flakes' build \
   exit 1
 }
 printf 'PASS: Nix built a real VM launcher with VM-only hardware\n'
+# A selected Hermes module must evaluate without a private file or user OAuth.
+hermes_index=0
+for module in "$repo"/home/*/default.nix; do
+  name=${module%/default.nix}
+  name=${name##*/}
+  [[ $name == noctalia || $name == snappy-switcher ]] && continue
+  [[ $name =~ ^[a-z0-9-]+$ ]] || continue
+  hermes_index=$((hermes_index+1))
+  [[ $name != hermes ]] || break
+done
+[[ $name == hermes ]] || { printf 'FAIL: Hermes module missing\n' >&2; exit 1; }
+mkdir -p "$tmp/home-hermes"
+printf -v cmd '%q ' env "HOME=$tmp/home-hermes" \
+  "XDG_DATA_HOME=$tmp/home-hermes/.local/share" "PATH=$tmp/bin:$PATH" \
+  "MOCK_LOG=$tmp/hermes-commands.log" \
+  bash "$repo/install.sh" --mode preview --repo "$tmp/fixture"
+if ! printf 'guest\n\n\n\n%s\n\nYES\n' "$hermes_index" | script -q -e -c "$cmd" /dev/null > "$tmp/hermes-output.log" 2>&1; then
+  printf 'FAIL: preview with Hermes selected needs no secrets\n' >&2
+  sed -n '1,35p' "$tmp/hermes-output.log" >&2
+  exit 1
+fi
+hermes_flake="$tmp/home-hermes/.local/share/dotfiles-preview/portable-config"
+hermes_env=$(nix --extra-experimental-features 'nix-command flakes' eval --json \
+  "$hermes_flake#nixosConfigurations.install.config.home-manager.users.guest.services.hermes-agent.environmentFiles" \
+  --no-write-lock-file 2> "$tmp/hermes-eval.log") || {
+  printf 'FAIL: selected Hermes module did not evaluate\n' >&2
+  sed -n '1,35p' "$tmp/hermes-eval.log" >&2
+  exit 1
+}
+[[ $hermes_env == '[]' ]] || { printf 'FAIL: selected Hermes requires an undeclared env file\n' >&2; exit 1; }
+printf 'PASS: selected Hermes evaluates without credentials\n'
+
+# An expected revision mismatch must abort before evaluating or sourcing the clone.
+mkdir -p "$tmp/home-mismatch"
+printf -v cmd '%q ' env "HOME=$tmp/home-mismatch" \
+  "XDG_DATA_HOME=$tmp/home-mismatch/.local/share" "PATH=$tmp/bin:$PATH" \
+  bash "$repo/install.sh" --mode preview --repo "$tmp/fixture" \
+  --expect-revision 0000000000000000000000000000000000000000
+if script -q -e -c "$cmd" /dev/null > "$tmp/mismatch.log" 2>&1; then
+  printf 'FAIL: mismatched revision was accepted\n' >&2; exit 1
+fi
+[[ $(<"$tmp/mismatch.log") == *'does not match --expect-revision'* ]] || {
+  printf 'FAIL: revision failure had the wrong cause\n' >&2; exit 1;
+}
+printf 'PASS: mismatched clone revision is rejected\n'

@@ -10,6 +10,7 @@ set -Eeuo pipefail
 DEFAULT_REPO_URL='https://github.com/Rodrigo-Matuz/dotfiles.git'
 repo_url=${NIXOS_CONFIG_REPO:-$DEFAULT_REPO_URL}
 ref=''
+expected_revision=''
 mode=''
 root='/mnt'
 stage=''
@@ -17,12 +18,13 @@ target=''
 
 usage() {
   printf '%s\n' \
-    'Usage: bash install.sh [--mode preview|iso|installed] [--repo GIT_URL] [--ref BRANCH_OR_TAG] [--root /mnt]' \
+    'Usage: bash install.sh [--mode preview|iso|installed] [--repo GIT_URL] [--ref BRANCH_OR_TAG] [--expect-revision FULL_SHA] [--root /mnt]' \
     '' \
     'Clones DEFAULT_REPO_URL automatically; --repo overrides it.' \
     'preview:   build an isolated NixOS VM; no root privileges or host activation.' \
     'iso:       /mnt and /mnt/boot must already be mounted; runs nixos-install.' \
     'installed: preserves /etc/nixos; requires an existing systemd-boot installation.' \
+    'Use --expect-revision to reject a changed/mismatched clone before evaluating it.' \
     'All modes require x86_64, NixOS, and an interactive terminal.' \
     'Optional data-volume mounting uses existing filesystems; no formatting or repartitioning.' \
     'No existing /etc/nixos files are overwritten.'
@@ -90,12 +92,13 @@ pick_modules() {
 
 while (($#)); do
   case $1 in
-    --mode|--repo|--ref|--root)
+    --mode|--repo|--ref|--expect-revision|--root)
       (($# >= 2)) || fail "Missing value for $1"
       case $1 in
         --mode) mode=$2 ;;
         --repo) repo_url=$2 ;;
         --ref) ref=$2 ;;
+        --expect-revision) expected_revision=$2 ;;
         --root) root=$2 ;;
       esac
       shift 2 ;;
@@ -107,6 +110,7 @@ done
 [[ -r /dev/tty && -w /dev/tty ]] || fail 'An interactive terminal is required'
 [[ $(uname -m) == x86_64 ]] || fail 'Only x86_64-linux is supported by this flake'
 [[ $repo_url != -* ]] || fail 'Git URL must not start with a dash'
+[[ -z $expected_revision || $expected_revision =~ ^[0-9a-fA-F]{40}$ ]] || fail '--expect-revision must be a full 40-character Git commit SHA'
 require nix
 if ! command -v git >/dev/null 2>&1; then
   printf 'Git is missing; fetching a temporary Git from nixpkgs...\n'
@@ -160,13 +164,22 @@ mkdir -p -- "$parent"
 target="$parent/portable-config"
 [[ ! -e $target && ! -L $target ]] || fail "Destination already exists: $target (move it aside manually before retrying)"
 stage=$(mktemp -d "$parent/.nixos-install-stage.XXXXXXXX")
-clone=(git clone --depth 1)
+clone=(git clone --depth 1 --no-local)
 [[ -z $ref ]] || clone+=(--branch "$ref")
 clone+=(-- "$repo_url" "$stage/repo")
 printf 'Fetching dotfiles from %s...\n' "$repo_url"
 "${clone[@]}" || fail "Could not clone $repo_url (the dotfiles repo may not be public yet; use --repo URL for a test checkout)"
 repo="$stage/repo"
+revision=$(git -C "$repo" rev-parse --verify HEAD) || fail 'Could not identify cloned revision'
+[[ -z $expected_revision || ${revision,,} == ${expected_revision,,} ]] || fail "Clone revision $revision does not match --expect-revision $expected_revision"
+printf 'Source: %s\nRevision: %s\n' "$repo_url" "$revision"
 [[ -s $repo/flake.nix && -s $repo/flake.lock && -s $repo/install/portable.nix && -s $repo/install/selection.nix && -s $repo/install/partitions.nix && -s $repo/install/partitions.sh ]] || fail 'Repository is missing the installer flake files'
+
+# Cloned Nix and shell files are executable code. Confirm trust BEFORE sourcing
+# partitions.sh or evaluating the clone as root; activation has a separate prompt.
+if [[ $mode != preview ]]; then
+  confirm "Trust $repo_url at $revision? The installer will run its shell/Nix code as root."
+fi
 
 if [[ $mode == iso ]]; then
   nixos-generate-config --root "$root" --dir "$repo"
@@ -187,6 +200,10 @@ ask 'Username for the new account (required)' "$default_user"
 username=$REPLY
 [[ $username =~ ^[a-z_][a-z0-9_-]*$ ]] || fail 'Username must contain only lowercase letters, digits, underscore, or hyphen'
 [[ $username != root ]] || fail 'Choose a normal username, not root'
+if [[ $mode == installed ]]; then
+  uid=$(id -u "$username" 2>/dev/null) || fail 'Installed mode requires an existing login account; create it before switching'
+  ((uid >= 1000)) || fail 'Installed mode requires an existing non-system user account'
+fi
 ask 'Hostname' 'nixos'
 hostname=$REPLY
 [[ $hostname =~ ^[a-z][a-z0-9-]*$ && ${#hostname} -le 63 ]] || fail 'Invalid hostname'
@@ -202,6 +219,18 @@ else
 fi
 state_version=$REPLY
 [[ $state_version =~ ^[0-9]{2}\.[0-9]{2}$ ]] || fail 'Invalid state version'
+
+# Preview always logs in inside its VM; real installations make this opt-in.
+auto_login=false
+if [[ $mode != preview ]]; then
+  printf 'Auto-login gives anyone at the physical console access to this user session.\n'
+  ask "Auto-login $username on the first console? (yes/no)" 'no'
+  case ${REPLY,,} in
+    yes|y) auto_login=true ;;
+    no|n) ;;
+    *) fail 'Answer yes or no for console auto-login' ;;
+  esac
+fi
 
 shopt -s nullglob
 home_choices=()
@@ -223,6 +252,24 @@ selected_home=()
 selected_system=()
 pick_modules 'Home Manager modules' home_choices selected_home
 pick_modules 'System modules' system_choices selected_system
+
+# Store only validated, non-secret Git identity strings in this local profile.
+# Avoid silently attributing another person's commits to the repo owner.
+git_name_expr=null
+git_email_expr=null
+if has_choice git; then
+  ask 'Git author name (optional; Enter to configure later)' ''
+  git_name=$REPLY
+  ask 'Git author email (optional; Enter to configure later)' ''
+  git_email=$REPLY
+  if [[ -n $git_name || -n $git_email ]]; then
+    [[ -n $git_name && -n $git_email ]] || fail 'Enter both Git author name and email, or leave both blank'
+    [[ $git_name =~ ^[[:alnum:]\ ._-]+$ ]] || fail 'Git name may contain letters, digits, spaces, dot, underscore, and hyphen only'
+    [[ $git_email =~ ^[A-Za-z0-9._%+@-]+$ && $git_email == *@* ]] || fail 'Invalid Git email'
+    git_name_expr="\"$git_name\""
+    git_email_expr="\"$git_email\""
+  fi
+fi
 if has_choice nvim && has_choice nvchad; then
   fail 'nvim and nvchad both manage Neovim; choose one'
 fi
@@ -233,9 +280,12 @@ if has_choice caelestia && ! has_choice hyprland; then
   selected_home+=(hyprland)
   printf 'Added Hyprland: Caelestia needs a graphical session.\n'
 fi
-# Ask about data disks only in real installation modes, never VM preview.
-source "$repo/install/partitions.sh"
-configure_partitions "$mode" "$root" "$repo" "$username"
+# Do not source cloned shell code during preview before its build confirmation.
+partition_owner_uid=null
+if [[ $mode != preview ]]; then
+  source "$repo/install/partitions.sh"
+  configure_partitions "$mode" "$root" "$repo" "$username"
+fi
 printf '\nSelected home modules: %s\n' "${selected_home[*]:-(none)}"
 printf 'Selected system modules: %s\n' "${selected_system[*]:-(none)}"
 printf '%s\n' 'Note: Hyprland, Caelestia, OBS, Steam, Git, and Hermes modules contain personal hardware/settings assumptions; review them before proceeding.'
@@ -246,7 +296,8 @@ printf '%s\n' 'Note: Hyprland, Caelestia, OBS, Steam, Git, and Hermes modules co
   if ((${#selected_home[@]})); then printf '"%s" ' "${selected_home[@]}"; fi
   printf '];\n  systemModules = [ '
   if ((${#selected_system[@]})); then printf '"%s" ' "${selected_system[@]}"; fi
-  printf '];\n  partitionOwnerUid = %s;\n}\n' "$partition_owner_uid"
+  printf '];\n  autoLogin = %s;\n  gitAuthorName = %s;\n  gitAuthorEmail = %s;\n  partitionOwnerUid = %s;\n}\n' \
+    "$auto_login" "$git_name_expr" "$git_email_expr" "$partition_owner_uid"
 } > "$repo/install/selection.nix"
 
 if [[ $mode == preview ]]; then
@@ -283,9 +334,13 @@ if [[ $mode == iso ]]; then
     fail "NixOS installed, but the user's password was not set. Retry: nixos-enter --root '$root' --command 'passwd $username'"
   fi
   printf 'Installation complete. Configuration: %s; reboot when ready.\n' "$target"
+  if has_choice hermes; then
+    printf 'After first login, run `hermes model` to sign in to your provider. No secrets were required during installation.\n'
+  fi
 else
   nixos-rebuild switch --flake "$target#install" --no-write-lock-file
-  printf '\nSet or confirm a password for %s:\n' "$username"
-  passwd "$username"
-  printf 'Configuration activated: %s\n' "$target"
+  printf 'Configuration activated: %s. Confirm you can log in with the existing %s account before rebooting.\n' "$target" "$username"
+  if has_choice hermes; then
+    printf 'Run `hermes model` as %s to sign in to your provider if needed.\n' "$username"
+  fi
 fi

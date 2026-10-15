@@ -16,7 +16,9 @@ The planned public Git URL is
 `https://github.com/Rodrigo-Matuz/dotfiles.git`; it is **not public yet**.
 `DEFAULT_REPO_URL` in `../install.sh` already points there. Before publication,
 use `--repo /path/to/committed/dotfiles` to clone a local Git checkout; the
-installer does not use uncommitted or untracked files in that source. When the
+installer does not use uncommitted or untracked files in that source. All modes
+work without credentials, including when Hermes is selected; sign in later.
+When the
 repository is public, users can download **only the bootstrap** and let it
 clone the full repository:
 
@@ -31,7 +33,14 @@ less install.sh
 publishing to GitHub alone does not create that website route. To use the
 website URL later, configure it to serve the raw `install.sh`, confirm that it
 returns the actual script (not HTML), and review it before executing it with
-sudo. Only run code from a source you trust; VM preview is not a security
+sudo. The script prints the cloned full Git revision. In ISO/installed modes it
+requires an explicit trust confirmation **before** running cloned Nix or shell
+code as root, then separately confirms installation/activation. Optionally pass
+`--ref RELEASE_TAG --expect-revision FULL_40_CHARACTER_SHA` to reject a changed
+clone before evaluation; a branch or tag alone may move, and the separately
+downloaded bootstrap must also be reviewed. No interactive prompt can make
+untrusted source code safe. Only run code from a source you trust; VM preview
+is not a security
 sandbox for untrusted Nix expressions or build scripts. The VM launcher can
 expose a writable host exchange directory and guest networking.
 
@@ -51,9 +60,13 @@ expose a writable host exchange directory and guest networking.
    ```
 
 3. Type a **required** normal username (not `root`), hostname, time zone, and
-   state version. Press Enter at the optional Home Manager/system module
+   state version. For a real install, answer the console auto-login question
+   (default no; the VM preview always logs in automatically). Press Enter at the optional Home Manager/system module
    prompts to choose none; otherwise enter their displayed numbers separated
-   by spaces or commas. You can then opt in to additional data partitions: the
+   by spaces or commas. If you select Git, you can enter your author name and
+   email during installation or leave both blank (the repository owner's
+   identity is never copied into a portable install). You can then opt in
+   to additional data partitions: the
    script displays each supported partition's device (for example `/dev/sdc1`),
    size, filesystem, label, UUID and existing mountpoint; answer yes/no for
    each, then enter a mount name such as `linux_hd` for `/mnt/linux_hd`.
@@ -84,9 +97,10 @@ filesystems are ext4, btrfs, xfs, NTFS (mounted with `ntfs3`), FAT (`vfat`)
 and exFAT. The generated
 `install/partitions.nix` uses filesystem UUIDs and `nofail` with a device
 timeout so an absent data disk does not prevent boot. FAT, exFAT and NTFS use
-UID/GID mount options and `umask=022`; for ext4/btrfs/xfs, a systemd oneshot
+UID/GID mount options and `umask=077` (private to the selected user); for ext4/btrfs/xfs, a systemd oneshot
 gives the chosen user ownership and write permission on the **mount root only**
-after mounting. Existing files and subdirectories keep their original owners
+after mounting; this **permanently changes the filesystem root ownership**
+when the volume is attached. Existing files and subdirectories keep their original owners
 and modes; this is not a recursive ownership takeover. NTFS volumes must be
 cleanly shut down in Windows (Fast Startup/hibernation disabled) for reliable
 read-write access. Review `/boot` free space and back up important data before
@@ -141,9 +155,10 @@ sudo bash install.sh --mode installed
 
 The script copies this host's `/etc/nixos/hardware-configuration.nix` to a
 new `/etc/nixos/portable-config` checkout. It can optionally generate UUID-based
-data mounts through the same per-partition questions as ISO mode. It then
-dry-builds, asks for `YES`, runs `nixos-rebuild switch`, and asks for the
-selected user's password. This is still a **full profile switch**, not a way
+data mounts through the same per-partition questions as ISO mode. It first requires an existing non-system user account (UID >= 1000). It then
+dry-builds, asks for `YES`, and runs `nixos-rebuild switch`; it does **not**
+reset that existing account's password. Verify console login and recovery
+access before switching, and verify login again before rebooting. This is still a **full profile switch**, not a way
 to add mounts to your current workstation configuration. This mode requires
 systemd-boot and is not supported on the GRUB workstation in this repository. It
 does not overwrite the previous `/etc/nixos` files, but **switching can stop
@@ -191,15 +206,19 @@ still usable. To rebuild an edited portable selection later, run
   layout or workspace-to-monitor rules. Hyprland chooses its default modes and
   placement; configure your own layout after login. Some other optional modules
   still contain monitor-specific settings (for example OBS and Caelestia), so
-  review those before selecting them. No display manager or tty autologin is
-  configured on the installed host;
-  launch the graphical session manually after login. The VM-only variant
-  enables console autologin for preview.
-- `home/git` sets a personal Git identity. `home/nvtop` uses the AMD variant.
+  review those before selecting them. The installer asks whether the selected user should auto-login on the
+  first console of a real installation (default **no**). Anyone with physical
+  console access then gets that user session without a password; this does
+  not automatically start a graphical desktop. The VM preview always enables
+  console auto-login for its guest.
+- `home/git` asks for the new user's own optional author identity; it does not
+  reuse the workstation's. `home/nvtop` uses the AMD variant.
   `home/obs`/`home/vesktop` configure Hyprland autostarts; OBS assumes a
-  particular display. `steam` opens game ports and starts its user service.
-  `home/hermes` expects `/var/lib/hermes/env`; set appropriate permissions
-  and credentials before enabling it. Never commit secrets.
+  particular display. `steam` starts its user service; its game-network firewall ports are closed by default (enable explicitly if needed).
+  `home/hermes` installs without a secret file; after first login run
+  `hermes model` to sign in with your provider, or
+  explicitly provision credentials later. OBS control needs a local password
+  file only when its WebSocket shortcuts are used. Never commit secrets.
 - Review the whole repository for private values, host identifiers and
   credentials before publishing a public `dotfiles` repository. `flake.lock`,
   `install.sh`, `install/`, and all referenced modules must be included for the

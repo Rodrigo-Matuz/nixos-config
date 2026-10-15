@@ -149,7 +149,7 @@ configure_partitions() {
       [[ $filesystem != ntfs ]] || filesystem=ntfs3
       printf '  fileSystems."/mnt/%s" = {\n    device = "/dev/disk/by-uuid/%s";\n    fsType = "%s";\n' "$mount_name" "$uuid" "$filesystem"
       if [[ $filesystem == ntfs3 || $filesystem == vfat || $filesystem == exfat ]]; then
-        printf '    options = [ "nofail" "x-systemd.device-timeout=10s" "uid=${toString ownerUid}" "gid=${toString ownerGid}" "umask=022" ];\n  };\n'
+        printf '    options = [ "nofail" "x-systemd.device-timeout=10s" "uid=${toString ownerUid}" "gid=${toString ownerGid}" "umask=077" ];\n  };\n'
       else
         printf '    options = [ "nofail" "x-systemd.device-timeout=10s" ];\n  };\n'
         printf '  # POSIX ownership cannot be set using ext4/btrfs/xfs mount options.\n'

@@ -6,5 +6,8 @@
   stateVersion = "26.05";
   homeModules = [ ];
   systemModules = [ ];
+  autoLogin = false; # installer asks for real hosts; VM variant always logs in
+  gitAuthorName = null;
+  gitAuthorEmail = null;
   partitionOwnerUid = null; # set only for explicit data-mount selections
 }

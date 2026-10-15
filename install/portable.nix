@@ -54,9 +54,10 @@ in
   programs.zsh.enable = enabled "zsh";
   programs.hyprland.enable = enabled "hyprland";
 
-  # Only the build-vm variant logs in automatically; the installed host does not.
+  # Real installs ask the user; the preview VM always logs in as its user.
+  services.getty.autologinUser = if selection.autoLogin then selection.username else null;
   virtualisation.vmVariant = {
-    services.getty.autologinUser = selection.username;
+    services.getty.autologinUser = lib.mkForce selection.username;
     virtualisation.memorySize = 2048;
     virtualisation.cores = 2;
   };
@@ -73,6 +74,9 @@ in
     home.homeDirectory = "/home/${selection.username}";
     home.stateVersion = selection.stateVersion;
     programs.home-manager.enable = true;
+  } // lib.optionalAttrs (enabled "git") {
+    matuz.git.authorName = selection.gitAuthorName;
+    matuz.git.authorEmail = selection.gitAuthorEmail;
   } // lib.optionalAttrs (enabled "hyprland") {
     matuz.hyprland.includeMonitorLayout = false;
   } // lib.optionalAttrs (enabled "firefox") {
