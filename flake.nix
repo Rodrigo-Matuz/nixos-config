@@ -73,10 +73,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    resonance = {
-      url = "github:Rodrigo-Matuz/Resonance";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nuclear = {
       url = "github:Rodrigo-Matuz/nuclear/nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -90,17 +86,6 @@
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
   let
     system = "x86_64-linux";
-    localResonanceDeb =
-      let path = builtins.getEnv "RESONANCE_LOCAL_DEB";
-      in if path == "" then null else builtins.path { path = path; name = "resonance-local-deb"; };
-    resonancePackage = if localResonanceDeb != null
-      then inputs.resonance.packages.${system}.default.overrideAttrs (_: {
-        # Local testing path. The artifact is supplied through an environment
-        # variable by Resonance/scripts/nixos-local-test.sh and is never added
-        # to this repository or committed to the NixOS configuration.
-        src = localResonanceDeb;
-      })
-      else inputs.resonance.packages.${system}.default;
   in
   {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
@@ -135,13 +120,8 @@
             inputs.zen-browser.homeModules.default
             inputs.hermes-agent.homeManagerModules.default
             inputs.wallpaper-picker-ui.homeManagerModules.default
-            inputs.resonance.homeManagerModules.default
           ];
 
-          home-manager.users.matuz.programs.resonance = {
-            enable = true;
-            package = resonancePackage;
-          };
         }
       ];
     };
