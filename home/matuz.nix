@@ -82,6 +82,7 @@
       run ln -sfnT "$source" "$target"
     }
     link_storage "/mnt/storage_hd/OBS Videos" "$HOME/Videos"
+    link_storage "/mnt/storage_hd/Music" "$HOME/Music"
     link_storage "/mnt/storage_hd/Pictures" "$HOME/Pictures"
     link_storage "/mnt/storage_hd/Wallpapers" "$HOME/Wallpapers"
     link_storage "/mnt/workspace_linux/Repos" "$HOME/Repos"
