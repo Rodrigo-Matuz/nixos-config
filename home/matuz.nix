@@ -32,7 +32,7 @@
     ./vscodium
     ./hermes
     ./kanatype
-    ./nuclear
+    # ./nuclear
     ./copilot
   ];
 
