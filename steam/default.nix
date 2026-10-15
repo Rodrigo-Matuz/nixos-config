@@ -4,9 +4,10 @@
   programs.steam = {
     enable = true;
 
-    remotePlay.openFirewall = true;
+    # Opt in to these network listeners explicitly if the features are used.
+    remotePlay.openFirewall = false;
     # localNetworkGameTransfers.openFirewall = true;
-    dedicatedServer.openFirewall = true;
+    dedicatedServer.openFirewall = false;
   };
 
   systemd.user.services.steam = {
