@@ -103,11 +103,12 @@ modules are documented opt-in building blocks.
 | `mpv` | active | mpv with the ModernZ on-screen controller |
 | `fastfetch` | active | Fastfetch and JSONC configuration |
 | `firefox` | active | Profile, preferences, bookmarks, extensions, and CSS |
+| `helium` | active | Chromium companion with Firefox bookmarks and compatible extensions |
 | `git` | active | Git identity and program settings |
 | `hermes` | active | Hermes Agent application and local backend |
 | `hyprland` | active | Lua-based window-manager configuration |
 | [`kanatype`](home/kanatype/README.md) | active | Japanese kana and kanji practice app |
-| [`nuclear`](home/nuclear/README.md) | active | Nuclear music player from a local release-backed flake |
+| [`nuclear`](home/nuclear/README.md) | active | Nuclear music player from the fork’s lightweight Nix branch |
 | `kitty` | active | Terminal, font, shell integration, and palette |
 | `librewolf` | opt-in | LibreWolf profile and uBlock Origin |
 | `noctalia` | opt-in | Noctalia shell and Matuz palette |
@@ -138,10 +139,11 @@ component-specific links.
 - [Caelestia fork: shell](https://github.com/Rodrigo-Matuz/shell) · [CLI](https://github.com/Rodrigo-Matuz/cli)
 - [Wallpaper Picker UI](https://github.com/Rodrigo-Matuz/wallpaper-picker-ui)
 - [Kanatype](https://github.com/Rodrigo-Matuz/kanatype)
-- [Nuclear](https://github.com/nukeop/nuclear) (local flake at `/mnt/workspace_linux/Repos/nuclear`)
+- [Nuclear personal fork](https://github.com/Rodrigo-Matuz/nuclear) · [upstream](https://github.com/nukeop/nuclear)
 - [Hermes Agent](https://github.com/NousResearch/hermes-agent)
 - [Vicinae](https://github.com/vicinaehq/vicinae)
 - [Zen Browser flake](https://github.com/0xc000022070/zen-browser-flake)
+- [Helium browser](https://github.com/imputnet/helium) · [NixOS package](https://github.com/tomsch/helium-nix)
 - [Firefox add-on packages](https://gitlab.com/rycee/nur-expressions/-/tree/master/pkgs/firefox-addons)
 - [VSCodium extensions overlay](https://github.com/nix-community/nix-vscode-extensions)
 

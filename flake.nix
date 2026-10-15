@@ -37,6 +37,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    helium = {
+      url = "github:tomsch/helium-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -63,7 +68,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nuclear = {
-      url = "path:/mnt/workspace_linux/Repos/nuclear";
+      url = "github:Rodrigo-Matuz/nuclear/nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

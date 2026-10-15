@@ -9,6 +9,7 @@
     ./hardware-configuration.nix
     ./partitions.nix
     ./steam
+    ./system/chromium-policies.nix
   ];
 
   # Home Manager configuration for the main user.

@@ -18,3 +18,4 @@ separate from Home Manager modules under [`../home`](../home).
 
 Hardware UUIDs, mount points, and service assumptions are specific to the
 original workstation.
+- [`chromium-policies.nix`](chromium-policies.nix) — managed Chromium bookmarks and extension policy for the Home Manager Helium module.

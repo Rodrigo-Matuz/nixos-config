@@ -18,6 +18,7 @@
     ./nvtop
     ./termusic
     ./firefox
+    ./helium
     ./git
     ./devenv
     ./rust

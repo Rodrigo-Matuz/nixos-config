@@ -133,6 +133,26 @@
         "type": "github"
       }
     },
+    "helium": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792032472,
+        "narHash": "sha256-raLsvt8rNaGNQ2z7EM86RVFhymN9z2MX5tkcppVpDlc=",
+        "owner": "tomsch",
+        "repo": "helium-nix",
+        "rev": "36d6f243c64f64313cf444aaa1353eb407d434e3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tomsch",
+        "repo": "helium-nix",
+        "type": "github"
+      }
+    },
     "hermes-agent": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -433,14 +453,18 @@
         ]
       },
       "locked": {
-        "lastModified": 1792028473,
-        "narHash": "sha256-kEMcgjEh0HJFAiw3x832+wHzKTLNMkWfqQjCbD4cxZ0=",
-        "path": "/mnt/workspace_linux/Repos/nuclear",
-        "type": "path"
+        "lastModified": 1792030662,
+        "narHash": "sha256-ChVzOtqeLl7QptIttcVsmtnVFRkyypDAZeI+FjWG13c=",
+        "owner": "Rodrigo-Matuz",
+        "repo": "nuclear",
+        "rev": "54ceb5c08cd2232664012db67cbfb24b14504cee",
+        "type": "github"
       },
       "original": {
-        "path": "/mnt/workspace_linux/Repos/nuclear",
-        "type": "path"
+        "owner": "Rodrigo-Matuz",
+        "ref": "nix",
+        "repo": "nuclear",
+        "type": "github"
       }
     },
     "numen": {
@@ -580,6 +604,7 @@
         "caelestia-cli": "caelestia-cli",
         "caelestia-shell": "caelestia-shell_2",
         "firefox-addons": "firefox-addons",
+        "helium": "helium",
         "hermes-agent": "hermes-agent",
         "home-manager": "home-manager_2",
         "kanatype": "kanatype",
