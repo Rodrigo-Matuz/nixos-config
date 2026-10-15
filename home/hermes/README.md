@@ -4,8 +4,16 @@ Enables the Hermes Agent desktop application and Home Manager service. The local
 backend listens on port `9119`; the configuration selects the `openai-codex`
 provider, high reasoning, all toolsets, local terminal execution, and memory.
 
-Credentials load from `/var/lib/hermes/env` and are not stored here. The local
-profile archive `hermes-profile.gz` is ignored.
+There is **no required secret file**: installing this module works before a user
+has credentials. Sign in interactively after installation (`hermes model` /
+`hermes setup`), or opt the workstation into
+[encrypted API credentials](../../secrets/README.md) after provisioning a key
+and ciphertext. OAuth tokens live in the user's Hermes `auth.json`, outside Git.
+`environmentFiles` is not a systemd-only setting: the Hermes module merges its
+content into a persistent `$HERMES_HOME/.env` at activation. Keep that profile
+private and back it up accordingly. Named profiles need their own `HERMES_HOME`.
+The local `hermes-profile.gz` archive is ignored, **not** safe to publish or
+keep world-readable; move it outside the checkout.
 
 ## Upstream and original sources
 
@@ -16,4 +24,4 @@ profile archive `hermes-profile.gz` is ignored.
 ## Module
 
 Imported by [`../matuz.nix`](../matuz.nix); implementation is in
-[`default.nix`](default.nix). Keep credentials in the environment file.
+[`default.nix`](default.nix). Do not commit `auth.json`, `.env`, session data, or a live profile.

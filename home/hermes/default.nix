@@ -49,8 +49,7 @@
       };
     };
 
-    environmentFiles = [
-      "/var/lib/hermes/env"
-    ];
+    # No credential is required to evaluate/activate this module. Configure
+    # authentication after installation, or opt in to an encrypted env file.
   };
 }

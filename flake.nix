@@ -43,6 +43,10 @@
     };
 
     hermes-agent.url = "github:NousResearch/hermes-agent";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
@@ -81,6 +85,8 @@
         }
 
         ./configuration.nix
+        inputs.sops-nix.nixosModules.sops
+        ./secrets.nix
 
         { nixpkgs.config.allowUnfree = true; }
 

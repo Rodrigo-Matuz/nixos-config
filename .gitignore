@@ -10,7 +10,15 @@ result-*
 *.secret.*
 *.age
 *.key
-home/hermes/hermes-profile.gz
+home/hermes/hermes-profile*.gz
+# Live credential/state files must never be copied into this repository.
+.config/
+.hermes/
+auth.json
+hosts.yml
+secure-token-storage.json
+Cookies
+Cookies-journal
 
 # Editor and OS metadata
 .DS_Store
