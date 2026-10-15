@@ -15,3 +15,11 @@ launcher; [`default.nix`](default.nix) selects packages and plugins.
 
 Imported by [`../matuz.nix`](../matuz.nix); a working Wayland/Hyprland session
 is assumed by the launcher.
+
+`obs-control.sh` reads an optional WebSocket password from
+`$XDG_CONFIG_HOME/obs-studio/websocket-password` (or `~/.config/...`), which
+should be mode `0600` and never committed. It passes the connection URL through
+`OBS_WEBSOCKET_URL`, not process arguments. The password is still visible to
+processes that can inspect the same user's environment; treat that user as one
+trust boundary. If the file is absent, the control shortcut fails with a clear
+message, but OBS installation itself does not require a password.
