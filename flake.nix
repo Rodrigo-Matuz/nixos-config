@@ -62,6 +62,10 @@
       url = "github:Rodrigo-Matuz/kanatype";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nuclear = {
+      url = "path:/mnt/workspace_linux/Repos/nuclear";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
 

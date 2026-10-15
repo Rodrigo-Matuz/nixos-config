@@ -426,6 +426,23 @@
         "type": "github"
       }
     },
+    "nuclear": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792028473,
+        "narHash": "sha256-kEMcgjEh0HJFAiw3x832+wHzKTLNMkWfqQjCbD4cxZ0=",
+        "path": "/mnt/workspace_linux/Repos/nuclear",
+        "type": "path"
+      },
+      "original": {
+        "path": "/mnt/workspace_linux/Repos/nuclear",
+        "type": "path"
+      }
+    },
     "numen": {
       "inputs": {
         "nixpkgs": [
@@ -569,6 +586,7 @@
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nix4nvchad": "nix4nvchad",
         "nixpkgs": "nixpkgs_2",
+        "nuclear": "nuclear",
         "sops-nix": "sops-nix",
         "vicinae": "vicinae",
         "wallpaper-picker-ui": "wallpaper-picker-ui",
