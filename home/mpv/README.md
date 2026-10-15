@@ -8,6 +8,7 @@ The ModernZ files are copied from commit `579897e8c974c380caa5017dc7b27a69123c13
 - `script-opts/modernz.conf` — Matuz dark-palette configuration
 - `fonts/modernz-icons.ttf` — ModernZ icon font
 - `mpv.conf` — disables the stock OSC and prevents saved subtitle positions from conflicting with ModernZ
+- `mpv-mpris` — exposes mpv through MPRIS for Caelestia metadata, artwork, and playback controls
 - `yt-dlp` and `ffmpeg` — required by ModernZ's enabled video download control
 
 The vendored ModernZ script uses yt-dlp's single-argument `--format=<value>` form,
