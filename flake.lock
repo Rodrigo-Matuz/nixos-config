@@ -82,11 +82,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792168610,
-        "narHash": "sha256-n5yH5ycxBcfJqvd2GzH470gACAGxjvVKHGWLy25fJXo=",
+        "lastModified": 1792169139,
+        "narHash": "sha256-mvrqImEaxTygHwnoGYF7OJkaAGGHB+MTZVSNkk104vU=",
         "owner": "Rodrigo-Matuz",
         "repo": "Equibop",
-        "rev": "a30002f71af21f47ccde02352bf353a5d174878f",
+        "rev": "238d20537ee9383f1ac61ef19d98493ad340091c",
         "type": "github"
       },
       "original": {

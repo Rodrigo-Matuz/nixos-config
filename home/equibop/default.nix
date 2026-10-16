@@ -22,7 +22,7 @@ in
 
   # Seed a writable settings file once. Existing Equibop settings are never
   # overwritten by Home Manager activation.
-  home.activation.seedCaelestiaVoiceSettings = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+  home.activation.seedCaelestiaEquibopSettings = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
     if [ ! -e "${target}" ] && [ ! -L "${target}" ]; then
       run mkdir -p "${config.xdg.configHome}/Equibop/settings"
       run install -m 600 "${seed}" "${target}"
