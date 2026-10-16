@@ -74,16 +74,19 @@
     },
     "equibop": {
       "inputs": {
+        "caelestia-shell": [
+          "caelestia-shell"
+        ],
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1792167935,
-        "narHash": "sha256-NEVp87IV9hiW8juAE7xCNdGNuGlGcYGfMTYW9uFkCA4=",
+        "lastModified": 1792168610,
+        "narHash": "sha256-n5yH5ycxBcfJqvd2GzH470gACAGxjvVKHGWLy25fJXo=",
         "owner": "Rodrigo-Matuz",
         "repo": "Equibop",
-        "rev": "2a1d24763664aeae2c9ab2c687fc69b984572ceb",
+        "rev": "a30002f71af21f47ccde02352bf353a5d174878f",
         "type": "github"
       },
       "original": {

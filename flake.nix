@@ -81,6 +81,7 @@
     equibop = {
       url = "github:Rodrigo-Matuz/Equibop";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.caelestia-shell.follows = "caelestia-shell";
     };
 
   };
