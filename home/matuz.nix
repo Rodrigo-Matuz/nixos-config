@@ -9,6 +9,7 @@
     ./vicinae
     ./obs
     ./vesktop
+    ./equibop
     ./wallpaper
     ./screenshot
     ./fastfetch

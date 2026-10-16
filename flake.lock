@@ -72,6 +72,26 @@
         "type": "github"
       }
     },
+    "equibop": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792167935,
+        "narHash": "sha256-NEVp87IV9hiW8juAE7xCNdGNuGlGcYGfMTYW9uFkCA4=",
+        "owner": "Rodrigo-Matuz",
+        "repo": "Equibop",
+        "rev": "2a1d24763664aeae2c9ab2c687fc69b984572ceb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Rodrigo-Matuz",
+        "repo": "Equibop",
+        "type": "github"
+      }
+    },
     "firefox-addons": {
       "inputs": {
         "nixpkgs": [
@@ -621,6 +641,7 @@
       "inputs": {
         "caelestia-cli": "caelestia-cli",
         "caelestia-shell": "caelestia-shell_2",
+        "equibop": "equibop",
         "firefox-addons": "firefox-addons",
         "helium": "helium",
         "hermes-agent": "hermes-agent",

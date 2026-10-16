@@ -78,6 +78,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    equibop = {
+      url = "github:Rodrigo-Matuz/Equibop";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   # ---------------------------------------------------------------------------

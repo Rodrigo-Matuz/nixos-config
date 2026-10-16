@@ -17,6 +17,21 @@ Hyprland uses its defaults. After installation, edit the cloned profile’s
 for that profile, then rebuild it. Other selected modules may still reference
 workstation outputs.
 
+## Keybind descriptions and language
+
+Keybind descriptions are shown by the Vicinae Hyprland keybind viewer. They
+use English by default and switch to Brazilian Portuguese when the session
+locale starts with `pt_BR` or `pt-BR`.
+
+On NixOS, change the locale in `configuration.nix`:
+
+```nix
+i18n.defaultLocale = "pt_BR.UTF-8";
+```
+
+Then rebuild the system and restart Hyprland (or log out and back in). To use
+English again, set it back to `en_US.UTF-8` and restart Hyprland.
+
 ## Upstream and original Nix source
 
 - [Hyprland](https://github.com/hyprwm/Hyprland) · [wiki](https://wiki.hypr.land/)
