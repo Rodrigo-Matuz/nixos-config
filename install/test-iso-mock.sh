@@ -26,9 +26,10 @@ done
 chmod +x "$tmp/bin/"*
 # Mirror install.sh's module discovery order; select Git, no secrets.
 git_index=0
-for module in "$repo"/home/*/default.nix; do
+for module in "$repo"/home/*/default.nix "$repo"/home/optional/*/default.nix; do
+  [[ -f $module ]] || continue
   name=${module%/default.nix}; name=${name##*/}
-  [[ $name == noctalia || $name == snappy-switcher ]] && continue
+  [[ $name == noctalia ]] && continue
   [[ $name =~ ^[a-z0-9-]+$ ]] || continue
   git_index=$((git_index+1))
   [[ $name != git ]] || break

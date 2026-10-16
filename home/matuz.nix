@@ -1,48 +1,13 @@
-{ lib, inputs, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   imports = [
-    ./hyprland
-    ./zsh
-    ./kitty
-    ./caelestia
-    ./vicinae
-    ./obs
-    ./vesktop
-    ./equibop
-    ./wallpaper
-    ./screenshot
-    ./fastfetch
-    ./nvim
-    ./cursor
-    ./rtorrent
-    ./nvtop
-    ./termusic
-    ./firefox
-    ./helium
-    ./snappy-switcher
-    ./git
-    ./devenv
-    ./rust
-    ./dolphin
-    ./cli-tools
-    ./obsidian
-    ./zathura
-    ./desktop-theme
-    ./mpv
-    ./vscodium
-    ./hermes
-    ./kanatype
-    # ./nuclear
-    ./copilot
+    ./modules.nix
   ];
 
-  # Package overlays
+  # Keep the Home Manager package set aligned with the workstation's unfree
+  # policy. Individual modules should not repeat this setting.
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = [
-    inputs.nix-vscode-extensions.overlays.default
-    # inputs.ytm-player.overlays.default
-  ];
 
   # Workstation Git identity; the portable installer collects its own.
   matuz.git.authorName = "Rodrig-Matuz";

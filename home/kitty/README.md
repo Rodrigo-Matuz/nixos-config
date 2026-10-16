@@ -1,16 +1,9 @@
 # Kitty terminal
 
-Enables Kitty with JetBrainsMono Nerd Font, Zsh integration, `0.6` background
-opacity, and the checked-in Matuz palette. Settings live in
-[`default.nix`](default.nix).
+Enables Kitty with JetBrains Mono Nerd Font, Zsh integration, transparent
+backgrounds, and the Matuz color palette.
 
-## Upstream and original Nix source
+The main settings are in [`default.nix`](default.nix). The module is active on
+the workstation and can be selected during portable installation.
 
-- [Kitty](https://sw.kovidgoyal.net/kitty/) · [source](https://github.com/kovidgoyal/kitty)
-- [Home Manager modules](https://github.com/nix-community/home-manager/tree/master/modules/programs) — open the `kitty` module directory for the original Nix module.
-- [JetBrains Mono](https://www.jetbrains.com/lp/mono/)
-
-## Module
-
-Imported by [`../matuz.nix`](../matuz.nix); dependency is
-`pkgs.nerd-fonts.jetbrains-mono`.
+Learn more: [Kitty](https://sw.kovidgoyal.net/kitty/)

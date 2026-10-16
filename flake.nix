@@ -7,6 +7,8 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    flake-parts.url = "github:hercules-ci/flake-parts";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -89,54 +91,9 @@
   # ---------------------------------------------------------------------------
   # Outputs
   # ---------------------------------------------------------------------------
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
-  let
-    system = "x86_64-linux";
-  in
-  {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-
-      specialArgs = {
-        inherit inputs;
-      };
-
-      modules = [
-        {
-          nixpkgs.overlays = [
-            inputs.nix-vscode-extensions.overlays.default
-          ];
-        }
-
-        ./configuration.nix
-        inputs.sops-nix.nixosModules.sops
-        ./secrets.nix
-
-        { nixpkgs.config.allowUnfree = true; }
-
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.extraSpecialArgs = {
-            inherit inputs;
-          };
-
-          home-manager.users.matuz.imports = [
-            inputs.caelestia-shell.homeManagerModules.default
-            inputs.caelestia-shell.homeManagerModules.vesktop-voice
-            inputs.zen-browser.homeModules.default
-            inputs.hermes-agent.homeManagerModules.default
-            inputs.wallpaper-picker-ui.homeManagerModules.default
-          ];
-
-        }
-      ];
+  outputs = inputs@{ flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" ];
+      imports = [ ./flake/nixos.nix ];
     };
-
-    # Portable profile used by install.sh; leave the workstation output intact.
-    nixosConfigurations.install = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit inputs; };
-      modules = [ ./install/portable.nix ];
-    };
-  };
 }

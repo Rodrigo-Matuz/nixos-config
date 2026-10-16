@@ -1,19 +1,12 @@
 # Neovim
 
-Enables Neovim as the default editor and links this directory into
-`~/.config/nvim`. It also installs Lua/Luarocks, Lua language tooling, Stylua,
-Tree-sitter, C build tools, and common search/file utilities.
+Makes Neovim the default editor and links this folder to `~/.config/nvim`.
+It includes the editor plugins plus Lua tooling, Stylua, Tree-sitter, C build
+tools, and common search utilities.
 
-[`init.lua`](init.lua) contains the editor and plugin setup; [`plugins/`](plugins/)
-contains individual plugin files; and [`default.nix`](default.nix) owns the
-package list and Home Manager link. The link is recursive and forced.
+Edit [`init.lua`](init.lua) and [`plugins/`](plugins/) to change the editor. The
+configuration is linked recursively, so changes in this checkout are picked up
+on the next activation.
 
-## Upstream and original Nix sources
-
-- [Neovim](https://neovim.io/) · [source](https://github.com/neovim/neovim)
-- [Home Manager modules](https://github.com/nix-community/home-manager/tree/master/modules/programs) — open the `neovim` module directory for the original Nix module.
-- [NvChad](https://github.com/NvChad/NvChad) — separate opt-in module.
-
-## Module
-
-Imported by [`../matuz.nix`](../matuz.nix).
+This is the workstation's active Neovim setup. The separate NvChad module is
+optional; do not install both in the portable profile.

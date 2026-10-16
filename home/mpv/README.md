@@ -1,17 +1,11 @@
 # mpv with ModernZ
 
-Installs mpv and configures [ModernZ](https://github.com/Samillion/ModernZ), a modern replacement for mpv's stock OSC.
+Installs mpv with [ModernZ](https://github.com/Samillion/ModernZ), a more
+comfortable on-screen controller than mpv's default one.
 
-The ModernZ files are copied from commit `579897e8c974c380caa5017dc7b27a69123c1333` and installed declaratively by Home Manager:
+This module also enables MPRIS controls for the desktop shell and installs the
+helpers ModernZ needs for video downloads. The local files are in
+`scripts/`, `script-opts/`, `fonts/`, and `mpv.conf`.
 
-- `scripts/modernz.lua` — ModernZ OSC script
-- `script-opts/modernz.conf` — Matuz dark-palette configuration
-- `fonts/modernz-icons.ttf` — ModernZ icon font
-- `mpv.conf` — disables the stock OSC and prevents saved subtitle positions from conflicting with ModernZ
-- `mpv-mpris` — exposes mpv through MPRIS for Caelestia metadata, artwork, and playback controls
-- `yt-dlp` and `ffmpeg` — required by ModernZ's enabled video download control
-
-The vendored ModernZ script uses yt-dlp's single-argument `--format=<value>` form,
-so format selection works with mpv's subprocess argument list.
-
-No `nixos-rebuild switch` is performed automatically.
+The module is active on the workstation. It does not change files outside the
+Home Manager profile or switch the system by itself.

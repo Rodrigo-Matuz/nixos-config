@@ -1,225 +1,173 @@
-# Optional NixOS setup from the dotfiles repository
+# Try or install the portable NixOS profile
 
-[`../install.sh`](../install.sh) clones the complete dotfiles repository and uses
-its separate `#install` profile. The `#nixos` output is the original `matuz`
-workstation profile; **never install that profile on another machine**. This
-installer supports x86_64 NixOS only. It offers a non-root VM preview, a fresh
-UEFI installation, and an explicitly opt-in switch of an installed NixOS host.
-It never repartitions, formats, or mounts disks during setup. In ISO and
-installed modes it can optionally configure **existing formatted data volumes**
-to mount on the installed system. It leaves an existing `/etc/nixos` tree in
-place and refuses to overwrite `portable-config`.
+This directory describes the profile used by [`../install.sh`](../install.sh).
+It is separate from the original Matuz workstation profile, so the installer
+asks about your account and hardware instead of copying mine.
 
-## Publication status and bootstrap
+## Pick the mode you need
 
-The planned public Git URL is
-`https://github.com/Rodrigo-Matuz/dotfiles.git`; it is **not public yet**.
-`DEFAULT_REPO_URL` in `../install.sh` already points there. Before publication,
-use `--repo /path/to/committed/dotfiles` to clone a local Git checkout; the
-installer does not use uncommitted or untracked files in that source. All modes
-work without credentials, including when Hermes is selected; sign in later.
-When the
-repository is public, users can download **only the bootstrap** and let it
-clone the full repository:
+| Mode | Use it when | Changes the current system? |
+| --- | --- | --- |
+| `preview` | You want to try the setup in a virtual machine | No |
+| `iso` | You booted a NixOS live USB and want a fresh install | Installs to the mounted target |
+| `installed` | You already run NixOS and want to replace its profile | Yes, this is the risky option |
+
+If you are unsure, start with `preview`.
+
+## Before starting
+
+- The installer currently supports x86_64 machines.
+- Use a trusted checkout or Git URL. The script clones and evaluates that
+  repository, so review the source before running it as root.
+- Keep a backup of files you care about.
+- The script never partitions, formats, or mounts disks.
+- In `iso` mode, boot the live system in UEFI mode and mount the target root at
+  `/mnt` and its EFI partition at `/mnt/boot`.
+- In `installed` mode, the machine must already use systemd-boot with `/boot`
+  mounted. This mode keeps the existing account and changes the host profile.
+
+## Download the installer
+
+If you do not already have a checkout, download the small bootstrap script from
+this memorable URL, inspect it, and then choose a mode below:
 
 ```bash
-curl -fsSLo install.sh https://raw.githubusercontent.com/Rodrigo-Matuz/dotfiles/main/install.sh
+curl -fsSL https://matuz.dev/nixos-installscript -o install.sh
 less install.sh
-# Then run one of the mode commands below.
 ```
 
-**This download is not yet functional.** The planned
-`https://www.matuz.dev/nixos-installscript` URL currently serves a 404 page;
-publishing to GitHub alone does not create that website route. To use the
-website URL later, configure it to serve the raw `install.sh`, confirm that it
-returns the actual script (not HTML), and review it before executing it with
-sudo. The script prints the cloned full Git revision. In ISO/installed modes it
-requires an explicit trust confirmation **before** running cloned Nix or shell
-code as root, then separately confirms installation/activation. Optionally pass
-`--ref RELEASE_TAG --expect-revision FULL_40_CHARACTER_SHA` to reject a changed
-clone before evaluation; a branch or tag alone may move, and the separately
-downloaded bootstrap must also be reviewed. No interactive prompt can make
-untrusted source code safe. Only run code from a source you trust; VM preview
-is not a security
-sandbox for untrusted Nix expressions or build scripts. The VM launcher can
-expose a writable host exchange directory and guest networking.
+The URL redirects to the `install.sh` file in GitHub. The script then clones the
+full repository. If the repository is private or you are testing local changes,
+use a committed checkout and pass it with `--repo` instead.
 
-## Fresh NixOS installation
+## Try it in a VM
 
-1. Boot an **x86_64 NixOS live installer in UEFI mode** with Internet access.
-   Plan your partitions and filesystem, then partition/format manually. Mount
-   target `/` at `/mnt` and its EFI system partition at `/mnt/boot`. Keep a
-   backup of anything you intend to replace. Other layouts/bootloaders are
-   not supported by this script.
-2. Download and read `install.sh` as shown above. Then run:
-
-   ```bash
-   sudo bash install.sh --mode iso
-   # Before publication, with a local Git checkout containing the installer:
-   # sudo bash /path/to/dotfiles/install.sh --mode iso --repo /path/to/dotfiles
-   ```
-
-3. Type a **required** normal username (not `root`), hostname, time zone, and
-   state version. For a real install, answer the console auto-login question
-   (default no; the VM preview always logs in automatically). Press Enter at the optional Home Manager/system module
-   prompts to choose none; otherwise enter their displayed numbers separated
-   by spaces or commas. If you select Git, you can enter your author name and
-   email during installation or leave both blank (the repository owner's
-   identity is never copied into a portable install). You can then opt in
-   to additional data partitions: the
-   script displays each supported partition's device (for example `/dev/sdc1`),
-   size, filesystem, label, UUID and existing mountpoint; answer yes/no for
-   each, then enter a mount name such as `linux_hd` for `/mnt/linux_hd`.
-   **If you cannot identify a partition or do not know what it contains, press
-   Enter (default `no`) or type `skip`; the script does not inspect its files.** The
-   chosen username controls the new NixOS account, `/home/NAME`, and Home
-   Manager identity. The script generates hardware settings **from your mounted
-   target**, dry-builds the selected profile, and requires the literal `YES`
-   before running `nixos-install`.
-4. Complete both password prompts (root and the chosen user). The script
-   explicitly invokes `passwd` in the target even if the bootstrap was
-   piped into Bash. Reboot only after both passwords are set. The persistent
-   configuration is `/etc/nixos/portable-config` on the installed system.
-
-For a custom mount root, pass `--root /absolute/path`; its `/boot` must be a
-mounted EFI system partition. Nothing is installed if prerequisites or the
-pre-install confirmation fail, but the script may leave generated files in
-the mounted target only after confirmation. A dry-build cannot prove the
-machine will boot or that optional graphical modules work on its hardware.
-
-**Data-mount behavior:** This opt-in does not prepare a new disk: root and EFI
-must already be mounted, and unformatted, encrypted/locked, swap, or unknown
-filesystems are not offered. A partition already mounted outside the data
-area (for example `/home`) is skipped, as is a filesystem UUID shared by
-multiple devices. Existing `/mnt/NAME` targets must be empty or already mount
-the same filesystem; symlinked mount parents are rejected. Supported data
-filesystems are ext4, btrfs, xfs, NTFS (mounted with `ntfs3`), FAT (`vfat`)
-and exFAT. The generated
-`install/partitions.nix` uses filesystem UUIDs and `nofail` with a device
-timeout so an absent data disk does not prevent boot. FAT, exFAT and NTFS use
-UID/GID mount options and `umask=077` (private to the selected user); for ext4/btrfs/xfs, a systemd oneshot
-gives the chosen user ownership and write permission on the **mount root only**
-after mounting; this **permanently changes the filesystem root ownership**
-when the volume is attached. Existing files and subdirectories keep their original owners
-and modes; this is not a recursive ownership takeover. NTFS volumes must be
-cleanly shut down in Windows (Fast Startup/hibernation disabled) for reliable
-read-write access. Review `/boot` free space and back up important data before
-changing boot/system configuration. VM preview never imports host data mounts.
-
-## Existing NixOS: try the configuration in a VM
-
-This is the recommended path for a user who already has an installation and
-wants to **try** the configuration. Run without `sudo`; `preview` is the
-script's default mode:
+Run this as your normal user, without `sudo`:
 
 ```bash
-bash install.sh --mode preview
-# Before publication, from any directory:
-# bash /path/to/dotfiles/install.sh --mode preview --repo /path/to/dotfiles
+bash /path/to/dotfiles/install.sh \
+  --mode preview \
+  --repo /path/to/dotfiles
 ```
 
-Provide your preferred VM username and select optional modules (or none).
-After a `YES` prompt, the script builds `nixos-rebuild build-vm` with
-VM-specific hardware settings; it prints the command to start the VM.
-The VM console automatically logs in as the chosen user **in the VM only**;
-no password is set on the host. Shut down the VM when finished.
+The script asks for a username and the apps to include. Press Enter when you
+want no optional apps. It then builds a separate NixOS VM and prints a command
+to start it. The VM logs in automatically for convenience; your real system is
+not switched, `/etc/nixos` is not changed, and host disks are not mounted.
 
-Preview needs an x86_64 NixOS host, working Nix daemon, Git (or network to
-fetch it), enough build disk space, QEMU/virtualisation support, and an
-interactive terminal. It creates
-`~/.local/share/dotfiles-preview/portable-config` (or
-`$XDG_DATA_HOME/dotfiles-preview/portable-config`) and Nix store output, but
-**does not import the host disk UUIDs, mount partitions, write `/etc/nixos`,
-install NixOS, or switch your running generation**. The host remains on its
-existing configuration. Move that preview directory aside manually to
-create a different selection; the script refuses to overwrite it. A VM does
-not validate real GPU/display/hardware integration; some optional desktop
-modules may require adaptation or a suitable GUI session. This installer
-is not for an existing non-NixOS Linux distribution.
+The VM is useful for checking the shape of the profile. It cannot prove that
+GPU drivers, monitors, audio devices, or other hardware-specific settings will
+work on your machine.
 
-## Existing NixOS: apply to the host (advanced)
+## Install from a NixOS live USB
 
-**This changes the host; do not use it just to try the config.** The host must
-already use UEFI + systemd-boot with the EFI system partition mounted at
-`/boot`. Make a backup of `/etc/nixos`, user data, and your working boot
-configuration. Review how this portable profile differs from the old one:
-services, boot settings, users/groups, network and Home Manager files may
-change. Record the **original `system.stateVersion`** from your current
-NixOS configuration; do not replace it with the current release number.
+Prepare the disks yourself, then mount them before running the script:
 
 ```bash
-sudo bash install.sh --mode installed
-# Or, before publication:
-# sudo bash /path/to/dotfiles/install.sh --mode installed --repo /path/to/dotfiles
+sudo mount /dev/<root-partition> /mnt
+sudo mkdir -p /mnt/boot
+sudo mount /dev/<efi-partition> /mnt/boot
+sudo bash /path/to/dotfiles/install.sh \
+  --mode iso \
+  --repo /path/to/dotfiles
 ```
 
-The script copies this host's `/etc/nixos/hardware-configuration.nix` to a
-new `/etc/nixos/portable-config` checkout. It can optionally generate UUID-based
-data mounts through the same per-partition questions as ISO mode. It first requires an existing non-system user account (UID >= 1000). It then
-dry-builds, asks for `YES`, and runs `nixos-rebuild switch`; it does **not**
-reset that existing account's password. Verify console login and recovery
-access before switching, and verify login again before rebooting. This is still a **full profile switch**, not a way
-to add mounts to your current workstation configuration. This mode requires
-systemd-boot and is not supported on the GRUB workstation in this repository. It
-does not overwrite the previous `/etc/nixos` files, but **switching can stop
-services or disrupt access**; it has no automatic rollback. Some selected
-Home Manager modules use `force = true` and may replace existing application
-files during activation (for example, LibreWolf settings); back up those
-application profiles as well. Recover from a prior NixOS boot generation if
-necessary, or use `sudo nixos-rebuild switch --rollback` while the host is
-still usable. To rebuild an edited portable selection later, run
-`sudo nixos-rebuild switch --flake /etc/nixos/portable-config#install`.
+The script asks for:
 
-## Selection and module extension
+- the new username, hostname, time zone, and NixOS state version;
+- whether the first console should log in automatically;
+- the Home Manager and system modules to install;
+- an optional Git author name and email;
+- optional existing data partitions to mount.
 
-- `selection.nix` holds evaluation defaults. The installer writes a *local*
-  selection in the cloned checkout. Keep generated host hardware and state
-  version with that host, not as shared defaults for other users.
-- `portable.nix` imports either target-generated hardware, the host's
-  hardware in installed mode, or empty hardware in VM mode (where `build-vm`
-  supplies virtual devices), plus `install/partitions.nix`. The latter is an
-  empty module by default; the installer generates it **in the new clone**
-  when data mounts are selected. It does not import or overwrite the
-  workstation's root `partitions.nix`. A fresh account gets explicit UID 1000
-  only when a data partition is selected; installed mode preserves the selected
-  account's existing numeric UID. It includes a minimal NixOS base; every
-  non-essential Home Manager and system module is opt-in.
-- To add a normal Home Manager module, add `home/NAME/default.nix` and a
-  README; the script discovers it automatically. A system module goes at
-  `system/NAME/default.nix`. A module requiring another **flake input** also
-  needs that input declared and locked in `flake.nix`, plus a conditional
-  import/overlay in `portable.nix`. Evaluate/build `#install` after adding it.
-- `noctalia` and `snappy-switcher` are hidden until their undeclared flake
-  inputs are wired and locked. `nvim` and `nvchad` conflict, as do `caelestia`
-  and `wallpaper`. Caelestia auto-selects Hyprland.
-- The workstation's `#nixos` still uses the fixed `matuz` identity. Selecting
-  a username in `#install` does not replace personal Git identity, branding,
-  or hardware assumptions **inside individual optional modules**. The portable
-  Firefox profile starts without the workstation’s bookmarks and uses only
-  uBlock Origin by default; edit `home/firefox/favorites.nix` and
-  `home/firefox/extensions-portable.nix` in the new clone to customize them.
-  Inspect other modules before selecting them.
+Press Enter at an optional question to choose the safe default. The script
+shows a dry-build before it asks for the final `YES`. It asks for root and user
+passwords after the installation finishes. Reboot only after both passwords are
+set and the installation reports success.
 
-## Hardware and account cautions
+The new configuration is saved at `/etc/nixos/portable-config` on the target.
 
-- The portable Hyprland profile does not import the workstation’s monitor
-  layout or workspace-to-monitor rules. Hyprland chooses its default modes and
-  placement; configure your own layout after login. Some other optional modules
-  still contain monitor-specific settings (for example OBS and Caelestia), so
-  review those before selecting them. The installer asks whether the selected user should auto-login on the
-  first console of a real installation (default **no**). Anyone with physical
-  console access then gets that user session without a password; this does
-  not automatically start a graphical desktop. The VM preview always enables
-  console auto-login for its guest.
-- `home/git` asks for the new user's own optional author identity; it does not
-  reuse the workstation's. `home/nvtop` uses the AMD variant.
-  `home/obs`/`home/vesktop` configure Hyprland autostarts; OBS assumes a
-  particular display. `steam` starts its user service; its game-network firewall ports are closed by default (enable explicitly if needed).
-  `home/hermes` installs without a secret file; after first login run
-  `hermes model` to sign in with your provider, or
-  explicitly provision credentials later. OBS control needs a local password
-  file only when its WebSocket shortcuts are used. Never commit secrets.
-- Review the whole repository for private values, host identifiers and
-  credentials before publishing a public `dotfiles` repository. `flake.lock`,
-  `install.sh`, `install/`, and all referenced modules must be included for the
-  public bootstrap to work.
+## Apply it to an existing NixOS installation
+
+This mode is for people who have already reviewed the profile and have a way
+back to their current system. It is not a preview:
+
+```bash
+sudo bash /path/to/dotfiles/install.sh \
+  --mode installed \
+  --repo /path/to/dotfiles
+```
+
+The script copies the current machine's hardware configuration, keeps the
+existing `/etc/nixos` files, and switches the new profile only after a dry-build
+and an explicit confirmation. It can still stop services, replace user-managed
+application files, or leave you needing to boot an older generation. Check that
+you can recover your current NixOS generation before using this mode.
+
+## Choosing apps
+
+The installer finds active modules in `home/<name>/` and opt-in modules in
+`home/optional/<name>/`. Select numbers from the list, separated by spaces or
+commas. Press Enter to select none.
+
+A few combinations are deliberately rejected:
+
+- choose either `nvim` or `nvchad`;
+- choose either `caelestia` or `noctalia`;
+- selecting `wallpaper` automatically adds `caelestia` and Hyprland, because
+  Wallpaper Picker uses Caelestia to apply the selected wallpaper;
+- selecting `caelestia` also adds `hyprland` automatically;
+- Noctalia is shown only after its missing flake input is added.
+
+Many desktop modules were written for the original workstation. Read their
+README before selecting them on different hardware.
+
+## Optional data drives
+
+The installer can offer existing, already-formatted data partitions. This is
+not disk setup: it does not create filesystems or recover data. If you do not
+recognize a partition, answer `no` or type `skip`.
+
+Choosing a data partition gives the selected user access to the mount root and
+can change that directory's ownership. Back up important data and check the
+mount names before confirming. The generated mounts use UUIDs and are allowed
+to be absent at boot, so an unplugged data drive should not block startup.
+
+## After installation
+
+For a fresh install, the profile is already active. For an existing system, the
+same profile can be rebuilt later with:
+
+```bash
+sudo nixos-rebuild switch \
+  --flake /etc/nixos/portable-config#install
+```
+
+To return to an earlier NixOS generation, use the boot menu or, while the
+current system still works:
+
+```bash
+sudo nixos-rebuild switch --rollback
+```
+
+Sign in to GitHub, Hermes, Discord, browsers, and other apps after installation.
+The installer does not need API keys or password files and does not copy the
+workstation owner's credentials.
+
+## Trusting a particular revision
+
+For a remote source, you can pin the branch or tag and check the exact commit:
+
+```bash
+sudo bash install.sh --mode iso \
+  --repo https://example.invalid/dotfiles.git \
+  --ref <tag-or-branch> \
+  --expect-revision <40-character-commit-sha>
+```
+
+Replace the example URL and placeholders with values you have verified. A tag
+or branch can move; checking the full commit gives you a fixed source. Do not
+run an installer from a source you do not trust.
+
+See the repository [README](../README.md) for the module layout and the
+workstation commands.

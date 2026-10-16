@@ -1,39 +1,15 @@
 # OBS Studio
 
-Enables OBS Studio with PipeWire audio capture, VA-API encoding, Vulkan
-capture, a Hyprland launcher entry, and the declarative [`Matuz.ovt`](Matuz.ovt)
-theme. [`obs.lua`](obs.lua) contains the launcher; [`default.nix`](default.nix)
-selects packages, plugins, and installs the theme into OBS's user theme folder.
+Installs OBS Studio with PipeWire audio capture, VA-API encoding, Vulkan
+capture, the Hyprland launcher, and the Matuz theme.
 
-The theme uses the exact `matuz.dev` surface palette:
+The theme is [`Matuz.ovt`](Matuz.ovt). The launcher is in [`obs.lua`](obs.lua).
+The module expects a working Wayland/Hyprland session and is tuned for the
+original display setup, so review it before using it elsewhere.
 
-- Background `#030A14`
-- Surface `#010A17`
-- Raised surface `#001029`
-- Hover `#073887`
-- Text `#F5F5F5`, muted text `#A1A1AA`, and secondary text `#71717A`
+OBS control shortcuts can use a local WebSocket password file at
+`~/.config/obs-studio/websocket-password`. Keep that file mode `0600` and never
+commit it. OBS itself does not need the file to start.
 
-Its saturated accents are red `#FC1A70`, purple `#702EF3`, blue `#1E65FF`,
-orange `#FF4D00`, yellow `#FFFF87`, and green `#A4E400`. It extends OBS's Yami
-base theme rather than copying the full base stylesheet, so OBS updates remain
-less likely to break it.
-
-## Upstream and original Nix sources
-
-- [OBS Studio](https://obsproject.com/) · [source](https://github.com/obsproject/obs-studio)
-- [OBS plugins in nixpkgs](https://github.com/NixOS/nixpkgs/tree/nixos-unstable/pkgs/applications/video/obs-studio/plugins)
-- [Home Manager modules](https://github.com/nix-community/home-manager/tree/master/modules/programs) — open the `obs-studio` module directory for the original Nix integration.
-- [PipeWire](https://pipewire.org/)
-
-## Module
-
-Imported by [`../matuz.nix`](../matuz.nix); a working Wayland/Hyprland session
-is assumed by the launcher.
-
-`obs-control.sh` reads an optional WebSocket password from
-`$XDG_CONFIG_HOME/obs-studio/websocket-password` (or `~/.config/...`), which
-should be mode `0600` and never committed. It passes the connection URL through
-`OBS_WEBSOCKET_URL`, not process arguments. The password is still visible to
-processes that can inspect the same user's environment; treat that user as one
-trust boundary. If the file is absent, the control shortcut fails with a clear
-message, but OBS installation itself does not require a password.
+The module is active on the workstation and can be selected in the portable
+profile.

@@ -1,18 +1,14 @@
-# Helium
+# Helium browser
 
-Installs the Helium Chromium companion browser through Home Manager, alongside
-the active Firefox module. The package comes from the pinned
-[`helium-nix`](https://github.com/tomsch/helium-nix) flake input because Helium
-is not in nixpkgs.
+Installs the Helium Chromium-based browser and enables its dark interface. The
+package comes from the pinned `helium-nix` input because it is not supplied by
+nixpkgs here.
 
-The workstation's Firefox bookmarks are converted into Chromium managed
-bookmarks, and the compatible Chromium extensions are installed by the small
-system policy bridge in [`../../system/chromium-policies.nix`](../../system/chromium-policies.nix).
-That bridge is system-level because Chromium does not reliably consume the same
-policies from a Home Manager user policy directory.
+The workstation also supplies Chromium policies so compatible browser settings
+and extensions can follow the Firefox setup. Helium's built-in uBlock fork is
+used instead of installing a second copy.
 
-Helium's built-in uBlock Origin fork covers Firefox's uBlock Origin entry; it is
-not duplicated as a second extension. Imagus is represented by its maintained
-Chromium port, Imagus Reborn.
+This module installs the browser, not your accounts, history, or passwords. It
+is active on the workstation.
 
-The existing Matuz dark GTK theme is shared automatically, and
+Learn more: [Helium](https://github.com/imputnet/helium)

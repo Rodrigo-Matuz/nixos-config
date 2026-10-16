@@ -1,27 +1,54 @@
-# Home Manager modules
+# Apps and user settings
 
-This directory contains focused user-level modules imported by
-[`matuz.nix`](matuz.nix). The parent file owns shared settings such as the
-username, home directory, machine-specific storage links, and module imports.
-Applications and shared CLI packages live in individual modules; Dolphin owns
-its directory MIME association.
+Each folder here describes one app or one small group of user settings. Home
+Manager applies the active folders when the system is rebuilt.
 
-Each module README describes its behavior, dependencies, machine-specific
-assumptions, and upstream/original Nix source. Read it together with the local
-`default.nix` before changing an option.
+## Active and optional modules
+
+- A folder directly under `home/` with a `default.nix` is active on the original
+  workstation.
+- A folder under [`optional/`](optional/) is not active there, but the portable
+  installer can offer it during setup.
+- The installer writes the selected apps to its local `install/selection.nix`.
+  It does not change the workstation profile.
+
+You can therefore turn off an app without editing a long list elsewhere:
+
+```bash
+git mv home/<app> home/optional/<app>
+sudo nixos-rebuild switch --flake .#nixos
+```
+
+Move it back when you want it again. Removing a folder completely also removes
+its settings from future generations, but keeps old generations available for a
+rollback.
 
 ## Adding a module
 
-1. Create a directory under `home/`.
-2. Add `default.nix` with a Home Manager module.
-3. Add a README with behavior, dependencies, upstream links, and caveats.
-4. Add an import in `matuz.nix` for workstation activation, or leave a commented
-   import for opt-in use. The portable installer discovers module directories
-   automatically; check [`install/portable.nix`](../install/portable.nix) if the
-   module needs an additional flake input. Update its status in the root README.
-5. Validate from the repository root:
+Create:
 
-   ```bash
-   nix flake check --no-write-lock-file
-   nixos-rebuild dry-build --flake .#nixos --no-write-lock-file
-   ```
+```text
+home/<app>/default.nix
+home/<app>/README.md
+```
+
+The module will be discovered automatically. If it needs a flake input, add and
+lock that input in `flake.nix`, then import the input's Home Manager module from
+`default.nix`. Keep the README focused on what a user gets, what the module
+assumes, and how to customize it.
+
+For an app that should be opt-in, use `home/optional/<app>/` instead. Optional
+modules are still available to the portable installer.
+
+## Before rebuilding
+
+Check the whole configuration first:
+
+```bash
+nix flake check
+sudo nixos-rebuild dry-build --flake .#nixos
+```
+
+The workstation modules assume a graphical Wayland session and the original
+machine in a few places. Read an app's README before selecting it for another
+computer.

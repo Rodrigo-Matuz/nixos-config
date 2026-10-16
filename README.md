@@ -1,193 +1,113 @@
-# Dotfiles
+# NixOS setup and dotfiles
 
-Personal configurations and dotfiles for the programs I use, including NixOS
-and Home Manager. **NixOS installation is optional.** You can browse and reuse
-individual program settings without running an installer. This repository is
-planned for `Rodrigo-Matuz/dotfiles`, but it is **not public yet**; the website
-bootstrap URL is also not live.
+This repository contains a personal NixOS and Home Manager setup. It is also a
+collection of small app configurations: you can copy an app module without
+adopting the whole desktop.
 
-The existing `#nixos` flake profile is for my `matuz` workstation only. It has
-machine-specific UUIDs, monitors, paths, and service settings. **Do not apply
-`#nixos` on another computer.** The separate `#install` profile behind
-[`install.sh`](install.sh) accepts a username and optional modules.
+## Choose a starting point
 
-## Choose a path
+| What you want | Start here |
+| --- | --- |
+| Try the setup without changing your computer | [`install/README.md`](install/README.md), then `install.sh --mode preview` |
+| Install it from a NixOS live USB | [`install/README.md`](install/README.md), then `install.sh --mode iso` |
+| Use it on an existing NixOS installation | Read the warning in [`install/README.md`](install/README.md) before `--mode installed` |
+| Rebuild the original Matuz workstation | `sudo nixos-rebuild switch --flake .#nixos` |
+| Browse individual app settings | [`home/`](home/) |
 
-### Fresh NixOS installation (opt-in)
-
-On an **x86_64 UEFI NixOS installer**, partition and format disks yourself,
-mount the target root at `/mnt` and EFI system partition at `/mnt/boot`, then
-review the bootstrap script and run it as root:
-
-```bash
-# After this repository is public, fetch the script from the raw GitHub URL:
-curl -fsSLo install.sh https://raw.githubusercontent.com/Rodrigo-Matuz/dotfiles/main/install.sh
-less install.sh
-sudo bash install.sh --mode iso
-```
-
-**The download will fail until the repository is published.** The planned
-`https://www.matuz.dev/nixos-installscript` route currently returns 404 and
-must be configured separately before using it instead. The script clones the
-full Git repository itself; no manual clone is needed. For a local test of a
-published checkout, pass `--repo /path/to/dotfiles` (its files must be committed).
-It will ask for a username, hostname, time zone, state version, and optional
-modules. It can also ask about existing formatted data partitions, one at a
-time, and generate UUID-based mounts such as `/mnt/linux_hd` in its cloned
-portable profile. It then dry-builds and requires `YES` before installing.
-Set root and user passwords at its prompts. **It does not repartition, format,
-or mount disks during setup; root and EFI must already be mounted.**
-See [fresh-install prerequisites and limitations](install/README.md#fresh-nixos-installation).
-
-### Existing NixOS installation: try it without switching
-
-Run **without sudo** to build a separate NixOS VM. This is the default mode;
-it does not activate the configuration on your host:
-
-```bash
-# Once published, fetch the raw script as above, inspect it, then:
-bash install.sh --mode preview
-# Run the VM launcher from the path printed by the script.
-```
-
-Before publication, use a **local committed Git checkout** instead:
+The installer works with a trusted Git checkout as well as a remote Git URL:
 
 ```bash
 bash /path/to/dotfiles/install.sh --mode preview --repo /path/to/dotfiles
 ```
 
-You need NixOS on x86_64, Git (or network access to fetch it), a working Nix
-store, and enough space to build/run the VM. VM preview writes a checkout under
-`~/.local/share/dotfiles-preview/portable-config` (or `$XDG_DATA_HOME`) and
-builds in the Nix store; it does **not** copy host disk UUIDs, mount partitions,
-change `/etc/nixos`, or switch generations. The VM console logs in as the
-chosen user. Select only modules compatible with a virtual machine; graphical
-and hardware-specific modules may need edits before they work there. Existing
-non-NixOS hosts are not supported by this installer. See the
-[preview walkthrough and caveats](install/README.md#existing-nixos-try-the-configuration-in-a-vm).
+The source checkout must have a commit. The installer makes its own clone so it
+can leave the source directory alone.
 
-`--mode installed` is a **separate, destructive-to-host-configuration choice**:
-it runs `nixos-rebuild switch` and can remove services or change accounts.
-It is **not** the way to try the config. Read the
-[advanced apply/rollback guidance](install/README.md#existing-nixos-apply-to-the-host-advanced)
-first.
-
-## Repository map
-
-| File | Purpose |
-| --- | --- |
-| [`flake.nix`](flake.nix) | Inputs and separate `#nixos` (personal) / `#install` (portable) outputs |
-| [`flake.lock`](flake.lock) | Locked revisions and hashes for inputs |
-| [`configuration.nix`](configuration.nix) | Workstation-only NixOS entrypoint |
-| [`hardware-configuration.nix`](hardware-configuration.nix) | Workstation hardware; **not reused by the installer** |
-| [`partitions.nix`](partitions.nix) | Additional workstation mounts |
-| [`home/matuz.nix`](home/matuz.nix) | Workstation Home Manager imports |
-| [`home/`](home/) | Focused user-level modules and application dotfiles |
-| [`steam/`](steam/) | Optional system-level Steam module |
-| [`install/`](install/) | Portable profile, selection and installer details |
-
-## Home Manager modules
-
-The active modules are imported by [`home/matuz.nix`](home/matuz.nix). Other
-modules are documented opt-in building blocks.
-
-| Module | Status | Purpose |
-| --- | --- | --- |
-| `caelestia` | active | Desktop shell, bar, dashboard, lock screen, and wallpaper |
-| `cursor` | active | Rem (Re:ZERO) animated XCursor and Hyprcursor theme |
-| `devenv` | active | Development-environment tool |
-| `rust` | active | Rust compiler, Cargo, formatter, linter, and language server |
-| `cli-tools` | active | Shared command-line utilities |
-| `dolphin` | active | KDE file manager |
-| `desktop-theme` | active | Shared Fantasy icon theme and dark GTK/Qt appearance |
-| `mpv` | active | mpv with the ModernZ on-screen controller |
-| `fastfetch` | active | Fastfetch and JSONC configuration |
-| `firefox` | active | Profile, preferences, bookmarks, extensions, and CSS |
-| `helium` | active | Chromium companion with Firefox bookmarks and compatible extensions |
-| `git` | active | Git identity and program settings |
-| `hermes` | active | Hermes Agent application and local backend |
-| `hyprland` | active | Lua-based window-manager configuration |
-| [`kanatype`](home/kanatype/README.md) | active | Japanese kana and kanji practice app |
-| [`nuclear`](home/nuclear/README.md) | active | Nuclear music player from the fork’s lightweight Nix branch |
-| `kitty` | active | Terminal, font, shell integration, and palette |
-| `librewolf` | opt-in | LibreWolf profile and uBlock Origin |
-| `noctalia` | opt-in | Noctalia shell and Matuz palette |
-| `nvim` | active | Neovim and development tooling |
-| `nvchad` | opt-in | NvChad Home Manager module |
-| `nvtop` | active | AMD GPU monitoring |
-| `obs` | active | OBS Studio and capture plugins |
-| `obsidian` | active | Obsidian notes; vault data stays unmanaged |
-| `rtorrent` | active | rtorrent Home Manager program |
-| `screenshot` | active | Wayland screenshot/annotation tools |
-| `termusic` | active | Terminal music player |
-| `vesktop` | active | Vesktop/Vencord preferences |
-| `vicinae` | active | Vicinae launcher service |
-| `vscodium` | active | VSCodium settings, theme, icons, and extensions |
-| `wallpaper` | active | Wallpaper Picker UI and mpvpaper integration |
-| `zathura` | opt-in | PDF/document viewer; uncomment `./zathura` in `home/matuz.nix` |
-| `zsh` | active | Zsh tools, aliases, plugins, and integrations |
-| `zen-browser` | opt-in | Zen Browser module |
-
-## Upstream and source references
-
-The input declarations in [`flake.nix`](flake.nix) and revisions in
-[`flake.lock`](flake.lock) are authoritative. Read the local module README for
-component-specific links.
-
-- [NixOS/nixpkgs](https://github.com/NixOS/nixpkgs) · [NixOS manual](https://nixos.org/manual/nixos/stable/)
-- [Home Manager](https://github.com/nix-community/home-manager) · [module sources](https://github.com/nix-community/home-manager/tree/master/modules)
-- [Caelestia fork: shell](https://github.com/Rodrigo-Matuz/shell) · [CLI](https://github.com/Rodrigo-Matuz/cli)
-- [Wallpaper Picker UI](https://github.com/Rodrigo-Matuz/wallpaper-picker-ui)
-- [Kanatype](https://github.com/Rodrigo-Matuz/kanatype)
-- [Nuclear personal fork](https://github.com/Rodrigo-Matuz/nuclear) · [upstream](https://github.com/nukeop/nuclear)
-- [Hermes Agent](https://github.com/NousResearch/hermes-agent)
-- [Vicinae](https://github.com/vicinaehq/vicinae)
-- [Zen Browser flake](https://github.com/0xc000022070/zen-browser-flake)
-- [Helium browser](https://github.com/imputnet/helium) · [NixOS package](https://github.com/tomsch/helium-nix)
-- [Firefox add-on packages](https://gitlab.com/rycee/nur-expressions/-/tree/master/pkgs/firefox-addons)
-- [VSCodium extensions overlay](https://github.com/nix-community/nix-vscode-extensions)
-
-## Maintainer: apply the workstation profile
-
-The following commands are **only for the original `matuz` workstation**.
-That profile needs its matching hardware configuration, external flake inputs,
-and a Hyprland session for desktop-oriented modules. From the repository root:
+Once the repository is public, the short download URL is:
 
 ```bash
+curl -fsSL https://matuz.dev/nixos-installscript -o install.sh
+less install.sh
+```
+
+The URL redirects to the installer in the GitHub repository. Keep `-L` so curl
+follows that redirect, and read the script before running it as root.
+
+## Important before you use it
+
+- The `#nixos` profile belongs to the original Matuz workstation. It contains
+  that machine's hardware, disks, monitors, paths, and user settings. Do not
+  apply it to another computer.
+- Use `#install` through `install.sh` for a new machine or another user's
+  machine. It asks for the username, hostname, time zone, and apps instead of
+  assuming mine.
+- The installer does not partition, format, or mount disks for you. In a fresh
+  install, prepare and mount `/mnt` and `/mnt/boot` first.
+- Back up important data before changing a system configuration. The preview
+  mode is the safest way to see what the portable profile looks like.
+- No password or API key is needed to install the configuration. Sign in to
+  apps such as GitHub, Hermes, Firefox, or Discord after installation.
+
+## Adding and removing apps
+
+The app folders are the source of truth:
+
+- `home/<name>/default.nix` means the app is active on the workstation.
+- `home/optional/<name>/default.nix` means the app is available to the
+  installer but is not active on the workstation.
+
+To remove an app from the workstation while keeping its configuration:
+
+```bash
+git mv home/<name> home/optional/<name>
 sudo nixos-rebuild switch --flake .#nixos
 ```
 
-Validate without switching:
+To add it back, move the folder to `home/<name>/`. You do not need to edit a
+central import list. The next rebuild discovers the folder automatically.
+
+To add a new app, create `home/<name>/default.nix`. Put an app you are still
+testing, or one that should only be offered during installation, under
+`home/optional/<name>/` instead. Keep any flake-specific import inside that
+app's own module.
+
+## Common commands
+
+Run these from the repository root:
 
 ```bash
-nix flake check --no-write-lock-file
-sudo nixos-rebuild dry-build --flake .#nixos --no-write-lock-file
-```
+# Check the configuration without changing the system
+nix flake check
+sudo nixos-rebuild dry-build --flake .#nixos
 
-Update inputs deliberately, review the lockfile, and commit it:
-
-```bash
-nix flake update
+# Apply the original workstation profile
 sudo nixos-rebuild switch --flake .#nixos
 ```
 
-## Machine-specific files and privacy
+The portable installer keeps its generated configuration at
+`/etc/nixos/portable-config` after a real installation. Rebuild it later with:
 
-`hardware-configuration.nix`, `partitions.nix`, and `home/matuz.nix` contain
-machine-specific UUIDs, paths, and user settings; review the tracked bookmarks
-and Git identity too. `home/hermes/hermes-profile.gz` is ignored but contains
-potentially sensitive state: move it outside the checkout and restrict access
-before sharing this tree or making backups. The portable installer requires no
-secrets (even when selecting Hermes); authentication is a post-install step.
-The workstation alone has an **off-by-default** [sops-nix/age secrets
-option](secrets/README.md). Never add plaintext credentials, live `~/.config`,
-Hermes profiles, or GitHub CLI `hosts.yml` to Git. `.gitignore` is not a security
-boundary: inspect staged files **and repository history**, use a dedicated
-secret scanner before publishing, and rotate any credential previously committed.
-For GitHub CLI, use `gh auth login`; `copilot-login COMMAND` scopes the token
-to the requested command instead of globally exporting it from `.zshenv`.
-The original workstation keeps console auto-login by the owner's choice;
-portable real installs ask explicitly (default no), while VM preview always
-autologs in. Steam network exceptions are disabled unless opted into.
-|| `snappy-switcher` | active | Hyprland Alt+Tab window switcher with Matuz palette |
-|- [Snappy Switcher](https://github.com/OpalAayan/snappy-switcher)
+```bash
+sudo nixos-rebuild switch --flake /etc/nixos/portable-config#install
+```
+
+## Where things live
+
+- [`flake.nix`](flake.nix) and [`flake.lock`](flake.lock): package sources and
+  pinned versions.
+- [`configuration.nix`](configuration.nix): the original workstation's system
+  settings.
+- [`home/`](home/): user applications and their settings.
+- [`system/`](system/): system-level pieces and hardware notes.
+- [`install/`](install/): the portable profile used by the installer.
+- [`secrets/`](secrets/): optional encrypted-secret setup; it is not needed by
+  the installer.
+
+For module-specific notes, open the README inside that module. Those pages tell
+you what the module changes, what it assumes, and where to customize it.
+
+## Links
+
+- [NixOS manual](https://nixos.org/manual/nixos/stable/)
+- [Home Manager](https://nix-community.github.io/home-manager/)
+- [flake-parts](https://flake.parts/)

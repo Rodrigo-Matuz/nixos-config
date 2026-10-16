@@ -10,11 +10,11 @@ if [[ $help != *'preview:'* ]]; then
 fi
 printf 'PASS: preview mode is advertised\n'
 
-if [[ $(<"$repo/install.sh") != *"DEFAULT_REPO_URL='https://github.com/Rodrigo-Matuz/dotfiles.git'"* ]]; then
-  printf 'FAIL: default source must be the planned dotfiles GitHub repository\n' >&2
+if [[ $(<"$repo/install.sh") != *"DEFAULT_REPO_URL='https://github.com/Rodrigo-Matuz/nixos-config.git'"* ]]; then
+  printf 'FAIL: default source must be the NixOS configuration GitHub repository\n' >&2
   exit 1
 fi
-printf 'PASS: default source is the planned dotfiles repository\n'
+printf 'PASS: default source is the NixOS configuration repository\n'
 
 # Run the real CLI with a local Git fixture and a mocked VM builder. No host
 # install, mount or switch command is allowed in this test.
@@ -91,10 +91,11 @@ vm_store=$(nix --extra-experimental-features 'nix-command flakes' build \
 printf 'PASS: Nix built a real VM launcher with VM-only hardware\n'
 # A selected Hermes module must evaluate without a private file or user OAuth.
 hermes_index=0
-for module in "$repo"/home/*/default.nix; do
+for module in "$repo"/home/*/default.nix "$repo"/home/optional/*/default.nix; do
+  [[ -f $module ]] || continue
   name=${module%/default.nix}
   name=${name##*/}
-  [[ $name == noctalia || $name == snappy-switcher ]] && continue
+  [[ $name == noctalia ]] && continue
   [[ $name =~ ^[a-z0-9-]+$ ]] || continue
   hermes_index=$((hermes_index+1))
   [[ $name != hermes ]] || break
@@ -134,3 +135,33 @@ fi
   printf 'FAIL: revision failure had the wrong cause\n' >&2; exit 1;
 }
 printf 'PASS: mismatched clone revision is rejected\n'
+
+# Wallpaper Picker depends on Caelestia's wallpaper command. Selecting only
+# Wallpaper Picker must add both Caelestia and Hyprland to the generated profile.
+wallpaper_index=0
+for module in "$repo"/home/*/default.nix "$repo"/home/optional/*/default.nix; do
+  [[ -f $module ]] || continue
+  name=${module%/default.nix}
+  name=${name##*/}
+  [[ $name == noctalia ]] && continue
+  [[ $name =~ ^[a-z0-9-]+$ ]] || continue
+  wallpaper_index=$((wallpaper_index+1))
+  [[ $name != wallpaper ]] || break
+done
+[[ $name == wallpaper ]] || { printf 'FAIL: Wallpaper Picker module missing\n' >&2; exit 1; }
+mkdir -p "$tmp/home-wallpaper"
+printf -v cmd '%q ' env "HOME=$tmp/home-wallpaper" \
+  "XDG_DATA_HOME=$tmp/home-wallpaper/.local/share" "PATH=$tmp/bin:$PATH" \
+  "MOCK_LOG=$tmp/wallpaper-commands.log" \
+  bash "$repo/install.sh" --mode preview --repo "$tmp/fixture"
+if ! printf 'guest\n\n\n\n%s\n\nYES\n' "$wallpaper_index" | script -q -e -c "$cmd" /dev/null > "$tmp/wallpaper-output.log" 2>&1; then
+  printf 'FAIL: preview with Wallpaper Picker selected did not build\n' >&2
+  sed -n '1,35p' "$tmp/wallpaper-output.log" >&2
+  exit 1
+fi
+wallpaper_selection="$tmp/home-wallpaper/.local/share/dotfiles-preview/portable-config/install/selection.nix"
+selection=$(<"$wallpaper_selection")
+[[ $selection == *'"wallpaper"'* && $selection == *'"caelestia"'* && $selection == *'"hyprland"'* ]] || {
+  printf 'FAIL: Wallpaper Picker did not add Caelestia and Hyprland\n' >&2; exit 1;
+}
+printf 'PASS: Wallpaper Picker adds Caelestia and Hyprland\n'

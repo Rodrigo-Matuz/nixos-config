@@ -1,49 +1,40 @@
-# Optional workstation secrets (sops-nix + age)
+# Optional secrets
 
-The portable `#install` profile **never imports this module** and needs no keys,
-API tokens, or encrypted files. The workstation `#nixos` imports
-[`../secrets.nix`](../secrets.nix) with `matuz.secrets.hermes.enable = false` by
-default. GitHub CLI login and Hermes browser OAuth can remain entirely local;
-use this only for API credentials you explicitly want deployed by Nix.
+The normal workstation and the portable installer work without this directory.
+Use it only when you deliberately want to deploy encrypted API credentials to
+the original workstation.
 
-To opt the *original matuz workstation* in:
+## Important rules
 
-1. Create a **root-owned, mode-0600** age identity outside Git (for example
-   `/var/lib/sops-nix/key.txt`, in a mode-0700 directory). Back it up securely
-   and make a separate offline recovery age identity. Generate public
-   recipients with `age-keygen -y PATH_TO_KEY` (use `sudo` for the root key).
-   Never commit either private key. A replacement machine cannot decrypt a
-   file addressed only to the old machine key.
-2. Prepare a private dotenv file elsewhere containing only the desired
-   `NAME=value` API credentials. Encrypt it to **both** public recipients:
+- Never commit a private age key or a plaintext `.env` file.
+- Keep the machine key root-owned and readable only by root.
+- Keep a recovery key offline.
+- Do not put secrets in Nix strings, environment declarations, or generated
+  store files. Values in the Nix store are not private.
+
+## Workstation setup
+
+1. Install an age identity outside this repository, such as
+   `/var/lib/sops-nix/key.txt`, with root-only permissions.
+2. Create an encrypted dotenv file elsewhere and encrypt it to both the machine
+   and recovery public keys:
 
    ```bash
-   sops encrypt --age "$MACHINE_PUBLIC,$RECOVERY_PUBLIC" \
+   sops encrypt \
+     --age "$MACHINE_PUBLIC,$RECOVERY_PUBLIC" \
      --input-type dotenv --output-type dotenv \
      --output secrets/hermes.enc /private/path/hermes.env
    ```
 
-   Confirm `secrets/hermes.enc` contains ciphertext and sops metadata, not
-   plaintext, before tracking it. Do not put the plaintext in this checkout;
-   the `*.env` ignore rule does not protect history or forced additions.
-3. In the workstation configuration only, set
-   `matuz.secrets.hermes.enable = true;` after the encrypted file and age
-   identity exist. Stage the *encrypted* file so the Git flake includes it,
-   evaluate/dry-build `.#nixos`, then switch only when ready. The NixOS
-   sops-nix module decrypts it at activation to a runtime path owned by
-   `matuz` with mode `0400`; Home Manager points Hermes at that path.
-4. Verify the user service starts, and privately check the effective Hermes
-   home (`HERMES_HOME`). **Hermes copies `environmentFiles` into its persistent
-   `.env` at activation**; this is not ephemeral systemd-only injection.
-   Restrict and back up the profile separately. A named Hermes profile needs
-   explicit home/profile wiring before assuming this reaches it.
+3. Confirm that `secrets/hermes.enc` contains ciphertext, not plaintext.
+4. Set `matuz.secrets.hermes.enable = true;` in `../secrets.nix`, then dry-build before
+   switching.
 
-No public ciphertext, key, or service change is enabled automatically. API
-secrets cannot be used at Nix evaluation time and must never be interpolated
-into Nix strings, `environment`, or generated store files. Rotate credentials
-if they ever appeared in Git history. For GitHub, prefer interactive
-`gh auth login` over declaring a PAT. For OBS, keep its WebSocket password in
-its existing user-owned, mode-0600 file, outside Git.
+The portable `#install` profile never imports this module. App logins such as
+`gh auth login` and Hermes OAuth should normally be done interactively instead.
 
-References: [sops-nix](https://github.com/Mic92/sops-nix),
-[Hermes Nix secrets](https://hermes-agent.nousresearch.com/docs/getting-started/nix-setup#secrets-management).
+If a credential ever reached Git history, rotate it. Removing the file is not
+enough.
+
+Links: [sops-nix](https://github.com/Mic92/sops-nix) ·
+[Hermes secrets setup](https://hermes-agent.nousresearch.com/docs/getting-started/nix-setup#secrets-management)

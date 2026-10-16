@@ -2,13 +2,17 @@
 let
   selection = import ./selection.nix;
   enabled = name: builtins.elem name selection.homeModules;
-  homePath = name: ../home + "/${name}";
+  homePath = name:
+    let
+      candidates = [
+        (../home + "/${name}")
+        (../home/optional + "/${name}")
+      ];
+      matches = lib.filter (path: builtins.pathExists (path + "/default.nix")) candidates;
+    in
+    if matches == [ ] then throw "Unknown Home Manager module: ${name}" else builtins.head matches;
   systemPath = name: ../system + "/${name}";
-  homeImports = map homePath selection.homeModules
-    ++ lib.optionals (enabled "caelestia") [ inputs.caelestia-shell.homeManagerModules.default ]
-    ++ lib.optionals (enabled "zen-browser") [ inputs.zen-browser.homeModules.default ]
-    ++ lib.optionals (enabled "hermes") [ inputs.hermes-agent.homeManagerModules.default ]
-    ++ lib.optionals (enabled "wallpaper") [ inputs.wallpaper-picker-ui.homeManagerModules.default ];
+  homeImports = map homePath selection.homeModules;
   withHomeManager = selection.homeModules != [ ];
 in
 {
@@ -31,8 +35,8 @@ in
     }) selection.systemModules
     ++ [
       { assertion = !(enabled "nvim" && enabled "nvchad"); message = "Choose either nvim or nvchad"; }
-      { assertion = !(enabled "caelestia" && enabled "wallpaper"); message = "Choose either caelestia or wallpaper"; }
-      { assertion = !(enabled "noctalia" || enabled "snappy-switcher"); message = "These modules need flake inputs not declared by this repository"; }
+      { assertion = !(enabled "caelestia" && enabled "noctalia"); message = "Choose either caelestia or noctalia"; }
+      { assertion = !(enabled "wallpaper" && !enabled "caelestia"); message = "Wallpaper Picker needs caelestia; select both modules"; }
     ];
 
   boot.loader.systemd-boot.enable = true;
@@ -43,7 +47,7 @@ in
   i18n.defaultLocale = "en_US.UTF-8";
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = lib.optionals (enabled "vscodium") [ inputs.nix-vscode-extensions.overlays.default ];
+
 
   users.users.${selection.username} = {
     isNormalUser = true;
@@ -65,11 +69,14 @@ in
   system.stateVersion = selection.stateVersion;
 }
 // lib.optionalAttrs withHomeManager {
-  home-manager.useGlobalPkgs = true;
+  # Keep the Home Manager package set local so feature modules can own their
+  # overlays without coupling the portable system profile to every feature.
+  home-manager.useGlobalPkgs = false;
   home-manager.useUserPackages = true;
   home-manager.extraSpecialArgs = { inherit inputs; };
   home-manager.users.${selection.username} = {
     imports = homeImports;
+    nixpkgs.config.allowUnfree = true;
     home.username = selection.username;
     home.homeDirectory = "/home/${selection.username}";
     home.stateVersion = selection.stateVersion;

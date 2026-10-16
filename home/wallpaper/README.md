@@ -1,31 +1,21 @@
 # Wallpaper Picker UI
 
-Enables [Wallpaper Picker UI](https://github.com/Rodrigo-Matuz/wallpaper-picker-ui)
-through its Home Manager module. It scans `~/Wallpapers`; applying a selection
-runs `mpvpaper` with looped, audio-free playback.
+Active wallpaper picker for the workstation. It scans `~/Wallpapers`, lets you
+choose an image or video, and runs the Caelestia wallpaper command in the
+background when you apply the selection.
 
-## Configuration
+The current settings are:
 
-| Option | Value |
-| --- | --- |
-| `wallpapersPath` | `${HOME}/Wallpapers` |
-| `command` | `${pkgs.mpvpaper}/bin/mpvpaper -o "loop no-audio" "*" "$VP"` |
-| `debugMode` / `newWallpapers` / `darkMode` | `false` / `true` / `true` |
-| `language` | `eng` |
+- English interface;
+- dark mode;
+- new-wallpaper scanning enabled;
+- debug mode enabled for the current setup.
 
-`$VP` is replaced with the selected file path. Create `~/Wallpapers` before
-opening the app. The backend command is kept in Nix so it can be replaced
-without changing the application.
+The command used for applying a selection is kept in
+[`default.nix`](default.nix), where `$VP` is replaced by the selected path. This
+module depends on Caelestia, but it is not a replacement for the Caelestia shell.
+When the portable installer sees `wallpaper`, it adds `caelestia` and Hyprland
+for you. Caelestia and Noctalia are the two mutually exclusive shell choices.
 
-## Upstream and original Nix source
-
-- [Wallpaper Picker UI repository](https://github.com/Rodrigo-Matuz/wallpaper-picker-ui) — application, flake, and Home Manager module.
-- [Wallpaper Picker UI `flake.nix`](https://github.com/Rodrigo-Matuz/wallpaper-picker-ui/blob/main/flake.nix) — original module definition.
-- [mpvpaper](https://github.com/GhostNaN/mpvpaper) — Wayland backend invoked here.
-- [Home Manager](https://github.com/nix-community/home-manager) — module framework.
-
-## Module
-
-Imported by [`../matuz.nix`](../matuz.nix) and implemented in
-[`default.nix`](default.nix). It is currently **opt-in**; enable `./wallpaper`
-after confirming the input and wallpaper directory are available.
+Create `~/Wallpapers` before opening the app. Learn more at the
+[Wallpaper Picker UI repository](https://github.com/Rodrigo-Matuz/wallpaper-picker-ui).

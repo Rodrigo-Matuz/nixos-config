@@ -1,16 +1,9 @@
 # rtorrent
 
-Enables the rtorrent Home Manager program using the nixpkgs package. This
-module only declares the program; download directories, trackers, and network
-policy remain runtime/user configuration.
+Installs the rtorrent command and enables its Home Manager program. Download
+folders, trackers, and network policy are left to your own configuration.
 
-## Upstream and original Nix sources
+The module is active on the workstation and can be selected during portable
+installation.
 
-- [rtorrent](https://rakshasa.github.io/rtorrent/) · [source](https://github.com/rakshasa/rtorrent) — client documentation and code.
-- [Home Manager rtorrent module](https://github.com/nix-community/home-manager/tree/master/modules/programs) — original Nix module source.
-- [nixpkgs rtorrent package](https://github.com/NixOS/nixpkgs/tree/nixos-unstable/pkgs/by-name/rt/rtorrent) — package used here.
-
-## Module
-
-Imported by [`../matuz.nix`](../matuz.nix); implementation is in
-[`default.nix`](default.nix).
+Learn more: [rtorrent](https://rakshasa.github.io/rtorrent/)

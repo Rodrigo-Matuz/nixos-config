@@ -1,21 +1,22 @@
-# System configuration
+# System settings
 
-The system entrypoint is [`../configuration.nix`](../configuration.nix). This
-directory is reserved for system-level documentation and future modules,
-separate from Home Manager modules under [`../home`](../home).
+This folder contains system-level pieces for the original workstation. Most
+user-facing apps live in [`../home/`](../home/) instead.
 
-## Imported pieces
+## What is here
 
-- [`hardware-configuration.nix`](../hardware-configuration.nix) — generated hardware and boot-device configuration.
-- [`partitions.nix`](../partitions.nix) — additional workstation mounts.
-- [`steam`](../steam) — Steam service and firewall settings.
+- [`../configuration.nix`](../configuration.nix) is the workstation's system
+  entry point.
+- [`../hardware-configuration.nix`](../hardware-configuration.nix) describes
+  that machine's hardware and boot device.
+- [`../partitions.nix`](../partitions.nix) describes its additional mounts.
+- [`../steam/`](../steam/) contains the system-level Steam setup.
+- [`chromium-policies.nix`](chromium-policies.nix) supplies browser policies
+  used by Helium.
 
-## Upstream references
+Hardware UUIDs, monitor names, paths, and mount points are machine-specific.
+Do not copy them to another computer without reviewing them.
 
-- [NixOS manual](https://nixos.org/manual/nixos/stable/)
-- [NixOS module sources](https://github.com/NixOS/nixpkgs/tree/nixos-unstable/nixos/modules)
-- [NixOS option search](https://search.nixos.org/options)
-
-Hardware UUIDs, mount points, and service assumptions are specific to the
-original workstation.
-- [`chromium-policies.nix`](chromium-policies.nix) — managed Chromium bookmarks and extension policy for the Home Manager Helium module.
+Useful references:
+[NixOS manual](https://nixos.org/manual/nixos/stable/) ·
+[NixOS option search](https://search.nixos.org/options)

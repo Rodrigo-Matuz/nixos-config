@@ -4,10 +4,9 @@
 # Does NOT repartition/format disks or reuse this workstation's UUIDs.
 set -Eeuo pipefail
 
-# Planned public dotfiles repo. It does not exist publicly yet; use --repo to
-# test with a checkout until it is published. The website URL serving this
-# bootstrap script does not identify the repository on its own.
-DEFAULT_REPO_URL='https://github.com/Rodrigo-Matuz/dotfiles.git'
+# Public dotfiles repository used by the short installer URL. Use --repo for a
+# private/local checkout or a different source.
+DEFAULT_REPO_URL='https://github.com/Rodrigo-Matuz/nixos-config.git'
 repo_url=${NIXOS_CONFIG_REPO:-$DEFAULT_REPO_URL}
 ref=''
 expected_revision=''
@@ -62,10 +61,10 @@ has_choice() {
   return 1
 }
 
-# Pick discovered modules. Adding home/<name>/default.nix or
-# system/<name>/default.nix makes a module appear here automatically.
-# Modules needing additional external flake imports also need wiring in
-# install/portable.nix; see install/README.md.
+# Pick discovered modules. Adding home/<name>/default.nix makes a module part
+# of the workstation profile automatically. Optional modules live under
+# home/optional/<name>/default.nix and are offered by the installer without
+# being imported into the workstation.
 pick_modules() {
   local label=$1 input count value i
   local -n choices=$2 selected=$3
@@ -234,11 +233,12 @@ fi
 
 shopt -s nullglob
 home_choices=()
-for module in "$repo"/home/*/default.nix; do
+for module in "$repo"/home/*/default.nix "$repo"/home/optional/*/default.nix; do
+  [[ -f $module ]] || continue
   name=${module%/default.nix}
   name=${name##*/}
-  # These two modules reference undeclared flake inputs in the current repo.
-  [[ $name == noctalia || $name == snappy-switcher ]] && continue
+  # Noctalia still has no declared flake input in this repository.
+  [[ $name == noctalia ]] && continue
   [[ $name =~ ^[a-z0-9-]+$ ]] || continue
   home_choices+=("$name")
 done
@@ -273,8 +273,12 @@ fi
 if has_choice nvim && has_choice nvchad; then
   fail 'nvim and nvchad both manage Neovim; choose one'
 fi
-if has_choice caelestia && has_choice wallpaper; then
-  fail 'caelestia and wallpaper both manage wallpapers; choose one'
+if has_choice wallpaper && ! has_choice caelestia; then
+  selected_home+=(caelestia)
+  printf 'Added Caelestia: Wallpaper Picker uses the Caelestia wallpaper command.\n'
+fi
+if has_choice caelestia && has_choice noctalia; then
+  fail 'caelestia and noctalia are both desktop shells; choose one'
 fi
 if has_choice caelestia && ! has_choice hyprland; then
   selected_home+=(hyprland)

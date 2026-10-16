@@ -1,6 +1,8 @@
 { config, pkgs, inputs, ... }:
 
 {
+  imports = [ inputs.wallpaper-picker-ui.homeManagerModules.default ];
+
   programs.wallpaper-picker-ui = {
     enable = true;
 

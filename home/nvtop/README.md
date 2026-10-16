@@ -1,15 +1,6 @@
-# nvtop
+# GPU monitor
 
-Installs the AMD-specific `nvtop` package for GPU monitoring. Use `nvtop` from
-a terminal inside the graphical session to inspect utilization, memory, and
-processes supported by the GPU backend.
+Installs the AMD version of [`nvtop`](https://github.com/Syllo/nvtop). Run
+`nvtop` in a terminal to inspect GPU use, memory, and processes.
 
-## Upstream and original Nix source
-
-- [nvtop](https://github.com/Syllo/nvtop) — monitor documentation and source.
-- [nixpkgs nvtop packages](https://github.com/NixOS/nixpkgs/tree/nixos-unstable/pkgs/by-name/nv/nvtop) — package set used here.
-
-## Module
-
-Imported by [`../matuz.nix`](../matuz.nix); implementation is in
-[`default.nix`](default.nix) and selects `pkgs.nvtopPackages.amd`.
+It is active on the workstation and can be selected during portable installation.

@@ -1,16 +1,15 @@
-# Steam system module
+# Steam
 
-Enables Steam at the NixOS system level and starts Steam as a user service
-when the graphical session becomes available. Remote Play and dedicated-server
-firewall exceptions are **off by default**; opt in to the corresponding
-`programs.steam.remotePlay.openFirewall` or
-`programs.steam.dedicatedServer.openFirewall` setting only if needed. See [`default.nix`](default.nix) for the
-service command and firewall options.
+This module installs Steam at the system level and starts it when the graphical
+session is ready. Steam's Remote Play and dedicated-server firewall ports stay
+closed by default.
 
-## Upstream and original Nix sources
+Enable those network exceptions only if you need them. The settings are in
+[`default.nix`](default.nix).
 
-- [Steam](https://store.steampowered.com/) · [Steam for Linux](https://github.com/ValveSoftware/steam-for-linux)
-- [NixOS Steam module](https://github.com/NixOS/nixpkgs/blob/nixos-unstable/nixos/modules/programs/steam.nix)
-- [NixOS firewall options](https://search.nixos.org/options?query=networking.firewall)
+This is a system module, so it is selected separately by the portable installer.
+For the original workstation it is imported from
+[`../configuration.nix`](../configuration.nix).
 
-Imported by [`configuration.nix`](../configuration.nix) through `./steam`.
+Learn more: [Steam](https://store.steampowered.com/) ·
+[NixOS Steam options](https://search.nixos.org/options?query=programs.steam)
