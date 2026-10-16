@@ -59,11 +59,11 @@
         "quickshell": "quickshell_2"
       },
       "locked": {
-        "lastModified": 1792085062,
-        "narHash": "sha256-Q7iIfUbWRGYoDeqH9pAy6tHibqcKm3wefFNHe81q4og=",
+        "lastModified": 1792170212,
+        "narHash": "sha256-khOw3jLIu/yRRHFD0OcHFT7Xk1GM3PqI64nEX+7H3As=",
         "owner": "Rodrigo-Matuz",
         "repo": "shell",
-        "rev": "b96f5645b1c4a497e47623cfb6b65f335334e62d",
+        "rev": "5b659baccc54a130283a45f482e078f6c8b74675",
         "type": "github"
       },
       "original": {
@@ -82,11 +82,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792169139,
-        "narHash": "sha256-mvrqImEaxTygHwnoGYF7OJkaAGGHB+MTZVSNkk104vU=",
+        "lastModified": 1792170307,
+        "narHash": "sha256-+b8ZlM17nMDx7d6pgNN/HagKyWZ7QmTjM39jRL+TiOM=",
         "owner": "Rodrigo-Matuz",
         "repo": "Equibop",
-        "rev": "238d20537ee9383f1ac61ef19d98493ad340091c",
+        "rev": "015ac2caace3381079d96960ccd667ddba8132a1",
         "type": "github"
       },
       "original": {
